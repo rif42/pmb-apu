@@ -1,0 +1,181 @@
+---
+const navLinks = [
+  { label: "Beranda", href: "#beranda" },
+  { label: "Jalur Masuk", href: "#jalur-masuk" },
+  { label: "Program", href: "#program" },
+  { label: "Beasiswa", href: "#beasiswa" },
+  { label: "Kontak", href: "#kontak" },
+];
+---
+
+<nav
+  id="main-nav"
+  class="fixed top-0 left-0 w-full z-50 transition-transform duration-300"
+  style="background: rgba(10, 14, 26, 0.85); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(250, 246, 241, 0.06);"
+>
+  <div class="content-max flex items-center justify-between h-[72px]">
+    <!-- Logo -->
+    <a href="#beranda" class="flex items-center gap-3 group">
+      <img
+        src="/images/ikmb.png"
+        alt="Agung Putra University"
+        class="h-14 w-auto brightness-110"
+        loading="eager"
+      />
+      <span class="text-white font-sans font-medium text-sm hidden sm:block"
+        >Institut Karya Mulia Bangsa</span
+      >
+    </a>
+
+    <!-- Desktop Links -->
+    <div class="hidden md:flex items-center gap-8">
+      {
+        navLinks.map((link) => (
+          <a
+            href={link.href}
+            class="nav-link text-slate text-body-s font-normal transition-colors duration-300 hover:text-soft-sage"
+            data-section={link.href.slice(1)}
+          >
+            {link.label}
+          </a>
+        ))
+      }
+    </div>
+
+    <!-- CTA Button -->
+    <a
+      href="https://wa.me/628113755552?text=Halo, saya ingin menanyakan informasi pendaftaran mahasiswa baru APU 2026/2027."
+      target="_blank"
+      rel="noopener noreferrer"
+      class="hidden md:inline-flex items-center px-6 py-2.5 bg-burnt-copper text-white text-body-s font-medium rounded transition-colors duration-300 hover:bg-deep-sage"
+    >
+      Daftar Sekarang
+    </a>
+
+    <!-- Mobile Menu Button -->
+    <button
+      id="menu-toggle"
+      class="md:hidden flex flex-col gap-1.5 p-2"
+      aria-label="Toggle menu"
+      aria-expanded="false"
+    >
+      <span class="menu-line w-5 h-0.5 bg-white transition-all duration-300"
+      ></span>
+      <span class="menu-line w-5 h-0.5 bg-white transition-all duration-300"
+      ></span>
+    </button>
+  </div>
+
+  <!-- Mobile Menu Overlay -->
+  <div
+    id="mobile-menu"
+    class="fixed inset-0 bg-deep-space z-40 flex flex-col items-center justify-center gap-8 opacity-0 pointer-events-none transition-opacity duration-300 md:hidden"
+    style="top: 72px;"
+  >
+    {
+      navLinks.map((link) => (
+        <a
+          href={link.href}
+          class="mobile-nav-link text-white text-h3 font-medium transition-colors duration-300 hover:text-soft-sage"
+        >
+          {link.label}
+        </a>
+      ))
+    }
+    <a
+      href="https://wa.me/628113755552?text=Halo, saya ingin menanyakan informasi pendaftaran mahasiswa baru APU 2026/2027."
+      target="_blank"
+      rel="noopener noreferrer"
+      class="mt-4 px-8 py-3 bg-burnt-copper text-white text-body font-medium rounded transition-colors duration-300 hover:bg-deep-sage"
+    >
+      Daftar Sekarang
+    </a>
+  </div>
+</nav>
+
+<script>
+  (function () {
+    const nav = document.getElementById("main-nav");
+    const menuToggle = document.getElementById("menu-toggle");
+    const mobileMenu = document.getElementById("mobile-menu");
+    const menuLines = menuToggle?.querySelectorAll<HTMLElement>(".menu-line");
+    const mobileLinks = mobileMenu?.querySelectorAll(".mobile-nav-link");
+
+    let lastScroll = 0;
+    let isMenuOpen = false;
+
+    // Scroll direction hide/show
+    function handleScroll() {
+      if (isMenuOpen) return;
+      const currentScroll = window.scrollY;
+      if (currentScroll > lastScroll && currentScroll > 100) {
+        nav!.style.transform = "translateY(-100%)";
+      } else {
+        nav!.style.transform = "translateY(0)";
+      }
+      lastScroll = currentScroll;
+    }
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    // Mobile menu toggle
+    menuToggle?.addEventListener("click", () => {
+      isMenuOpen = !isMenuOpen;
+      menuToggle.setAttribute("aria-expanded", String(isMenuOpen));
+
+      if (isMenuOpen) {
+        mobileMenu!.classList.remove("opacity-0", "pointer-events-none");
+        mobileMenu!.classList.add("opacity-100", "pointer-events-auto");
+        menuLines![0].style.transform = "rotate(45deg) translateY(4px)";
+        menuLines![1].style.transform = "rotate(-45deg) translateY(-4px)";
+        document.body.style.overflow = "hidden";
+      } else {
+        mobileMenu!.classList.add("opacity-0", "pointer-events-none");
+        mobileMenu!.classList.remove("opacity-100", "pointer-events-auto");
+        menuLines![0].style.transform = "";
+        menuLines![1].style.transform = "";
+        document.body.style.overflow = "";
+      }
+    });
+
+    // Close mobile menu on link click
+    mobileLinks?.forEach((link) => {
+      link.addEventListener("click", () => {
+        if (isMenuOpen) menuToggle?.click();
+      });
+    });
+
+    // Active link sync
+    const sections = document.querySelectorAll("section[id]");
+    const navLinks = document.querySelectorAll(".nav-link");
+
+    const observerOptions = {
+      rootMargin: "-40% 0px -60% 0px",
+      threshold: 0,
+    };
+
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          navLinks.forEach((link) => {
+            link.classList.remove(
+              "text-soft-sage",
+              "border-b-2",
+              "border-soft-sage",
+            );
+            if (link.getAttribute("data-section") === id) {
+              link.classList.add(
+                "text-soft-sage",
+                "border-b-2",
+                "border-soft-sage",
+              );
+            }
+          });
+        }
+      });
+    }, observerOptions);
+
+    sections.forEach((section) => sectionObserver.observe(section));
+  })();
+</script>

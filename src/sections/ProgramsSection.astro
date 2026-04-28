@@ -1,0 +1,66 @@
+---
+import ScrollReveal from '../components/ScrollReveal.astro';
+import { programs } from '../data/programs';
+import { contact } from '../data/contact';
+---
+
+<section id="program" class="relative bg-deep-space py-24 md:py-32 overflow-hidden">
+  <!-- Subtle gradient overlay -->
+  <div class="absolute inset-0 bg-gradient-to-b from-deep-space/30 via-transparent to-deep-space/50 pointer-events-none"></div>
+
+  <div class="content-max relative z-10">
+    <!-- Section Header -->
+    <ScrollReveal class="text-center mb-16">
+      <span class="text-mono text-soft-sage tracking-widest block mb-4">PROGRAM STUDI</span>
+      <h2 class="text-h2 text-white mb-4">7 Program Unggulan, Masa Depan Cerah</h2>
+      <p class="text-body text-slate max-w-2xl mx-auto">
+        Program studi yang dirancang untuk menghasilkan lulusan berdaya saing global di bidang kesehatan, bisnis, dan teknologi.
+      </p>
+    </ScrollReveal>
+
+    <!-- Program Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {programs.map((program, index) => (
+        <ScrollReveal delay={index * 100} class={index >= 6 ? 'sm:col-span-2 lg:col-span-1' : ''}>
+          <div class="group relative aspect-[4/5] rounded-lg overflow-hidden cursor-pointer">
+            <!-- Image -->
+            <img
+              src={program.image}
+              alt={program.name}
+              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              loading="lazy"
+            />
+            
+            <!-- Overlay Gradient -->
+            <div class="absolute inset-0 bg-gradient-to-t from-deep-space/90 via-deep-space/30 to-transparent"></div>
+            
+            <!-- Content -->
+            <div class="absolute bottom-0 left-0 right-0 p-5">
+              <span class="text-caption text-soft-sage mb-1 block">{program.degree}</span>
+              <h3 class="text-h3 text-white text-lg">{program.name}</h3>
+              <p class="text-caption text-slate mt-1">{program.subPrograms.length} sub-program</p>
+            </div>
+
+            <!-- Hover overlay -->
+            <div class="absolute inset-0 bg-deep-space/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          </div>
+        </ScrollReveal>
+      ))}
+
+      <!-- CTA Card -->
+      <ScrollReveal delay={700}>
+        <a
+          href={contact.pmbLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group flex items-center justify-center aspect-[4/5] rounded-lg bg-burnt-copper transition-all duration-300 hover:bg-deep-sage"
+        >
+          <div class="text-center p-5">
+            <span class="text-h3 text-white block mb-2">Lihat Semua Program & Biaya</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto transition-transform duration-300 group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </div>
+        </a>
+      </ScrollReveal>
+    </div>
+  </div>
+</section>
