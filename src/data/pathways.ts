@@ -44,7 +44,7 @@ export const pathways: Pathway[] = [
       },
     ],
     ctaText: 'Daftar Reguler',
-    ctaLink: 'https://kmb.ac.id/informasi-pendaftaran',
+    ctaLink: 'http://49.50.9.214:8060/index.php/pendaftaran_pmb',
   },
   {
     id: 'jalur-beasiswa',
