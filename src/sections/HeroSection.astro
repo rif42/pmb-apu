@@ -17,7 +17,7 @@ import { contact } from "../data/contact";
     />
     <!-- Gradient Overlays -->
     <div
-      class="absolute inset-0 bg-gradient-to-t from-deep-sage/90 via-deep-sage/50 to-transparent"
+      class="absolute inset-0 bg-gradient-to-t from-brand-accent/70 via-deep-sage/50 to-transparent"
     >
     </div>
     <div
@@ -51,7 +51,7 @@ import { contact } from "../data/contact";
         class="text-h1 text-warm-ivory mb-6 max-w-4xl opacity-0"
       >
         <span class="block">Pendaftaran</span>
-        <span class="block text-soft-sage">Mahasiswa Baru</span>
+        <span class="block text-brand-accent-soft">Mahasiswa Baru</span>
         <span class="block">2026/2027</span>
       </h1>
 
@@ -70,7 +70,7 @@ import { contact } from "../data/contact";
           href={contact.pmbLink}
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 px-8 py-3.5 bg-deep-sage text-warm-ivory text-body font-medium rounded transition-all duration-300 hover:bg-deep-space hover:scale-[1.02]"
+          class="inline-flex items-center gap-2 px-8 py-3.5 bg-deep-space text-warm-ivory text-body font-medium rounded transition-all duration-300 hover:bg-deep-space hover:scale-[1.02]"
         >
           <span>Daftar Sekarang</span>
           <svg
@@ -122,7 +122,7 @@ import { contact } from "../data/contact";
     // Generate floating particles
     const particleContainer = document.getElementById("hero-particles");
     if (particleContainer) {
-        for (let i = 0; i < 30; i++) {
+      for (let i = 0; i < 30; i++) {
         const particle = document.createElement("div");
         const size = Math.random() * 3 + 1;
         particle.className = "absolute rounded-full bg-warm-ivory/20";

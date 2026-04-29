@@ -13,7 +13,9 @@ const navLinks = [
   data-scrolled="false"
   class="fixed top-0 left-0 w-full z-50 transition-transform duration-300 backdrop-blur-xl"
 >
-  <div class="content-max flex items-center justify-between h-[72px]">
+  <div
+    class="bg-brand-primary-deep text-white px-40 flex items-center justify-between h-[72px]"
+  >
     <!-- Logo -->
     <a href="#beranda" class="flex items-center gap-3 group">
       <img
@@ -72,7 +74,9 @@ const navLinks = [
     class="fixed inset-0 z-40 px-4 pb-6 pt-5 opacity-0 pointer-events-none transition-opacity duration-300 md:hidden"
     style="top: 72px;"
   >
-    <div class="mobile-menu-panel mx-auto flex w-full max-w-sm flex-col gap-3 rounded-[28px] p-5">
+    <div
+      class="mobile-menu-panel mx-auto flex w-full max-w-sm flex-col gap-3 rounded-[28px] p-5"
+    >
       <p class="mobile-menu-label text-mono">Menu</p>
       <div class="flex flex-col gap-2">
         {
@@ -98,7 +102,7 @@ const navLinks = [
   </div>
 </nav>
 
-  <script>
+<script>
   (function () {
     const nav = document.getElementById("main-nav");
     const menuToggle = document.getElementById("menu-toggle");
@@ -187,114 +191,114 @@ const navLinks = [
 
 <style>
   #main-nav {
-    background: rgba(21, 55, 32, 0.88);
-    border-bottom: 1px solid rgba(168, 195, 157, 0.22);
+    background: rgb(var(--color-brand-primary-deeper) / 0.88);
+    border-bottom: 1px solid rgb(var(--color-brand-border) / 0.22);
   }
 
   #main-nav[data-scrolled="true"] {
-    background: rgba(244, 247, 238, 0.94);
-    border-bottom-color: rgba(168, 195, 157, 0.7);
-    box-shadow: 0 12px 32px rgba(31, 49, 36, 0.08);
+    background: rgb(var(--color-brand-surface) / 0.94);
+    border-bottom-color: rgb(var(--color-brand-border) / 0.7);
+    box-shadow: 0 12px 32px rgb(var(--color-brand-text) / 0.08);
   }
 
   #main-nav .brand-copy,
   #main-nav .menu-toggle {
-    color: #f4f7ee;
+    color: rgb(var(--color-brand-surface));
   }
 
   #main-nav[data-scrolled="true"] .brand-copy,
   #main-nav[data-scrolled="true"] .menu-toggle {
-    color: #1f3124;
+    color: rgb(var(--color-brand-text));
   }
 
   #main-nav .nav-link {
-    color: rgba(244, 247, 238, 0.9);
+    color: rgb(var(--color-brand-surface) / 0.9);
   }
 
   #main-nav .nav-link:hover {
-    color: #f4f7ee;
+    color: rgb(var(--color-brand-surface));
   }
 
   #main-nav[data-scrolled="true"] .nav-link {
-    color: #1f3124;
+    color: rgb(var(--color-brand-text));
   }
 
   #main-nav[data-scrolled="true"] .nav-link:hover {
-    color: #2f6b3b;
+    color: rgb(var(--color-brand-primary));
   }
 
   #main-nav .nav-link[data-active] {
-    color: #a8c39d;
-    border-bottom-color: #a8c39d;
+    color: rgb(var(--color-brand-border));
+    border-bottom-color: rgb(var(--color-brand-border));
   }
 
   #main-nav[data-scrolled="true"] .nav-link[data-active] {
-    color: #2f6b3b;
-    border-bottom-color: #2f6b3b;
+    color: rgb(var(--color-brand-primary));
+    border-bottom-color: rgb(var(--color-brand-primary));
   }
 
   #main-nav .nav-cta {
-    background: #2f6b3b;
-    color: #f4f7ee;
+    background: rgb(var(--color-brand-primary));
+    color: rgb(var(--color-brand-surface));
   }
 
   #main-nav .nav-cta:hover {
-    background: #1e4d2b;
+    background: rgb(var(--color-brand-primary-deep));
   }
 
   #main-nav[data-scrolled="true"] .nav-cta {
-    background: #f4f7ee;
-    color: #153720;
-    box-shadow: inset 0 0 0 1px rgba(47, 107, 59, 0.22);
+    background: rgb(var(--color-brand-surface));
+    color: rgb(var(--color-brand-primary-deeper));
+    box-shadow: inset 0 0 0 1px rgb(var(--color-brand-primary) / 0.22);
   }
 
   #main-nav[data-scrolled="true"] .nav-cta:hover {
-    background: #e6f0dd;
+    background: rgb(var(--color-brand-surface-alt));
   }
 
   #mobile-menu {
-    background: rgba(21, 55, 32, 0.28);
+    background: rgb(var(--color-brand-primary-deeper) / 0.28);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
   }
 
   #mobile-menu .mobile-menu-panel {
-    background: rgba(244, 247, 238, 0.98);
-    border: 1px solid rgba(168, 195, 157, 0.55);
+    background: rgb(var(--color-brand-surface) / 0.98);
+    border: 1px solid rgb(var(--color-brand-border) / 0.55);
     box-shadow:
-      0 24px 48px rgba(21, 55, 32, 0.22),
-      inset 0 1px 0 rgba(255, 255, 255, 0.5);
+      0 24px 48px rgb(var(--color-brand-primary-deeper) / 0.22),
+      inset 0 1px 0 rgb(var(--color-base-white) / 0.5);
   }
 
   #mobile-menu .mobile-menu-label {
-    color: #56705c;
+    color: rgb(var(--color-brand-text-muted));
     letter-spacing: 0.18em;
   }
 
   #mobile-menu .mobile-nav-link {
-    color: #1f3124;
+    color: rgb(var(--color-brand-text));
     padding: 0.95rem 1rem;
     border-radius: 1rem;
-    background: rgba(230, 240, 221, 0.72);
-    border: 1px solid rgba(168, 195, 157, 0.38);
+    background: rgb(var(--color-brand-surface-alt) / 0.72);
+    border: 1px solid rgb(var(--color-brand-border) / 0.38);
   }
 
   #mobile-menu .mobile-nav-link:hover {
-    color: #2f6b3b;
-    background: rgba(214, 231, 200, 0.78);
+    color: rgb(var(--color-brand-primary));
+    background: rgb(var(--color-brand-surface-soft) / 0.78);
   }
 
   #mobile-menu .mobile-nav-link:active {
-    background: rgba(214, 231, 200, 0.92);
+    background: rgb(var(--color-brand-surface-soft) / 0.92);
   }
 
   #mobile-menu .mobile-cta {
-    background: #2f6b3b;
-    color: #f4f7ee;
-    box-shadow: 0 16px 28px rgba(21, 55, 32, 0.18);
+    background: rgb(var(--color-brand-primary));
+    color: rgb(var(--color-brand-surface));
+    box-shadow: 0 16px 28px rgb(var(--color-brand-primary-deeper) / 0.18);
   }
 
   #mobile-menu .mobile-cta:hover {
-    background: #1e4d2b;
+    background: rgb(var(--color-brand-primary-deep));
   }
 </style>

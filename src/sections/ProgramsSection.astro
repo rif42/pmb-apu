@@ -6,14 +6,14 @@ import { contact } from '../data/contact';
 
 <section id="program" class="relative bg-brand-primary-deeper py-24 md:py-32 overflow-hidden">
   <!-- Subtle contrast overlays -->
-  <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(47,107,59,0.22),transparent_60%)] pointer-events-none"></div>
-  <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(21,55,32,0.78)_0%,rgba(21,55,32,0.48)_46%,rgba(21,55,32,0.88)_100%)] pointer-events-none"></div>
+  <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgb(var(--color-brand-primary)_/_0.22),transparent_60%)] pointer-events-none"></div>
+  <div class="absolute inset-0 bg-[linear-gradient(180deg,rgb(var(--color-brand-primary-deeper)_/_0.78)_0%,rgb(var(--color-brand-primary-deeper)_/_0.48)_46%,rgb(var(--color-brand-primary-deeper)_/_0.88)_100%)] pointer-events-none"></div>
 
   <div class="content-max relative z-10">
     <!-- Section Header -->
     <ScrollReveal class="text-center mb-16">
       <span class="text-mono text-soft-sage tracking-widest block mb-4">PROGRAM STUDI</span>
-      <h2 class="text-h2 text-white mb-4">7 Program Unggulan, Masa Depan Cerah</h2>
+      <h2 class="text-h2 text-brand-surface mb-4">7 Program Unggulan, Masa Depan Cerah</h2>
       <p class="text-body text-brand-surface-alt/82 max-w-2xl mx-auto">
         Program studi yang dirancang untuk menghasilkan lulusan berdaya saing global di bidang kesehatan, bisnis, dan teknologi.
       </p>
@@ -23,7 +23,7 @@ import { contact } from '../data/contact';
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {programs.map((program, index) => (
         <ScrollReveal delay={index * 100} class={index >= 6 ? 'sm:col-span-2 lg:col-span-1' : ''}>
-          <div class="group relative aspect-[4/5] overflow-hidden rounded-lg cursor-pointer border border-brand-border/14 bg-brand-primary-deeper/20 shadow-[0_18px_40px_rgba(21,55,32,0.22)] transition-all duration-300 hover:-translate-y-1 hover:border-brand-border/28 hover:shadow-[0_24px_48px_rgba(21,55,32,0.3)]">
+          <div class="group relative aspect-[4/5] overflow-hidden rounded-lg cursor-pointer border border-brand-border/14 bg-brand-primary-deeper/20 shadow-[0_18px_40px_rgb(var(--color-brand-primary-deeper)_/_0.22)] transition-all duration-300 hover:-translate-y-1 hover:border-brand-border/28 hover:shadow-[0_24px_48px_rgb(var(--color-brand-primary-deeper)_/_0.3)]">
             <!-- Image -->
             <img
               src={program.image}
@@ -54,7 +54,7 @@ import { contact } from '../data/contact';
           href={contact.pmbLink}
           target="_blank"
           rel="noopener noreferrer"
-          class="group flex items-center justify-center aspect-[4/5] rounded-lg border border-brand-border/20 bg-brand-primary text-brand-surface shadow-[0_18px_40px_rgba(21,55,32,0.22)] transition-all duration-300 hover:border-brand-accent/30 hover:bg-brand-primary-deep"
+          class="group flex items-center justify-center aspect-[4/5] rounded-lg border border-brand-border/20 bg-brand-primary text-brand-surface shadow-[0_18px_40px_rgb(var(--color-brand-primary-deeper)_/_0.22)] transition-all duration-300 hover:border-brand-accent/30 hover:bg-brand-primary-deep"
         >
           <div class="text-center p-5">
             <span class="text-h3 text-brand-surface block mb-2">Lihat Semua Program & Biaya</span>

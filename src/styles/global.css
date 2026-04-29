@@ -8,6 +8,61 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --color-base-surface: rgb(244 247 238);
+  --color-base-surface-alt: rgb(230 240, 221);
+  --color-base-surface-soft: rgb(214 231 200);
+  --color-base-primary: rgb(47 107 59);
+  --color-base-primary-deep: rgb(30 77 43);
+  --color-base-primary-deeper: rgb(21 55 32);
+  --color-base-text: rgb(31 49 36);
+  --color-base-text-muted: rgb(86 112 92);
+  --color-base-border: rgb(168 195 157);
+  --color-base-accent: rgb(197 138 46);
+  --color-base-accent-soft: rgb(228 190 115);
+  --color-base-white: rgb(255 255 255);
+
+  --color-brand-surface: var(--color-base-surface);
+  --color-brand-surface-alt: var(--color-base-surface-alt);
+  --color-brand-surface-soft: var(--color-base-surface-soft);
+  --color-brand-primary: var(--color-base-primary);
+  --color-brand-primary-deep: var(--color-base-primary-deep);
+  --color-brand-primary-deeper: var(--color-base-primary-deeper);
+  --color-brand-text: var(--color-base-text);
+  --color-brand-text-muted: var(--color-base-text-muted);
+  --color-brand-border: var(--color-base-border);
+  --color-brand-accent: var(--color-base-accent);
+  --color-brand-accent-soft: var(--color-base-accent-soft);
+
+  --color-deep-space: var(--color-base-primary-deeper);
+  --color-warm-ivory: var(--color-base-surface);
+  --color-soft-sage: var(--color-base-border);
+  --color-burnt-copper: var(--color-base-accent);
+  --color-deep-sage: var(--color-base-primary);
+  --color-charcoal: var(--color-base-text);
+
+  --color-slate-50: var(--color-base-surface);
+  --color-slate-100: var(--color-base-surface-alt);
+  --color-slate-200: var(--color-base-surface-soft);
+  --color-slate-300: var(--color-base-border);
+  --color-slate-400: var(--color-base-text-muted);
+  --color-slate-500: var(--color-base-text-muted);
+  --color-slate-600: var(--color-base-text);
+  --color-slate-700: var(--color-base-primary-deep);
+  --color-slate-800: var(--color-base-primary-deeper);
+  --color-slate-900: var(--color-base-primary-deeper);
+
+  --color-gold-300: var(--color-base-surface-soft);
+  --color-gold-400: var(--color-base-accent-soft);
+  --color-gold-500: var(--color-base-accent);
+
+  --color-teal-400: var(--color-base-primary);
+  --color-teal-500: var(--color-base-surface-soft);
+
+  --color-navy-800: var(--color-base-primary-deep);
+  --color-navy-900: var(--color-base-primary-deeper);
+}
+
 @layer base {
   html {
     scroll-behavior: auto;
@@ -16,16 +71,16 @@
   body {
     font-family: 'Space Grotesk', system-ui, sans-serif;
     font-weight: 300;
-    color: #1F3124;
-    background-color: #F4F7EE;
+    color: rgb(var(--color-brand-text));
+    background-color: rgb(var(--color-brand-surface));
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
   }
 
   ::selection {
-    background-color: rgba(47, 107, 59, 0.22);
-    color: #F4F7EE;
+    background-color: rgb(var(--color-brand-primary) / 0.22);
+    color: rgb(var(--color-brand-surface));
   }
 }
 
@@ -104,12 +159,10 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(
-      120deg,
-      transparent 30%,
-      rgba(47, 107, 59, 0.18) 50%,
-      transparent 70%
-    );
+    background: linear-gradient(120deg,
+        transparent 30%,
+        rgb(var(--color-brand-primary) / 0.18) 50%,
+        transparent 70%);
     background-size: 200% 100%;
     pointer-events: none;
   }

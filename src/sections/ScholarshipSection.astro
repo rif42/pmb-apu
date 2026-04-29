@@ -7,14 +7,14 @@ import { contact } from '../data/contact';
 <section id="beasiswa" class="relative bg-brand-primary-deeper py-24 md:py-32 overflow-hidden">
   <!-- Background glow effect -->
   <div class="absolute inset-0 pointer-events-none">
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-[radial-gradient(circle,rgba(47,107,59,0.18),transparent_62%)] blur-3xl"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-[radial-gradient(circle,rgb(var(--color-brand-primary)_/_0.18),transparent_62%)] blur-3xl"></div>
   </div>
 
   <div class="content-max relative z-10">
     <!-- Section Header -->
     <ScrollReveal class="text-center mb-16">
       <span class="text-mono text-soft-sage tracking-widest block mb-4">BEASISWA</span>
-      <h2 class="text-h2 text-white mb-4">Wujudkan Impianmu Bersama Beasiswa APU</h2>
+      <h2 class="text-h2 text-brand-surface mb-4">Wujudkan Impianmu Bersama Beasiswa APU</h2>
       <p class="text-body font-bold text-brand-surface-alt/82 max-w-2xl mx-auto">
         Berbagai program beasiswa tersedia untuk mendukung perjalanan akademikmu di Agung Putra University.
       </p>
@@ -24,7 +24,7 @@ import { contact } from '../data/contact';
     <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-16">
       {scholarships.map((scholarship, index) => (
         <ScrollReveal delay={index * 100}>
-          <div class="group h-full rounded-xl border border-brand-border/20 bg-brand-primary/12 p-6 shadow-[0_14px_32px_rgba(21,55,32,0.18)] backdrop-blur-[2px] transition-all duration-300 hover:-translate-y-1 hover:border-brand-border/34 hover:bg-brand-primary/18">
+          <div class="group h-full rounded-xl border border-brand-border/20 bg-brand-primary/12 p-6 shadow-[0_14px_32px_rgb(var(--color-brand-primary-deeper)_/_0.18)] backdrop-blur-[2px] transition-all duration-300 hover:-translate-y-1 hover:border-brand-border/34 hover:bg-brand-primary/18">
             <!-- Scholarship Name -->
             <h3 class="text-h3 text-brand-surface text-lg mb-2">{scholarship.name}</h3>
             
@@ -62,7 +62,7 @@ import { contact } from '../data/contact';
         href={contact.scholarshipLink}
         target="_blank"
         rel="noopener noreferrer"
-        class="inline-flex items-center gap-3 rounded-md border border-brand-border/20 bg-brand-primary px-10 py-4 text-body font-medium text-brand-surface shadow-[0_16px_32px_rgba(21,55,32,0.2)] transition-all duration-300 hover:scale-[1.02] hover:border-brand-accent/24 hover:bg-brand-primary-deep"
+        class="inline-flex items-center gap-3 rounded-md border border-brand-border/20 bg-brand-primary px-10 py-4 text-body font-medium text-brand-surface shadow-[0_16px_32px_rgb(var(--color-brand-primary-deeper)_/_0.2)] transition-all duration-300 hover:scale-[1.02] hover:border-brand-accent/24 hover:bg-brand-primary-deep"
       >
         <span>Daftar Beasiswa</span>
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-brand-accent-soft"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
