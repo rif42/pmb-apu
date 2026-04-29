@@ -9,18 +9,18 @@
 @tailwind utilities;
 
 :root {
-  --color-base-surface: rgb(244 247 238);
-  --color-base-surface-alt: rgb(230 240, 221);
-  --color-base-surface-soft: rgb(214 231 200);
-  --color-base-primary: rgb(47 107 59);
-  --color-base-primary-deep: rgb(30 77 43);
-  --color-base-primary-deeper: rgb(21 55 32);
-  --color-base-text: rgb(31 49 36);
-  --color-base-text-muted: rgb(86 112 92);
-  --color-base-border: rgb(168 195 157);
-  --color-base-accent: rgb(197 138 46);
-  --color-base-accent-soft: rgb(228 190 115);
-  --color-base-white: rgb(255 255 255);
+  --color-base-surface: 244 247 238;
+  --color-base-surface-alt: 230 240 221;
+  --color-base-surface-soft: 214 231 200;
+  --color-base-primary: 47 107 59;
+  --color-base-primary-deep: 30 77 43;
+  --color-base-primary-deeper: 21 55 32;
+  --color-base-text: 31 49 36;
+  --color-base-text-muted: 86 112 92;
+  --color-base-border: 168 195 157;
+  --color-base-accent: 197 138 46;
+  --color-base-accent-soft: 228 190 115;
+  --color-base-white: 255 255 255;
 
   --color-brand-surface: var(--color-base-surface);
   --color-brand-surface-alt: var(--color-base-surface-alt);
