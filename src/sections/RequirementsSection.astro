@@ -27,14 +27,14 @@ const requirementIcons = [
     <div class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-16">
       {requirements.map((req, index) => (
         <ScrollReveal delay={index * 120} direction="left">
-          <div class="bg-white rounded-xl p-6 text-center h-full transition-all duration-300 hover:shadow-md border border-transparent hover:border-soft-sage/50">
+          <div class="bg-brand-surface rounded-xl p-6 text-center h-full transition-all duration-300 hover:shadow-md border border-soft-sage/30 hover:border-deep-sage/35">
             <!-- Icon -->
-            <div class="w-20 h-20 rounded-full border border-soft-sage flex items-center justify-center mx-auto mb-4 text-burnt-copper">
+            <div class="w-20 h-20 rounded-full border border-soft-sage/30 bg-soft-sage/10 flex items-center justify-center mx-auto mb-4 text-deep-sage">
               <Fragment set:html={requirementIcons[index]} />
             </div>
             
             <!-- Number -->
-            <span class="text-mono text-soft-sage block mb-2">{req.number}</span>
+            <span class="text-mono text-deep-sage block mb-2">{req.number}</span>
             
             <!-- Title -->
             <h4 class="text-body-s font-medium text-charcoal mb-2">{req.title}</h4>
@@ -52,7 +52,7 @@ const requirementIcons = [
         href={contact.pmbLink}
         target="_blank"
         rel="noopener noreferrer"
-        class="inline-flex items-center gap-3 px-10 py-4 bg-burnt-copper text-white text-body font-medium rounded-md transition-all duration-300 hover:bg-deep-sage hover:scale-[1.02]"
+        class="inline-flex items-center gap-3 px-10 py-4 bg-deep-sage text-warm-ivory text-body font-medium rounded-md transition-all duration-300 hover:bg-soft-sage hover:text-deep-sage hover:scale-[1.02]"
       >
         <span>Daftar Sekarang</span>
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>

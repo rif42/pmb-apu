@@ -4,16 +4,17 @@ import { programs } from '../data/programs';
 import { contact } from '../data/contact';
 ---
 
-<section id="program" class="relative bg-deep-space py-24 md:py-32 overflow-hidden">
-  <!-- Subtle gradient overlay -->
-  <div class="absolute inset-0 bg-gradient-to-b from-deep-space/30 via-transparent to-deep-space/50 pointer-events-none"></div>
+<section id="program" class="relative bg-brand-primary-deeper py-24 md:py-32 overflow-hidden">
+  <!-- Subtle contrast overlays -->
+  <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(47,107,59,0.22),transparent_60%)] pointer-events-none"></div>
+  <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(21,55,32,0.78)_0%,rgba(21,55,32,0.48)_46%,rgba(21,55,32,0.88)_100%)] pointer-events-none"></div>
 
   <div class="content-max relative z-10">
     <!-- Section Header -->
     <ScrollReveal class="text-center mb-16">
       <span class="text-mono text-soft-sage tracking-widest block mb-4">PROGRAM STUDI</span>
       <h2 class="text-h2 text-white mb-4">7 Program Unggulan, Masa Depan Cerah</h2>
-      <p class="text-body text-slate max-w-2xl mx-auto">
+      <p class="text-body text-brand-surface-alt/82 max-w-2xl mx-auto">
         Program studi yang dirancang untuk menghasilkan lulusan berdaya saing global di bidang kesehatan, bisnis, dan teknologi.
       </p>
     </ScrollReveal>
@@ -22,7 +23,7 @@ import { contact } from '../data/contact';
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {programs.map((program, index) => (
         <ScrollReveal delay={index * 100} class={index >= 6 ? 'sm:col-span-2 lg:col-span-1' : ''}>
-          <div class="group relative aspect-[4/5] rounded-lg overflow-hidden cursor-pointer">
+          <div class="group relative aspect-[4/5] overflow-hidden rounded-lg cursor-pointer border border-brand-border/14 bg-brand-primary-deeper/20 shadow-[0_18px_40px_rgba(21,55,32,0.22)] transition-all duration-300 hover:-translate-y-1 hover:border-brand-border/28 hover:shadow-[0_24px_48px_rgba(21,55,32,0.3)]">
             <!-- Image -->
             <img
               src={program.image}
@@ -32,17 +33,17 @@ import { contact } from '../data/contact';
             />
             
             <!-- Overlay Gradient -->
-            <div class="absolute inset-0 bg-gradient-to-t from-deep-space/90 via-deep-space/30 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-brand-primary-deeper/92 via-brand-primary-deep/46 to-transparent"></div>
             
             <!-- Content -->
             <div class="absolute bottom-0 left-0 right-0 p-5">
-              <span class="text-caption text-soft-sage mb-1 block">{program.degree}</span>
-              <h3 class="text-h3 text-white text-lg">{program.name}</h3>
-              <p class="text-caption text-slate mt-1">{program.subPrograms.length} sub-program</p>
+              <span class="text-caption text-brand-surface-alt/82 mb-1 block">{program.degree}</span>
+              <h3 class="text-h3 text-brand-surface text-lg">{program.name}</h3>
+              <p class="text-caption text-brand-surface-alt/72 mt-1">{program.subPrograms.length} sub-program</p>
             </div>
 
             <!-- Hover overlay -->
-            <div class="absolute inset-0 bg-deep-space/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div class="absolute inset-0 bg-brand-primary/14 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           </div>
         </ScrollReveal>
       ))}
@@ -53,11 +54,11 @@ import { contact } from '../data/contact';
           href={contact.pmbLink}
           target="_blank"
           rel="noopener noreferrer"
-          class="group flex items-center justify-center aspect-[4/5] rounded-lg bg-burnt-copper transition-all duration-300 hover:bg-deep-sage"
+          class="group flex items-center justify-center aspect-[4/5] rounded-lg border border-brand-border/20 bg-brand-primary text-brand-surface shadow-[0_18px_40px_rgba(21,55,32,0.22)] transition-all duration-300 hover:border-brand-accent/30 hover:bg-brand-primary-deep"
         >
           <div class="text-center p-5">
-            <span class="text-h3 text-white block mb-2">Lihat Semua Program & Biaya</span>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto transition-transform duration-300 group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            <span class="text-h3 text-brand-surface block mb-2">Lihat Semua Program & Biaya</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto text-brand-accent-soft transition-transform duration-300 group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </div>
         </a>
       </ScrollReveal>

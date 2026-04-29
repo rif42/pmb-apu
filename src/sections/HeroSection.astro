@@ -17,14 +17,14 @@ import { contact } from "../data/contact";
     />
     <!-- Gradient Overlays -->
     <div
-      class="absolute inset-0 bg-gradient-to-t from-deep-space via-deep-space/40 to-transparent"
+      class="absolute inset-0 bg-gradient-to-t from-deep-sage/90 via-deep-sage/50 to-transparent"
     >
     </div>
     <div
-      class="absolute inset-0 bg-gradient-to-r from-deep-space/60 via-transparent to-deep-space/60"
+      class="absolute inset-0 bg-gradient-to-r from-deep-sage/45 via-transparent to-deep-sage/45"
     >
     </div>
-    <div class="absolute inset-0 bg-deep-space/30"></div>
+    <div class="absolute inset-0 bg-deep-sage/18"></div>
   </div>
 
   <!-- Animated Particle/Stars Layer -->
@@ -40,7 +40,7 @@ import { contact } from "../data/contact";
     <div class="content-max">
       <!-- Tagline -->
       <div id="hero-tagline" class="mb-6 opacity-0">
-        <span class="text-mono text-soft-sage tracking-widest"
+        <span class="text-mono text-warm-ivory/85 tracking-widest"
           >INSTITUT KARYA MULIA BANGSA</span
         >
       </div>
@@ -48,17 +48,17 @@ import { contact } from "../data/contact";
       <!-- Main Headline -->
       <h1
         id="hero-headline"
-        class="text-h1 text-white mb-6 max-w-4xl opacity-0"
+        class="text-h1 text-warm-ivory mb-6 max-w-4xl opacity-0"
       >
         <span class="block">Pendaftaran</span>
-        <span class="block text-gold-400">Mahasiswa Baru</span>
+        <span class="block text-soft-sage">Mahasiswa Baru</span>
         <span class="block">2026/2027</span>
       </h1>
 
       <!-- Subtitle -->
       <p
         id="hero-subtitle"
-        class="text-body text-slate max-w-xl mb-10 text-white opacity-0"
+        class="text-body text-warm-ivory/85 max-w-xl mb-10 opacity-0"
       >
         Futuristic Green Campus — Kampus unggulan di bidang biomedis dan
         bioteknologi dengan konsep kampus hijau, cerdas, dan berkesinambungan.
@@ -70,7 +70,7 @@ import { contact } from "../data/contact";
           href={contact.pmbLink}
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 px-8 py-3.5 bg-burnt-copper text-white text-body font-medium rounded transition-all duration-300 hover:bg-deep-sage hover:scale-[1.02]"
+          class="inline-flex items-center gap-2 px-8 py-3.5 bg-deep-sage text-warm-ivory text-body font-medium rounded transition-all duration-300 hover:bg-deep-space hover:scale-[1.02]"
         >
           <span>Daftar Sekarang</span>
           <svg
@@ -88,7 +88,7 @@ import { contact } from "../data/contact";
         </a>
         <a
           href="#jalur-masuk"
-          class="inline-flex items-center gap-2 px-8 py-3.5 border border-soft-sage/40 text-soft-sage text-body font-medium rounded transition-all duration-300 hover:bg-soft-sage/10 hover:border-soft-sage"
+          class="inline-flex items-center gap-2 px-8 py-3.5 border border-warm-ivory/45 text-warm-ivory text-body font-medium rounded transition-all duration-300 hover:bg-warm-ivory/10 hover:border-warm-ivory/75"
         >
           <span>Lihat Jalur Masuk</span>
         </a>
@@ -100,9 +100,9 @@ import { contact } from "../data/contact";
       id="scroll-indicator"
       class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-0"
     >
-      <span class="text-caption text-slate">Scroll to explore</span>
+      <span class="text-caption text-warm-ivory/75">Scroll to explore</span>
       <svg
-        class="animate-bounce-slow text-white"
+        class="animate-bounce-slow text-warm-ivory"
         xmlns="http://www.w3.org/2000/svg"
         width="24"
         height="24"
@@ -122,10 +122,10 @@ import { contact } from "../data/contact";
     // Generate floating particles
     const particleContainer = document.getElementById("hero-particles");
     if (particleContainer) {
-      for (let i = 0; i < 30; i++) {
+        for (let i = 0; i < 30; i++) {
         const particle = document.createElement("div");
         const size = Math.random() * 3 + 1;
-        particle.className = "absolute rounded-full bg-white/20";
+        particle.className = "absolute rounded-full bg-warm-ivory/20";
         particle.style.cssText = `
           width: ${size}px;
           height: ${size}px;

@@ -10,8 +10,8 @@ const navLinks = [
 
 <nav
   id="main-nav"
-  class="fixed top-0 left-0 w-full z-50 transition-transform duration-300"
-  style="background: rgba(10, 14, 26, 0.85); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(250, 246, 241, 0.06);"
+  data-scrolled="false"
+  class="fixed top-0 left-0 w-full z-50 transition-transform duration-300 backdrop-blur-xl"
 >
   <div class="content-max flex items-center justify-between h-[72px]">
     <!-- Logo -->
@@ -22,7 +22,7 @@ const navLinks = [
         class="h-14 w-auto brightness-110"
         loading="eager"
       />
-      <span class="text-white font-sans font-medium text-sm hidden sm:block"
+      <span class="brand-copy font-sans font-medium text-sm hidden sm:block"
         >Institut Karya Mulia Bangsa</span
       >
     </a>
@@ -33,7 +33,7 @@ const navLinks = [
         navLinks.map((link) => (
           <a
             href={link.href}
-            class="nav-link text-slate text-body-s font-normal transition-colors duration-300 hover:text-soft-sage"
+            class="nav-link border-b-2 border-transparent pb-1 text-body-s font-normal transition-colors duration-300"
             data-section={link.href.slice(1)}
           >
             {link.label}
@@ -47,7 +47,7 @@ const navLinks = [
       href="https://wa.me/628113755552?text=Halo, saya ingin menanyakan informasi pendaftaran mahasiswa baru APU 2026/2027."
       target="_blank"
       rel="noopener noreferrer"
-      class="hidden md:inline-flex items-center px-6 py-2.5 bg-burnt-copper text-white text-body-s font-medium rounded transition-colors duration-300 hover:bg-deep-sage"
+      class="nav-cta hidden md:inline-flex items-center px-6 py-2.5 text-body-s font-medium rounded transition-all duration-300"
     >
       Daftar Sekarang
     </a>
@@ -55,13 +55,13 @@ const navLinks = [
     <!-- Mobile Menu Button -->
     <button
       id="menu-toggle"
-      class="md:hidden flex flex-col gap-1.5 p-2"
+      class="menu-toggle md:hidden flex flex-col gap-1.5 p-2 transition-colors duration-300"
       aria-label="Toggle menu"
       aria-expanded="false"
     >
-      <span class="menu-line w-5 h-0.5 bg-white transition-all duration-300"
+      <span class="menu-line w-5 h-0.5 bg-current transition-all duration-300"
       ></span>
-      <span class="menu-line w-5 h-0.5 bg-white transition-all duration-300"
+      <span class="menu-line w-5 h-0.5 bg-current transition-all duration-300"
       ></span>
     </button>
   </div>
@@ -69,43 +69,54 @@ const navLinks = [
   <!-- Mobile Menu Overlay -->
   <div
     id="mobile-menu"
-    class="fixed inset-0 bg-deep-space z-40 flex flex-col items-center justify-center gap-8 opacity-0 pointer-events-none transition-opacity duration-300 md:hidden"
+    class="fixed inset-0 z-40 px-4 pb-6 pt-5 opacity-0 pointer-events-none transition-opacity duration-300 md:hidden"
     style="top: 72px;"
   >
-    {
-      navLinks.map((link) => (
-        <a
-          href={link.href}
-          class="mobile-nav-link text-white text-h3 font-medium transition-colors duration-300 hover:text-soft-sage"
-        >
-          {link.label}
-        </a>
-      ))
-    }
-    <a
-      href="https://wa.me/628113755552?text=Halo, saya ingin menanyakan informasi pendaftaran mahasiswa baru APU 2026/2027."
-      target="_blank"
-      rel="noopener noreferrer"
-      class="mt-4 px-8 py-3 bg-burnt-copper text-white text-body font-medium rounded transition-colors duration-300 hover:bg-deep-sage"
-    >
-      Daftar Sekarang
-    </a>
+    <div class="mobile-menu-panel mx-auto flex w-full max-w-sm flex-col gap-3 rounded-[28px] p-5">
+      <p class="mobile-menu-label text-mono">Menu</p>
+      <div class="flex flex-col gap-2">
+        {
+          navLinks.map((link) => (
+            <a
+              href={link.href}
+              class="mobile-nav-link text-body font-medium transition-colors duration-300"
+            >
+              {link.label}
+            </a>
+          ))
+        }
+      </div>
+      <a
+        href="https://wa.me/628113755552?text=Halo, saya ingin menanyakan informasi pendaftaran mahasiswa baru APU 2026/2027."
+        target="_blank"
+        rel="noopener noreferrer"
+        class="mobile-cta mt-2 inline-flex items-center justify-center px-6 py-3.5 text-body font-medium rounded-xl transition-colors duration-300"
+      >
+        Daftar Sekarang
+      </a>
+    </div>
   </div>
 </nav>
 
-<script>
+  <script>
   (function () {
     const nav = document.getElementById("main-nav");
     const menuToggle = document.getElementById("menu-toggle");
     const mobileMenu = document.getElementById("mobile-menu");
     const menuLines = menuToggle?.querySelectorAll<HTMLElement>(".menu-line");
-    const mobileLinks = mobileMenu?.querySelectorAll(".mobile-nav-link");
+    const mobileLinks = mobileMenu?.querySelectorAll("a");
 
     let lastScroll = 0;
     let isMenuOpen = false;
 
+    function updateTheme() {
+      const isScrolled = window.scrollY > 24;
+      nav?.setAttribute("data-scrolled", String(isScrolled));
+    }
+
     // Scroll direction hide/show
     function handleScroll() {
+      updateTheme();
       if (isMenuOpen) return;
       const currentScroll = window.scrollY;
       if (currentScroll > lastScroll && currentScroll > 100) {
@@ -117,6 +128,7 @@ const navLinks = [
     }
 
     window.addEventListener("scroll", handleScroll, { passive: true });
+    updateTheme();
 
     // Mobile menu toggle
     menuToggle?.addEventListener("click", () => {
@@ -159,17 +171,10 @@ const navLinks = [
         if (entry.isIntersecting) {
           const id = entry.target.id;
           navLinks.forEach((link) => {
-            link.classList.remove(
-              "text-soft-sage",
-              "border-b-2",
-              "border-soft-sage",
-            );
             if (link.getAttribute("data-section") === id) {
-              link.classList.add(
-                "text-soft-sage",
-                "border-b-2",
-                "border-soft-sage",
-              );
+              link.setAttribute("data-active", "true");
+            } else {
+              link.removeAttribute("data-active");
             }
           });
         }
@@ -179,3 +184,117 @@ const navLinks = [
     sections.forEach((section) => sectionObserver.observe(section));
   })();
 </script>
+
+<style>
+  #main-nav {
+    background: rgba(21, 55, 32, 0.88);
+    border-bottom: 1px solid rgba(168, 195, 157, 0.22);
+  }
+
+  #main-nav[data-scrolled="true"] {
+    background: rgba(244, 247, 238, 0.94);
+    border-bottom-color: rgba(168, 195, 157, 0.7);
+    box-shadow: 0 12px 32px rgba(31, 49, 36, 0.08);
+  }
+
+  #main-nav .brand-copy,
+  #main-nav .menu-toggle {
+    color: #f4f7ee;
+  }
+
+  #main-nav[data-scrolled="true"] .brand-copy,
+  #main-nav[data-scrolled="true"] .menu-toggle {
+    color: #1f3124;
+  }
+
+  #main-nav .nav-link {
+    color: rgba(244, 247, 238, 0.9);
+  }
+
+  #main-nav .nav-link:hover {
+    color: #f4f7ee;
+  }
+
+  #main-nav[data-scrolled="true"] .nav-link {
+    color: #1f3124;
+  }
+
+  #main-nav[data-scrolled="true"] .nav-link:hover {
+    color: #2f6b3b;
+  }
+
+  #main-nav .nav-link[data-active] {
+    color: #a8c39d;
+    border-bottom-color: #a8c39d;
+  }
+
+  #main-nav[data-scrolled="true"] .nav-link[data-active] {
+    color: #2f6b3b;
+    border-bottom-color: #2f6b3b;
+  }
+
+  #main-nav .nav-cta {
+    background: #2f6b3b;
+    color: #f4f7ee;
+  }
+
+  #main-nav .nav-cta:hover {
+    background: #1e4d2b;
+  }
+
+  #main-nav[data-scrolled="true"] .nav-cta {
+    background: #f4f7ee;
+    color: #153720;
+    box-shadow: inset 0 0 0 1px rgba(47, 107, 59, 0.22);
+  }
+
+  #main-nav[data-scrolled="true"] .nav-cta:hover {
+    background: #e6f0dd;
+  }
+
+  #mobile-menu {
+    background: rgba(21, 55, 32, 0.28);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  #mobile-menu .mobile-menu-panel {
+    background: rgba(244, 247, 238, 0.98);
+    border: 1px solid rgba(168, 195, 157, 0.55);
+    box-shadow:
+      0 24px 48px rgba(21, 55, 32, 0.22),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  }
+
+  #mobile-menu .mobile-menu-label {
+    color: #56705c;
+    letter-spacing: 0.18em;
+  }
+
+  #mobile-menu .mobile-nav-link {
+    color: #1f3124;
+    padding: 0.95rem 1rem;
+    border-radius: 1rem;
+    background: rgba(230, 240, 221, 0.72);
+    border: 1px solid rgba(168, 195, 157, 0.38);
+  }
+
+  #mobile-menu .mobile-nav-link:hover {
+    color: #2f6b3b;
+    background: rgba(214, 231, 200, 0.78);
+  }
+
+  #mobile-menu .mobile-nav-link:active {
+    background: rgba(214, 231, 200, 0.92);
+  }
+
+  #mobile-menu .mobile-cta {
+    background: #2f6b3b;
+    color: #f4f7ee;
+    box-shadow: 0 16px 28px rgba(21, 55, 32, 0.18);
+  }
+
+  #mobile-menu .mobile-cta:hover {
+    background: #1e4d2b;
+  }
+</style>
