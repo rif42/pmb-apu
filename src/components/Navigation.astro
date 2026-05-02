@@ -208,7 +208,7 @@ const navLinks = [
 
   #main-nav[data-scrolled="true"] .brand-copy,
   #main-nav[data-scrolled="true"] .menu-toggle {
-    color: rgb(var(--color-brand-text));
+    color: rgb(var(--color-brand-surface));
   }
 
   #main-nav .nav-link {
@@ -220,7 +220,7 @@ const navLinks = [
   }
 
   #main-nav[data-scrolled="true"] .nav-link {
-    color: rgb(var(--color-brand-text));
+    color: rgb(var(--color-brand-surface) / 0.9);
   }
 
   #main-nav[data-scrolled="true"] .nav-link:hover {
@@ -233,27 +233,18 @@ const navLinks = [
   }
 
   #main-nav[data-scrolled="true"] .nav-link[data-active] {
-    color: rgb(var(--color-brand-primary));
-    border-bottom-color: rgb(var(--color-brand-primary));
+    color: rgb(var(--color-brand-accent-soft));
+    border-bottom-color: rgb(var(--color-brand-accent-soft));
   }
 
   #main-nav .nav-cta {
-    background: rgb(var(--color-brand-primary));
+    background: rgb(var(--color-brand-accent));
     color: rgb(var(--color-brand-surface));
   }
 
   #main-nav .nav-cta:hover {
-    background: rgb(var(--color-brand-primary-deep));
-  }
-
-  #main-nav[data-scrolled="true"] .nav-cta {
-    background: rgb(var(--color-brand-surface));
-    color: rgb(var(--color-brand-primary-deeper));
-    box-shadow: inset 0 0 0 1px rgb(var(--color-brand-primary) / 0.22);
-  }
-
-  #main-nav[data-scrolled="true"] .nav-cta:hover {
-    background: rgb(var(--color-brand-surface-alt));
+    background: rgb(var(--color-brand-accent-soft));
+    color: rgb(var(--color-brand-primary-deep));
   }
 
   #mobile-menu {

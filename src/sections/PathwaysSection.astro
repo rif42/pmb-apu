@@ -5,11 +5,11 @@ import { pathways } from '../data/pathways';
 const getBadgeClasses = (type: string) => {
   switch (type) {
     case 'active':
-      return 'bg-brand-primary/12 text-brand-primary-deep';
+      return 'bg-brand-accent-soft text-brand-primary-deep';
     case 'upcoming':
       return 'bg-brand-surface-alt border border-brand-border/40 text-brand-text';
     default:
-      return 'bg-brand-surface-soft/70 border border-brand-border/40 text-brand-text-muted';
+      return 'border border-brand-border/40 text-brand-text-muted';
   }
 };
 ---
@@ -19,7 +19,7 @@ const getBadgeClasses = (type: string) => {
     <!-- Section Header -->
     <ScrollReveal class="text-center mb-16">
       <span class="text-mono text-brand-accent tracking-widest block mb-4">JALUR PENDAFTARAN</span>
-      <h2 class="text-h2 text-brand-text mb-4">Dua Jalur Menuju Kampus Impian</h2>
+      <h2 class="text-h2 text-brand-text mb-4 underline decoration-brand-accent-soft">Dua Jalur Menuju Kampus Impian</h2>
       <p class="text-body text-brand-text-muted max-w-xl mx-auto">
         Pilih jalur yang sesuai dengan potensi dan persiapanmu. Kami membuka kesempatan seluas-luasnya untuk calon mahasiswa berprestasi.
       </p>
@@ -29,7 +29,7 @@ const getBadgeClasses = (type: string) => {
     <div class="grid md:grid-cols-2 gap-8">
       {pathways.map((pathway, index) => (
         <ScrollReveal delay={index * 150}>
-          <div class="bg-brand-surface border border-brand-border/42 rounded-xl p-8 h-full transition-all duration-300 hover:shadow-lg hover:border-brand-primary/32 group">
+          <div class="bg-brand-surface border border-brand-border/42 rounded-xl p-8 h-full transition-all duration-300 hover:shadow-lg hover:border-brand-accent-soft hover:border-2 hover:border-solid group">
             <!-- Icon -->
             <div class="w-14 h-14 rounded-full bg-brand-surface-alt/75 text-brand-primary-deep flex items-center justify-center mb-6 border border-brand-border/24">
               {pathway.icon === 'graduation-cap' ? (
