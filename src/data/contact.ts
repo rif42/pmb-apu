@@ -4,7 +4,7 @@ export const contact = {
   address: 'Gedung Admisi APU, Jl. Nongkosawit, Gunungpati, Semarang',
   website: 'kmb.ac.id',
   websiteLink: 'https://kmb.ac.id',
-  scholarshipLink: 'https://scholarship.kmb.ac.id',
+  scholarshipLink: 'https://scholarship.kmb.ac.id/daftar-beasiswa/',
   email: 'info@kmb.ac.id',
   social: {
     instagram: '@ikmb.official',
