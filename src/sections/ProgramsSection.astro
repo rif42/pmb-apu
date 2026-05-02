@@ -1,67 +1,616 @@
 ---
-import ScrollReveal from '../components/ScrollReveal.astro';
-import { programs } from '../data/programs';
-import { contact } from '../data/contact';
+import ScrollReveal from "../components/ScrollReveal.astro";
+import { programs } from "../data/programs";
+
+// Map colors to programs based on reference HTML
+const programColors: Record<string, string> = {
+    "biomedical-science": "#1f3c88",
+    biotechnology: "#2ecc71",
+    law: "#c41515",
+    management: "#f1e300",
+    communication: "#f39c12",
+    "midwifery-s1": "#7a4db3",
+    "midwifery-d3": "#9b59b6",
+};
+
+const getColorForProgram = (id: string) => programColors[id] || "#0e1a3a";
 ---
 
-<section id="program" class="relative bg-brand-primary-deeper py-24 md:py-32 overflow-hidden">
-  <!-- Subtle contrast overlays -->
-  <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgb(var(--color-brand-primary)_/_0.22),transparent_60%)] pointer-events-none"></div>
-  <div class="absolute inset-0 bg-[linear-gradient(180deg,rgb(var(--color-brand-primary-deeper)_/_0.78)_0%,rgb(var(--color-brand-primary-deeper)_/_0.48)_46%,rgb(var(--color-brand-primary-deeper)_/_0.88)_100%)] pointer-events-none"></div>
+<section
+    id="program"
+    class="bungkus-prodi relative overflow-hidden py-12 bg-white"
+>
+    <style>
+        .bungkus-prodi {
+            margin: 20px 0px;
+            --gap: 18px;
+        }
+        .desktop-only {
+            display: block;
+        }
+        .mobile-only {
+            display: none;
+        }
 
-  <div class="content-max relative z-10">
-    <!-- Section Header -->
-    <ScrollReveal class="text-center mb-16">
-      <span class="text-mono text-brand-accent-soft tracking-widest block mb-4">PROGRAM STUDI</span>
-      <h2 class="text-h2 text-brand-surface mb-4">7 Program Unggulan, Masa Depan Cerah</h2>
-      <p class="text-body text-brand-surface-alt/82 max-w-2xl mx-auto">
-        Program studi yang dirancang untuk menghasilkan lulusan berdaya saing global di bidang kesehatan, bisnis, dan teknologi.
-      </p>
+        @media (max-width: 899px) {
+            .desktop-only {
+                display: none !important;
+            }
+            .mobile-only {
+                display: block !important;
+            }
+        }
+
+        /* ================= DESKTOP (grid + smooth expand) ================= */
+        .desktop-only .dsk-progdi-section {
+            width: 100%;
+            padding: 24px 0;
+        }
+
+        .desktop-only .dsk-progdi-grid {
+            max-width: 80dvw;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: grid;
+            grid-template-columns:
+                var(--g0, 1fr) var(--g1, 1fr) var(--g2, 1fr)
+                var(--g3, 1fr) var(--g4, 1fr) var(--g5, 1fr);
+            gap: var(--gap);
+            transition: grid-template-columns 0.45s
+                cubic-bezier(0.2, 0.9, 0.2, 1);
+            align-items: stretch;
+        }
+
+        .desktop-only .dsk-progdi-grid > a {
+            display: block;
+        }
+
+        .desktop-only .dsk-progdi-slide {
+            position: relative;
+            height: 820px;
+            background-size: cover;
+            background-position: center;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+            border-radius: 6px;
+            isolation: isolate;
+            transition:
+                transform 0.45s cubic-bezier(0.2, 0.9, 0.2, 1),
+                box-shadow 0.35s ease;
+            will-change: transform, box-shadow;
+            backface-visibility: hidden;
+        }
+
+        .desktop-only .dsk-progdi-slide::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: var(--hover-bg, rgba(0, 0, 0, 0.35));
+            opacity: 0.88;
+            transition:
+                opacity 0.35s ease,
+                transform 0.35s ease;
+            z-index: 1;
+        }
+
+        @media (min-width: 900px) {
+            .desktop-only .dsk-progdi-slide:hover::before {
+                opacity: 0.5;
+            }
+            .desktop-only .dsk-progdi-slide:hover {
+                transform: scale(1.02);
+                box-shadow: 0 18px 44px rgba(0, 0, 0, 0.32);
+                z-index: 4;
+            }
+            .desktop-only .dsk-progdi-slide:hover .dsk-progdi-card {
+                transform: rotate(0deg) translate(0, 0);
+                left: 24px;
+                bottom: 88px;
+                white-space: normal;
+                width: calc(100% - 48px);
+            }
+
+            .desktop-only
+                .dsk-progdi-grid:has(.dsk-progdi-slide:nth-child(1):hover) {
+                --g0: 2.5fr;
+                --g1: 1fr;
+                --g2: 1fr;
+                --g3: 1fr;
+                --g4: 1fr;
+                --g5: 1fr;
+            }
+            .desktop-only
+                .dsk-progdi-grid:has(.dsk-progdi-slide:nth-child(2):hover) {
+                --g0: 1fr;
+                --g1: 2.5fr;
+                --g2: 1fr;
+                --g3: 1fr;
+                --g4: 1fr;
+                --g5: 1fr;
+            }
+            .desktop-only
+                .dsk-progdi-grid:has(.dsk-progdi-slide:nth-child(3):hover) {
+                --g0: 1fr;
+                --g1: 1fr;
+                --g2: 2.5fr;
+                --g3: 1fr;
+                --g4: 1fr;
+                --g5: 1fr;
+            }
+            .desktop-only
+                .dsk-progdi-grid:has(.dsk-progdi-slide:nth-child(4):hover) {
+                --g0: 1fr;
+                --g1: 1fr;
+                --g2: 1fr;
+                --g3: 2.5fr;
+                --g4: 1fr;
+                --g5: 1fr;
+            }
+            .desktop-only
+                .dsk-progdi-grid:has(.dsk-progdi-slide:nth-child(5):hover) {
+                --g0: 1fr;
+                --g1: 1fr;
+                --g2: 1fr;
+                --g3: 1fr;
+                --g4: 2.5fr;
+                --g5: 1fr;
+            }
+            .desktop-only
+                .dsk-progdi-grid:has(.dsk-progdi-slide:nth-child(6):hover) {
+                --g0: 1fr;
+                --g1: 1fr;
+                --g2: 1fr;
+                --g3: 1fr;
+                --g4: 1fr;
+                --g5: 2.5fr;
+            }
+        }
+
+        .desktop-only .dsk-progdi-card {
+            position: absolute;
+            left: 50%;
+            bottom: 88px;
+            transform-origin: left bottom;
+            transform: rotate(-90deg) translate(0, 50%);
+            font-size: 32px;
+            font-weight: 700;
+            color: #fff;
+            text-align: left;
+            letter-spacing: 0.6px;
+            z-index: 4;
+            text-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+            line-height: 1.1;
+            pointer-events: none;
+            white-space: nowrap;
+            transition: all 0.5s cubic-bezier(0.2, 0.9, 0.2, 1);
+        }
+
+        .desktop-only .dsk-progdi-footer {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 64px;
+            background: #0e1a3a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #fff;
+            z-index: 4;
+            padding-left: 10px;
+        }
+
+        @media (max-width: 1200px) {
+            .desktop-only .dsk-progdi-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 899px) {
+            .desktop-only .dsk-progdi-grid {
+                grid-template-columns: 1fr;
+                transition: none;
+            }
+            .desktop-only .dsk-progdi-slide {
+                height: 520px;
+                border-radius: 0;
+            }
+            .desktop-only .dsk-progdi-card {
+                writing-mode: horizontal-tb;
+                transform: none;
+                left: 24px;
+                bottom: 96px;
+                font-size: 24px;
+                text-align: left;
+            }
+        }
+
+        /* ================= MOBILE (Swiper) ================= */
+        .mobile-only .progdi-section {
+            max-width: 1400px;
+            margin: 16px auto 36px;
+            padding: 0 16px;
+            position: relative;
+        }
+
+        .mobile-only .progdi-swiper.swiper {
+            width: 100%;
+            padding: 18px 0;
+            position: relative;
+        }
+
+        .mobile-only .progdi-slide.swiper-slide {
+            aspect-ratio: 1 / 1;
+            border-radius: 6px;
+            overflow: hidden;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            transform-origin: center;
+            transition:
+                transform 260ms ease,
+                box-shadow 260ms ease;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+        }
+
+        .mobile-only .swiper-slide {
+            min-width: 140px;
+            width: auto;
+        }
+
+        @media (max-width: 479px) {
+            .mobile-only .swiper-wrapper {
+                display: flex;
+            }
+            .mobile-only .swiper-slide {
+                width: 100% !important;
+                min-width: 100% !important;
+                max-width: 100% !important;
+            }
+        }
+
+        .mobile-only .progdi-slide::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                180deg,
+                rgba(0, 0, 0, 0.2) 8%,
+                rgba(0, 0, 0, 0.3) 75%
+            );
+            pointer-events: none;
+            transition: background 220ms ease;
+            z-index: 0;
+        }
+
+        .mobile-only .progdi-slide::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.72;
+            transition:
+                opacity 220ms ease,
+                background 220ms ease;
+            background: linear-gradient(
+                180deg,
+                var(--overlay-start) 0%,
+                var(--overlay-end) 100%
+            );
+        }
+
+        .mobile-only .progdi-card {
+            position: absolute;
+            left: 22px;
+            bottom: 22px;
+            z-index: 3;
+            color: #fff;
+            max-width: 72%;
+            text-decoration: none;
+        }
+
+        .mobile-only .progdi-label {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 700;
+            color: #ffd400;
+            margin-bottom: 8px;
+            letter-spacing: 0.2px;
+        }
+
+        .mobile-only .progdi-title {
+            font-size: 20px;
+            line-height: 1.02;
+            margin: 0;
+            font-weight: 700;
+            text-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+            font-family: "Instrument Serif", "Merriweather", Georgia, serif;
+        }
+
+        .mobile-only .progdi-swiper-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.14);
+            z-index: 30;
+            cursor: pointer;
+            border: none;
+            opacity: 0.98;
+        }
+
+        .mobile-only .progdi-swiper-button-prev {
+            left: -6px;
+        }
+        .mobile-only .progdi-swiper-button-next {
+            right: -6px;
+        }
+
+        @media (max-width: 420px) {
+            .mobile-only .progdi-swiper-button {
+                width: 36px;
+                height: 36px;
+            }
+            .mobile-only .progdi-swiper-button-prev {
+                left: -10px;
+            }
+            .mobile-only .progdi-swiper-button-next {
+                right: -10px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .mobile-only .progdi-swiper-button {
+                display: none !important;
+            }
+        }
+
+        .mobile-only .progdi-swiper .swiper-wrapper {
+            align-items: stretch;
+        }
+    </style>
+
+    <!-- Swiper CSS -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+
+    <ScrollReveal class="text-center mb-10 pt-8">
+        <span class="text-mono text-brand-accent tracking-widest block mb-4"
+            >PROGRAM STUDI</span
+        >
+        <h2 class="text-h2 text-brand-primary-deep mb-4">
+            Program Unggulan, Masa Depan Cerah
+        </h2>
     </ScrollReveal>
 
-    <!-- Program Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      {programs.map((program, index) => (
-        <ScrollReveal delay={index * 100} class={index >= 6 ? 'sm:col-span-2 lg:col-span-1' : ''}>
-          <div class="group relative aspect-[4/5] overflow-hidden rounded-lg cursor-pointer border border-brand-border/14 bg-brand-primary-deeper/20 shadow-[0_18px_40px_rgb(var(--color-brand-primary-deeper)_/_0.22)] transition-all duration-300 hover:-translate-y-1 hover:border-brand-border/28 hover:shadow-[0_24px_48px_rgb(var(--color-brand-primary-deeper)_/_0.3)]">
-            <!-- Image -->
-            <img
-              src={program.image}
-              alt={program.name}
-              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-              loading="lazy"
-            />
-            
-            <!-- Overlay Gradient -->
-            <div class="absolute inset-0 bg-gradient-to-t from-brand-primary-deeper/92 via-brand-primary-deep/46 to-transparent"></div>
-            
-            <!-- Content -->
-            <div class="absolute bottom-0 left-0 right-0 p-5">
-              <span class="text-caption text-brand-surface-alt/82 mb-1 block">{program.degree}</span>
-              <h3 class="text-h3 text-brand-surface text-lg">{program.name}</h3>
-              <p class="text-caption text-brand-surface-alt/72 mt-1">{program.subPrograms.length} sub-program</p>
+    <!-- DESKTOP -->
+    <section
+        class="desktop-only dsk-progdi-section"
+        aria-label="Daftar Program Studi (Desktop)"
+    >
+        <div class="dsk-progdi-grid" role="list">
+            {
+                programs.map((program) => (
+                    <a
+                        id={`dsk-progdi-${program.id}`}
+                        class="dsk-progdi-slide"
+                        href={`/${program.id}/`}
+                        aria-label={program.name}
+                        style={`--hover-bg: ${getColorForProgram(program.id)}; background-image:url('${program.image}')`}
+                    >
+                        <div class="dsk-progdi-card">{program.name}</div>
+                    </a>
+                ))
+            }
+        </div>
+    </section>
+
+    <!-- MOBILE (Swiper) -->
+    <section
+        id="progdi-programs"
+        class="mobile-only progdi-section"
+        aria-label="Program Studi Unggulan (Mobile)"
+    >
+        <div
+            class="progdi-swiper swiper"
+            aria-roledescription="carousel"
+            role="region"
+        >
+            <div class="swiper-wrapper">
+                {
+                    programs.map((program) => (
+                        <a
+                            id={`progdi-${program.id}`}
+                            class="progdi-slide swiper-slide"
+                            href={`/${program.id}/`}
+                            style={`--overlay-start: ${getColorForProgram(program.id)}52; --overlay-end: ${getColorForProgram(program.id)}5C; background-image:url('${program.image}');`}
+                        >
+                            <div class="progdi-card">
+                                <div class="progdi-label">
+                                    Program {program.degree}
+                                </div>
+                                <h3 class="progdi-title">{program.name}</h3>
+                            </div>
+                        </a>
+                    ))
+                }
             </div>
 
-            <!-- Hover overlay -->
-            <div class="absolute inset-0 bg-brand-primary/14 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          </div>
-        </ScrollReveal>
-      ))}
+            <!-- nav -->
+            <button
+                class="progdi-swiper-button progdi-swiper-button-prev"
+                aria-label="Previous"
+            >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                    <path
+                        d="M15 18L9 12L15 6"
+                        stroke="#0a58ca"
+                        stroke-width="2.2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"></path>
+                </svg>
+            </button>
+            <button
+                class="progdi-swiper-button progdi-swiper-button-next"
+                aria-label="Next"
+            >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                    <path
+                        d="M9 6L15 12L9 18"
+                        stroke="#0a58ca"
+                        stroke-width="2.2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"></path>
+                </svg>
+            </button>
+        </div>
+    </section>
 
-      <!-- CTA Card -->
-      <ScrollReveal delay={700}>
-        <a
-          href={contact.pmbLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="group flex items-center justify-center aspect-[4/5] rounded-lg border border-brand-border/20 bg-brand-primary text-brand-surface shadow-[0_18px_40px_rgb(var(--color-brand-primary-deeper)_/_0.22)] transition-all duration-300 hover:border-brand-accent/30 hover:bg-brand-primary-deep"
-        >
-          <div class="text-center p-5">
-            <span class="text-h3 text-brand-surface block mb-2">Lihat Semua Program & Biaya</span>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto text-brand-accent-soft transition-transform duration-300 group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-          </div>
-        </a>
-      </ScrollReveal>
-    </div>
-  </div>
+    <!-- Swiper JS -->
+    <script
+        is:inline
+        src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"
+    ></script>
+
+    <script is:inline define:vars={{ count: programs.length }}>
+        /* ================= DESKTOP fallback: set CSS vars on pointer enter/leave ================= */
+        (function () {
+            const GRID_MIN_DESKTOP = 900;
+            const grid = document.querySelector(
+                ".desktop-only .dsk-progdi-grid",
+            );
+            if (!grid) return;
+            const slides = Array.from(grid.children);
+
+            function setVarsFor(index) {
+                for (let i = 0; i < count; i++) {
+                    grid.style.setProperty(
+                        `--g${i}`,
+                        i === index ? "2.5fr" : "1fr",
+                    );
+                }
+            }
+            function resetVars() {
+                for (let i = 0; i < count; i++)
+                    grid.style.setProperty(`--g${i}`, "1fr");
+            }
+
+            slides.forEach((s, i) => {
+                s.addEventListener("pointerenter", () => {
+                    if (window.innerWidth >= GRID_MIN_DESKTOP) setVarsFor(i);
+                });
+                s.addEventListener(
+                    "focus",
+                    () => {
+                        if (window.innerWidth >= GRID_MIN_DESKTOP)
+                            setVarsFor(i);
+                    },
+                    true,
+                );
+            });
+            grid.addEventListener("pointerleave", () => {
+                if (window.innerWidth >= GRID_MIN_DESKTOP) resetVars();
+            });
+            grid.addEventListener(
+                "blur",
+                () => {
+                    if (window.innerWidth >= GRID_MIN_DESKTOP) resetVars();
+                },
+                true,
+            );
+
+            window.addEventListener("resize", () => {
+                if (window.innerWidth < GRID_MIN_DESKTOP) resetVars();
+            });
+        })();
+
+        /* ================= MOBILE: Swiper init ================= */
+        (function () {
+            const container = document.querySelector(
+                ".mobile-only .progdi-swiper",
+            );
+            if (!container) return;
+            const wrapper = container.querySelector(".swiper-wrapper");
+            if (!wrapper) return;
+
+            const prevEl = container.querySelector(
+                ".progdi-swiper-button-prev",
+            );
+            const nextEl = container.querySelector(
+                ".progdi-swiper-button-next",
+            );
+
+            const originalCount = count || 1;
+            let swiper = null;
+
+            function initSwiper() {
+                if (swiper) return;
+                const enableLoop = originalCount > 1;
+
+                swiper = new Swiper(container, {
+                    loop: enableLoop,
+                    slidesPerView: 1,
+                    spaceBetween: 12,
+                    breakpoints: {
+                        0: {
+                            slidesPerView: Math.min(1, originalCount),
+                            spaceBetween: 12,
+                        },
+                        480: {
+                            slidesPerView: Math.min(2, originalCount),
+                            spaceBetween: 14,
+                        },
+                        820: {
+                            slidesPerView: Math.min(3, originalCount),
+                            spaceBetween: 16,
+                        },
+                    },
+                    navigation: { prevEl, nextEl },
+                    autoplay: {
+                        delay: 3000,
+                        disableOnInteraction: false,
+                        pauseOnMouseEnter: false,
+                    },
+                    keyboard: { enabled: true, onlyInViewport: true },
+                    a11y: { enabled: true },
+                    grabCursor: true,
+                    speed: 600,
+                    observer: true,
+                    observeParents: true,
+                    observeSlideChildren: true,
+                });
+            }
+
+            if (document.readyState === "loading") {
+                window.addEventListener("DOMContentLoaded", initSwiper);
+            } else {
+                initSwiper();
+            }
+
+            window.addEventListener("orientationchange", () => {
+                setTimeout(() => {
+                    swiper?.update?.();
+                }, 250);
+            });
+            window.addEventListener("resize", () => {
+                setTimeout(() => {
+                    swiper?.update?.();
+                }, 200);
+            });
+        })();
+    </script>
 </section>

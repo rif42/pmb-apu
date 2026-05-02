@@ -65,16 +65,7 @@ export const programs: Program[] = [
       'Innovative Women Health & Beauty Care in Midwifery',
       'Entrepreneur in Midwifery Business',
     ],
-    image: '/images/programs/midwifery-s1.jpg',
+    image: '/images/programs/midwiferys1.jpg',
   },
-  {
-    id: 'midwifery-d3',
-    name: 'Kebidanan',
-    degree: 'D3',
-    subPrograms: [
-      'International Midwifery',
-      'Innovation Entrepreneurship Midwifery',
-    ],
-    image: '/images/programs/midwifery-d3.jpg',
-  },
+
 ];

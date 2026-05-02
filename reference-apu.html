@@ -1,0 +1,3372 @@
+<style>
+    /*================= 1. INPO =========================*/
+    .inpo {
+        margin-top: 30px;
+        margin-bottom: -50px;
+    }
+
+    .eyebrow {
+        color: var(--muted);
+        font-size: 14px;
+        margin-bottom: 8px;
+        text-align: center;
+    }
+
+    .judul {
+        font-family: 'Playfair Display', serif;
+        font-size: 44px;
+        line-height: 1.05;
+        margin: 8px 0 12px;
+        text-align: center;
+        color: #fcbc55;
+    }
+
+    .sub {
+        color: var(--muted);
+        text-align: center;
+        padding: 0px 40px;
+    }
+
+    @media (max-width: 600px) {
+        .inpo {
+            padding-bottom: 12px;
+        }
+    }
+
+    /* ================= 2. POTO (diperbarui) ================= */
+    /* ROOT CONFIGURATION */
+    :root {
+        --bg-color: #f7f7f7;
+        --card-border-color: #ffffff;
+        --shadow-color: rgba(0, 0, 0, 0.25);
+
+        /* numeric base untuk perhitungan (unitless) */
+        --base-card-width-num: 200;
+        /* referensi lama (unitless) */
+        --card-width-num: 300;
+        /* 260 def ubah ini untuk membesarkan/memperkecil gambar */
+
+        /* hasil dengan unit px, gunakan property ini di CSS layout */
+        --card-width: calc(var(--card-width-num) * 1px);
+        /* tinggi proporsional: contoh 200 -> 280 = 1.4x. jadi gunakan perpangkatan yang sama */
+        --card-height: calc(var(--card-width-num) * 1.4 * 1px);
+
+        /* radius dasar dalam px (nilai lama) */
+        --base-radius: 700px;
+
+        /* radius proporsional: base-radius * (card-width-num / base-card-width-num) */
+        --radius: calc(var(--base-radius) * (var(--card-width-num) / var(--base-card-width-num)));
+
+        --total-cards: 20;
+        --card-angle: calc(360deg / var(--total-cards));
+        --auto-rotate-speed: 4deg;
+
+        --gap: 18px;
+
+        --whyapu-bg: linear-gradient(180deg, #f7fbff 0%, #ffffff 100%);
+        --whyapu-card: rgba(255, 255, 255, 0.75);
+        --whyapu-accent1: #06b6d4;
+        /* cyan */
+        --whyapu-accent2: #8b5cf6;
+        /* violet */
+        --whyapu-glow: 0 8px 30px rgba(100, 120, 255, 0.08);
+        --whyapu-radius: 14px;
+        --whyapu-gap: 14px;
+        --whyapu-transition: 320ms cubic-bezier(.2, .9, .2, 1);
+        --whyapu-text: #0f172a;
+        --whyapu-muted: #475569;
+        --whyapu-maxwidth: 980px;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: var(--bg-color);
+        /* Mencegah scrollbar horizontal muncul gara-gara efek hover */
+        overflow-x: hidden;
+    }
+
+    /* ================= 2. PHOTO CONTAINER ================= */
+    .prof {
+        margin-top: -75px;
+        margin-bottom: -75px;
+        position: relative;
+        width: 100vw;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        overflow-x: hidden;
+    }
+
+    /* --- GALLERY WRAPPER --- */
+    .gallery-wrapper {
+        position: relative;
+        width: 100%;
+        height: 400px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        perspective: 1200px;
+        transform-style: preserve-3d;
+        visibility: hidden;
+    }
+
+    .gallery-wrapper.loaded {
+        visibility: visible;
+    }
+
+    /* Silinder Utama */
+    .gallery-cylinder {
+        width: var(--card-width);
+        height: var(--card-height);
+        position: absolute;
+        transform-style: preserve-3d;
+        transform: rotateY(0deg);
+        transition: transform 400ms cubic-bezier(.22, .9, .36, 1);
+        will-change: transform;
+    }
+
+    /* Gambar 3D */
+    .img3d {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: var(--card-width);
+        height: var(--card-height);
+        border-radius: 10px;
+        border: 4px solid var(--card-border-color);
+        object-fit: cover;
+        box-shadow: 0 10px 30px var(--shadow-color);
+
+        /* Posisi kartu */
+        transform: rotateY(var(--rotation)) translateZ(var(--radius)) rotateY(180deg);
+
+        will-change: transform, opacity, filter;
+        opacity: 1;
+        filter: none;
+        transition: transform 320ms cubic-bezier(.22, .9, .36, 1), box-shadow 220ms, filter 220ms, opacity 220ms;
+        pointer-events: auto;
+        cursor: grab;
+        backface-visibility: hidden;
+        /* Sembunyikan belakang kartu agar performa lebih ringan */
+    }
+
+    /* Hover Effect */
+    .img3d.hovered {
+        /* Saat hover, kartu maju (translateZ + 60px). 
+         Karena parent overflow-x: hidden, dia tidak akan bikin scrollbar 
+         meskipun 'offside' secara visual */
+        transform: rotateY(var(--rotation)) translateZ(calc(var(--radius) + 60px)) rotateY(180deg) scale(1.05);
+        box-shadow: 0 18px 50px rgba(74, 144, 226, 0.9);
+        filter: none !important;
+        opacity: 1 !important;
+        cursor: pointer;
+        z-index: 1000;
+    }
+
+    .img3d:not(.hovered) {
+        transition: transform 320ms, filter 220ms, opacity 220ms;
+    }
+
+    .img3d:active {
+        cursor: grabbing;
+    }
+
+
+    /* --- KONTROL SLIDER --- */
+    .controls {
+        margin-top: 10px;
+        display: none;
+        /* Ubah ke flex */
+        gap: 20px;
+        z-index: 100;
+        position: relative;
+    }
+
+    .slider-btn {
+        background: #4A90E2;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 9999px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: bold;
+        transition: background 0.3s, transform 0.1s;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .slider-btn:hover {
+        background: #357ABD;
+    }
+
+    /* --- MASKING (KUNCI NO 1) --- */
+    .mask-left,
+    .mask-right {
+        position: absolute;
+        top: 0;
+        height: 100%;
+        width: 22vw;
+        pointer-events: none;
+        z-index: 15;
+    }
+
+    .mask-left {
+        left: 0;
+        background: linear-gradient(to right,
+                rgba(247, 247, 247, 1) 0%,
+                rgba(247, 247, 247, 0.7) 35%,
+                rgba(247, 247, 247, 0.0) 100%);
+    }
+
+    .mask-right {
+        right: 0;
+        background: linear-gradient(to left,
+                rgba(247, 247, 247, 1) 0%,
+                rgba(247, 247, 247, 0.7) 35%,
+                rgba(247, 247, 247, 0.0) 100%);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .prof {
+            margin-bottom: -60px;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .prof {
+            overflow: hidden;
+            /* jangan hanya overflow-x */
+            transform: translateZ(0);
+        }
+
+        :root {
+            --card-width: 140px;
+            --card-height: 200px;
+            --radius: 450px;
+        }
+
+        .gallery-wrapper {
+            height: 300px;
+        }
+
+        .mask-left,
+        .mask-right {
+            width: 10vw;
+            height: -webkit-fill-available;
+        }
+    }
+
+    /* custom tooltip */
+    .gallery-tooltip {
+        position: absolute;
+        pointer-events: none;
+        padding: 6px 10px;
+        border-radius: 6px;
+        background: rgba(0, 0, 0, 0.8);
+        color: #fff;
+        font-size: 13px;
+        line-height: 1;
+        white-space: nowrap;
+        transform: translate(-50%, -140%);
+        z-index: 3000;
+        display: none;
+        will-change: transform, opacity;
+        opacity: 0;
+        transition: opacity .12s ease;
+    }
+
+    .gallery-tooltip.visible {
+        display: block;
+        opacity: 1;
+    }
+
+    /* ================= 3. FEATURES (final, improved) ================== */
+    /* global safety */
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
+
+    /* DESCRIPTION / INTRO */
+    .subd {
+        color: var(--muted);
+        text-align: center;
+        max-width: 980px;
+        /* sejajarkan dengan .features */
+        margin: 28px auto 12px;
+        /* jarak atas lebih lega */
+        padding: 0 24px;
+        /* horizontal padding stabil */
+        line-height: 1.6;
+        /* lebih rapih dan mudah dibaca */
+        font-size: 1rem;
+        /* set dalam rem untuk aksesibilitas */
+        letter-spacing: 0.01em;
+        margin-bottom: 8px;
+    }
+
+    /* FEATURES GRID (Desktop: 3 kolom) */
+    .features {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 24px;
+        /* ruang antar card lebih seimbang */
+        margin-top: 12px;
+        /* hilangkan overlay negatif berlebihan */
+        max-width: 980px;
+        /* sejajarkan lebar dengan .subd */
+        margin-left: auto;
+        margin-right: auto;
+        padding: 18px 24px;
+        /* padding area yang konsisten */
+        align-items: start;
+    }
+
+    /* INDIVIDUAL FEATURE */
+    .feature {
+        background: transparent;
+        text-align: center;
+        padding: 16px 12px;
+        /* ruang internal card lebih lapang */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 110px;
+        border-radius: 6px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* TITLE & BODY */
+    .feature h4 {
+        margin: 0 0 8px;
+        font-size: 1.0625rem;
+        /* ~17px */
+        line-height: 1.25;
+        color: var(--text);
+        font-weight: 700;
+    }
+
+    .feature p {
+        color: var(--muted);
+        font-size: 0.9375rem;
+        /* ~15px */
+        margin: 0;
+    }
+
+    /* ================= Breakpoints ================= */
+
+    /* Large screens (slightly narrower desktops) */
+    @media (max-width: 1200px) {
+        .subd {
+            max-width: 900px;
+            padding: 0 20px;
+            font-size: 0.99rem;
+        }
+
+        .features {
+            max-width: 900px;
+            gap: 20px;
+            padding: 16px 20px;
+        }
+    }
+
+    /* Tablet: 2 kolom; jika ganjil, last-child span sendiri & center */
+    @media (max-width: 900px) {
+        .features {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+            margin-top: 10px;
+            padding: 12px 18px;
+        }
+
+        /* Jika jumlah item ganjil, last-child ambil 1 baris penuh dan terpusat */
+        .features>.feature:last-child {
+            grid-column: 1 / -1;
+            justify-self: center;
+            max-width: 540px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+    }
+
+    /* Mobile: 1 kolom, spacing lebih ringkas */
+    @media (max-width: 520px) {
+        .features {
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-top: 8px;
+            padding: 10px 16px;
+        }
+
+        .features>.feature {
+            padding: 12px 10px;
+        }
+
+        .features>.feature:last-child {
+            grid-column: auto;
+            justify-self: center;
+            max-width: 360px;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .subd {
+            padding: 0 14px;
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+        }
+
+        .feature h4 {
+            font-size: 1rem;
+        }
+
+        /* ~16px */
+        .feature p {
+            font-size: 0.95rem;
+        }
+
+        /* ~15px */
+    }
+
+    /* ==================== 4. APPLYX ======================== */
+    .applyx-wrap {
+        max-width: 920px;
+        margin: 0 auto;
+        overflow: visible;
+        margin-bottom: 20px;
+        padding-right: 80px;
+        position: relative;
+        z-index: 10;
+    }
+
+    .applyx-banner {
+        background: linear-gradient(to right, #00bcd4, #26c6da);
+        padding: 20px 10px;
+        color: white;
+        position: relative;
+        overflow: hidden;
+        min-height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .applyx-banner::before {
+        content: "";
+        position: absolute;
+        top: -50px;
+        left: -50px;
+        width: 200px;
+        height: 200px;
+        background: orange;
+        border-radius: 50%;
+        z-index: 0;
+    }
+
+    .applyx-container {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 80px;
+        padding-left: 30px;
+    }
+
+    .applyx-title {
+        font-size: clamp(30px, 5vw, 20px);
+        line-height: 1.15;
+        margin: 0;
+        white-space: normal;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+
+    .applyx-button-bleed {
+        position: absolute;
+        right: -60px;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: rgba(255, 235, 59, 0.9);
+        font-size: 28px;
+        padding: 10px 20px;
+        border-radius: 5px;
+        z-index: 2;
+        border: none;
+        cursor: pointer;
+    }
+
+    .applyx-button-bleed:hover {
+        background-color: #fdd835;
+    }
+
+    .applyx-left,
+    .applyx-right {
+        flex: 0 0 auto;
+        display: flex;
+        align-items: center;
+    }
+
+    .applyx-free {
+        font-size: 42px;
+        font-weight: 900;
+        color: #ffeb3b;
+        background: linear-gradient(135deg, #001f3f, #004080, #0066cc);
+        padding: 6px 14px;
+        border-radius: 6px;
+        margin-left: 20px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+        animation: pulset 1.5s infinite;
+        right: 30;
+    }
+
+    @keyframes pulset {
+        0% {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        50% {
+            transform: scale(1.1);
+            opacity: 0.85;
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    /* ---------- Mobile (<= 640px) ---------- */
+    @media (max-width: 940px) {
+        .applyx-wrap {
+            margin-top: 12px;
+            padding: 0 12px;
+            display: block;
+        }
+
+        .applyx-banner {
+            min-height: 72px;
+            padding: 24px 12px;
+            border-radius: 8px;
+        }
+
+        .applyx-container {
+            gap: var(--gap-mobile);
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            flex-wrap: nowrap;
+        }
+
+        /* dua kolom berdampingan di mobile */
+        .applyx-left,
+        .applyx-right {
+            flex: 1 1 50%;
+            justify-content: center;
+            text-align: center;
+            min-width: 0;
+        }
+
+        .applyx-title {
+            font-size: 22px;
+            margin: 0;
+        }
+
+        /* tombol sekarang relativ (tidak ter-clip) */
+        .applyx-button-bleed {
+            position: relative;
+            transform: none;
+            width: auto;
+            margin-top: -28px;
+            margin-left: 130px;
+            align-self: center;
+            font-size: clamp(26px, 4.2vw, 20px);
+            padding: 10px 14px;
+            white-space: nowrap;
+            border-radius: 6px;
+        }
+    }
+
+    /* ============== 5. VIDEO =================== */
+    .lppmkmb-video-wrapper {
+        width: 100vw;
+        height: 95vh;
+        position: relative;
+        z-index: 1;
+        overflow: hidden;
+        margin-top: -80px;
+    }
+
+    .lppmkmb-video-wrapper iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+
+    @media (max-width: 720px) {
+        .lppmkmb-video-wrapper {
+            margin: 0px;
+            max-height: 250px;
+        }
+
+        .lppmkmb-video-wrapper iframe {
+            height: 100%;
+        }
+    }
+
+    /* ---------------- 6. PROGRAMS ---------------- */
+    .bungkus-prodi {
+        margin: 20px 0px;
+    }
+
+    :root {
+        --gap: 18px;
+    }
+
+    body {
+        margin: 0;
+        font-family: system-ui, -apple-system, "Segoe UI", Inter, Arial, sans-serif;
+        background: #fff;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* visibility */
+    .desktop-only {
+        display: block;
+    }
+
+    .mobile-only {
+        display: none;
+    }
+
+    /* global switch: desktop >=900, mobile <900 */
+    @media (max-width:899px) {
+        .desktop-only {
+            display: none !important;
+        }
+
+        .mobile-only {
+            display: block !important;
+        }
+    }
+
+    /* ================= DESKTOP (grid + smooth expand) ================= */
+    .desktop-only .dsk-progdi-section {
+        width: 100%;
+        padding: 24px 0;
+    }
+
+    .desktop-only .dsk-progdi-grid {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 24px;
+        display: grid;
+
+        /* 6 CSS vars (defaults 1fr) for 6 prodi */
+        --g0: 1fr;
+        --g1: 1fr;
+        --g2: 1fr;
+        --g3: 1fr;
+        --g4: 1fr;
+        --g5: 1fr;
+        grid-template-columns: var(--g0) var(--g1) var(--g2) var(--g3) var(--g4) var(--g5);
+
+        gap: var(--gap);
+        transition: grid-template-columns .45s cubic-bezier(.2, .9, .2, 1);
+        align-items: stretch;
+    }
+
+    .desktop-only .dsk-progdi-grid>a {
+        display: block;
+    }
+
+    .desktop-only .dsk-progdi-slide {
+        position: relative;
+        height: 820px;
+        background-size: cover;
+        background-position: center;
+        overflow: hidden;
+        text-decoration: none;
+        color: inherit;
+        cursor: pointer;
+        border-radius: 6px;
+        isolation: isolate;
+    }
+
+    /* overlay + transitions */
+    .desktop-only .dsk-progdi-slide::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.35);
+        opacity: .88;
+        transition: opacity .35s ease, transform .35s ease;
+        z-index: 1;
+    }
+
+    @media (min-width:900px) {
+        .desktop-only .dsk-progdi-slide:hover::before {
+            opacity: .5;
+        }
+    }
+
+    .desktop-only .dsk-progdi-slide:hover {
+        z-index: 3;
+    }
+
+    /* card text + footer */
+    .desktop-only .dsk-progdi-card {
+        position: absolute;
+        left: 46%;
+        bottom: 88px;
+        transform: translateX(-100%);
+        writing-mode: vertical-rl;
+        text-orientation: mixed;
+        font-size: 42px;
+        font-weight: 700;
+        color: #fff;
+        text-align: right;
+        letter-spacing: .6px;
+        z-index: 4;
+        text-shadow: 0 10px 28px rgba(0, 0, 0, .45);
+        line-height: 1;
+        pointer-events: none;
+    }
+
+    .desktop-only .dsk-progdi-footer {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 64px;
+        background: #0e1a3a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        color: #fff;
+        z-index: 4;
+        padding-left: 10px;
+    }
+
+    /* desktop color overrides for ::before (per id) */
+    #dsk-progdi-law::before {
+        background: #c41515;
+    }
+
+    #dsk-progdi-communication::before {
+        background: #f39c12;
+    }
+
+    #dsk-progdi-management::before {
+        background: #f1e300;
+    }
+
+    #dsk-progdi-biotechnology::before {
+        background: #2ecc71;
+    }
+
+    #dsk-progdi-biomedical::before {
+        background: #1f3c88;
+    }
+
+    #dsk-progdi-midwifery-prof::before {
+        background: #7a4db3;
+    }
+
+    /* Desktop: :has() sets CSS vars (preferred) - keeps transition smooth */
+    @media (min-width:900px) {
+        .desktop-only .dsk-progdi-grid:has(#dsk-progdi-biotechnology:hover) {
+            --g0: 2.5fr;
+            --g1: 1fr;
+            --g2: 1fr;
+            --g3: 1fr;
+            --g4: 1fr;
+            --g5: 1fr;
+        }
+
+        .desktop-only .dsk-progdi-grid:has(#dsk-progdi-biomedical:hover) {
+            --g0: 1fr;
+            --g1: 2.5fr;
+            --g2: 1fr;
+            --g3: 1fr;
+            --g4: 1fr;
+            --g5: 1fr;
+        }
+
+        .desktop-only .dsk-progdi-grid:has(#dsk-progdi-management:hover) {
+            --g0: 1fr;
+            --g1: 1fr;
+            --g2: 2.5fr;
+            --g3: 1fr;
+            --g4: 1fr;
+            --g5: 1fr;
+        }
+
+        .desktop-only .dsk-progdi-grid:has(#dsk-progdi-communication:hover) {
+            --g0: 1fr;
+            --g1: 1fr;
+            --g2: 1fr;
+            --g3: 2.5fr;
+            --g4: 1fr;
+            --g5: 1fr;
+        }
+
+        .desktop-only .dsk-progdi-grid:has(#dsk-progdi-law:hover) {
+            --g0: 1fr;
+            --g1: 1fr;
+            --g2: 1fr;
+            --g3: 1fr;
+            --g4: 2.5fr;
+            --g5: 1fr;
+        }
+
+        .desktop-only .dsk-progdi-grid:has(#dsk-progdi-midwifery-prof:hover) {
+            --g0: 1fr;
+            --g1: 1fr;
+            --g2: 1fr;
+            --g3: 1fr;
+            --g4: 1fr;
+            --g5: 2.5fr;
+        }
+
+        /* micro interactions */
+        .desktop-only .dsk-progdi-slide {
+            transition: transform .45s cubic-bezier(.2, .9, .2, 1), box-shadow .35s ease;
+            will-change: transform, box-shadow;
+            backface-visibility: hidden;
+        }
+
+        .desktop-only .dsk-progdi-slide:hover {
+            transform: scale(1.02);
+            box-shadow: 0 18px 44px rgba(0, 0, 0, .32);
+            z-index: 4;
+        }
+    }
+
+    /* responsive fallbacks for narrower desktops */
+    @media (max-width:1200px) {
+        .desktop-only .dsk-progdi-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    @media (max-width:899px) {
+        .desktop-only .dsk-progdi-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .desktop-only .dsk-progdi-slide {
+            height: 520px;
+            border-radius: 0;
+        }
+
+        .desktop-only .dsk-progdi-card {
+            writing-mode: horizontal-tb;
+            transform: none;
+            left: 24px;
+            bottom: 96px;
+            font-size: 24px;
+            text-align: left;
+        }
+
+        .desktop-only .dsk-progdi-grid {
+            transition: none;
+        }
+    }
+
+    /* ================= MOBILE (Swiper) ================= */
+    .mobile-only .progdi-section {
+        max-width: 1400px;
+        margin: 36px auto;
+        padding: 0 16px;
+        position: relative;
+        font-family: system-ui, Inter, Arial, sans-serif;
+    }
+
+    .mobile-only .progdi-swiper.swiper {
+        width: 100%;
+        padding: 18px 0;
+        position: relative;
+    }
+
+    /* Square slides (1:1) for mobile */
+    .mobile-only .progdi-slide.swiper-slide {
+        aspect-ratio: 1 / 1;
+        border-radius: 6px;
+        overflow: hidden;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        transform-origin: center;
+        transition: transform 260ms ease, box-shadow 260ms ease;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+    }
+
+    /* help prevent a single giant slide: allow Swiper to size slides but give a sane min width */
+    .mobile-only .swiper-slide {
+        min-width: 140px;
+        width: auto;
+    }
+
+    /* FORCE single-column for very small viewports (fix some iPhone behaviours) */
+    @media (max-width:479px) {
+        .mobile-only .swiper-wrapper {
+            display: flex;
+        }
+
+        .mobile-only .swiper-slide {
+            width: 100% !important;
+            min-width: 100% !important;
+            max-width: 100% !important;
+        }
+    }
+
+    /* overlays & text */
+    .mobile-only .progdi-slide::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0.20) 8%, rgba(0, 0, 0, 0.30) 75%);
+        pointer-events: none;
+        transition: background 220ms ease;
+        z-index: 0;
+    }
+
+    .mobile-only .progdi-slide::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
+        opacity: 0.72;
+        transition: opacity 220ms ease, background 220ms ease;
+    }
+
+    .mobile-only .progdi-card {
+        position: absolute;
+        left: 22px;
+        bottom: 22px;
+        z-index: 3;
+        color: #fff;
+        max-width: 72%;
+        text-decoration: none;
+    }
+
+    .mobile-only .progdi-label {
+        display: inline-block;
+        font-size: 12px;
+        font-weight: 700;
+        color: #ffd400;
+        margin-bottom: 8px;
+        letter-spacing: .2px;
+    }
+
+    .mobile-only .progdi-title {
+        font-size: 20px;
+        line-height: 1.02;
+        margin: 0;
+        font-weight: 700;
+        text-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+        font-family: "Merriweather", Georgia, serif;
+    }
+
+    /* mobile color overlays using ::after */
+    .mobile-only #progdi-law::after {
+        background: linear-gradient(180deg, rgba(190, 20, 20, 0.32) 0%, rgba(120, 0, 0, 0.36) 100%);
+    }
+
+    .mobile-only #progdi-communication::after {
+        background: linear-gradient(180deg, rgba(245, 140, 30, 0.32) 0%, rgba(200, 90, 10, 0.36) 100%);
+    }
+
+    .mobile-only #progdi-management::after {
+        background: linear-gradient(180deg, rgba(255, 215, 0, 0.30) 0%, rgba(210, 170, 0, 0.36) 100%);
+    }
+
+    .mobile-only #progdi-biotechnology::after {
+        background: linear-gradient(180deg, rgba(70, 170, 120, 0.32) 0%, rgba(20, 110, 70, 0.36) 100%);
+    }
+
+    .mobile-only #progdi-biomedical::after {
+        background: linear-gradient(180deg, rgba(40, 70, 160, 0.32) 0%, rgba(20, 35, 110, 0.36) 100%);
+    }
+
+    .mobile-only #progdi-midwifery-prof::after {
+        background: linear-gradient(180deg, rgba(165, 120, 210, 0.32) 0%, rgba(110, 70, 160, 0.36) 100%);
+    }
+
+    /* nav buttons */
+    .mobile-only .progdi-swiper-button {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 8px 22px rgba(0, 0, 0, 0.14);
+        z-index: 30;
+        cursor: pointer;
+        border: none;
+        opacity: 0.98;
+    }
+
+    .mobile-only .progdi-swiper-button-prev {
+        left: -6px;
+    }
+
+    .mobile-only .progdi-swiper-button-next {
+        right: -6px;
+    }
+
+    @media (max-width:420px) {
+        .mobile-only .progdi-swiper-button {
+            width: 36px;
+            height: 36px;
+        }
+
+        .mobile-only .progdi-swiper-button-prev {
+            left: -10px;
+        }
+
+        .mobile-only .progdi-swiper-button-next {
+            right: -10px;
+        }
+    }
+
+    @media (max-width:360px) {
+        .mobile-only .progdi-swiper-button {
+            display: none !important;
+        }
+    }
+
+    .mobile-only .progdi-swiper .swiper-wrapper {
+        align-items: stretch;
+    }
+
+    /* ============= 8. LOGO UNI ================ */
+    /* WRAPPER SECTION */
+    .lgapx-section {
+        max-width: 1200px;
+        margin: 10px auto;
+        padding: 10px 20px;
+        margin-bottom: 0px;
+        padding-bottom: 0px;
+    }
+
+    /* GRID PER ROW */
+    .lgapx-row {
+        display: grid;
+        gap: 26px;
+        margin-bottom: 34px;
+    }
+
+    .lgapx-r1 {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .lgapx-r2 {
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    .lgapx-r3 {
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    .lgapx-r4 {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    /* LOGO STYLE — MINIMALISTIC */
+    .lgapx-row img {
+        width: 100%;
+        display: block;
+        padding: 14px 18px;
+        background: #ffffff;
+        border-radius: 12px;
+
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+
+        transition: all .28s ease;
+    }
+
+    /* HOVER EFFECT — CLEAN & ELEGANT */
+    .lgapx-row img:hover {
+        transform: translateY(-3px);
+
+        /* soft shadow, natural look */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
+
+        border-color: rgba(0, 0, 0, 0.18);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+
+        .lgapx-r1,
+        .lgapx-r4 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .lgapx-r2,
+        .lgapx-r3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    @media (max-width: 540px) {
+
+        .lgapx-r1,
+        .lgapx-r2,
+        .lgapx-r3,
+        .lgapx-r4 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    /* TITLE WRAPPER */
+    .lgapx-title-wrap {
+        text-align: center;
+        margin-top: 24px;
+        margin-bottom: 12px;
+        padding: 0 10px;
+    }
+
+    /* MAIN TITLE DESIGN */
+    .lgapx-title {
+        font-size: 26px;
+        font-weight: 600;
+        color: #222;
+        letter-spacing: 0.3px;
+        line-height: 1.35;
+        max-width: 820px;
+        margin: 0 auto;
+
+        /* efek elegan */
+        position: relative;
+        padding-bottom: 14px;
+    }
+
+    /* SUBTLE UNDERLINE ACCENT */
+    .lgapx-title::after {
+        content: "";
+        width: 70px;
+        height: 3px;
+        background: linear-gradient(to right, #3d8bfd, #6ea8fe);
+        border-radius: 3px;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 0;
+        opacity: 0.65;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 600px) {
+        .lgapx-title {
+            font-size: 20px;
+        }
+    }
+
+    /* WRAPPER */
+    .lgapx-int-section {
+        max-width: 1200px;
+        margin: 0px auto 150px auto;
+        padding: 0 20px;
+        margin-bottom: 0px;
+        padding-bottom: 0px;
+    }
+
+    /* GRID 4 KOLOM */
+    .lgapx-int-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 26px;
+        margin-bottom: 32px;
+    }
+
+    /* LOGO STYLE */
+    .lgapx-int-row img {
+        width: 100%;
+        display: block;
+        padding: 14px 20px;
+
+        background: #ffffff;
+        border-radius: 12px;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+
+        transition: all .26s ease;
+    }
+
+    /* HOVER – MINIMAL & ELEGAN */
+    .lgapx-int-row img:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
+        border-color: rgba(0, 0, 0, 0.18);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+        .lgapx-int-row {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 540px) {
+        .lgapx-int-row {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    /* PATCH */
+    .lgapx-section,
+    .lgapx-int-section {
+        overflow-x: hidden;
+    }
+
+    /* MOBILE FIX – iPhone & Android */
+    @media (max-width: 430px) {
+
+        /* Lock to 2 columns */
+        .lgapx-r1,
+        .lgapx-r2,
+        .lgapx-r3,
+        .lgapx-r4,
+        .lgapx-int-row {
+            grid-template-columns: repeat(2, 1fr) !important;
+            grid-auto-flow: dense;
+            /* penting */
+        }
+
+        /* PATCH TERPENTING */
+        .lgapx-row img,
+        .lgapx-int-row img {
+            width: 100%;
+            height: auto;
+            /* pastikan rasio aman */
+            padding: 10px;
+            /* lebih kecil supaya tidak menambah total width */
+            box-sizing: border-box;
+            /* cegah overflow */
+        }
+
+        /* Kurangi gap grid agar lebih pas */
+        .lgapx-row,
+        .lgapx-int-row {
+            gap: 16px;
+        }
+
+        /* Center the last lone item if total items = odd */
+        .lgapx-row img:nth-last-child(1):nth-child(odd),
+        .lgapx-int-row img:nth-last-child(1):nth-child(odd) {
+            justify-self: center;
+        }
+
+        /* Center last item if count = odd */
+        .lgapx-row>img:last-child:nth-child(odd),
+        .lgapx-int-row>img:last-child:nth-child(odd) {
+            grid-column: 1 / -1;
+            /* buat dia occupy seluruh row */
+            justify-self: center;
+            /* benar-benar center */
+            width: 60%;
+            /* proporsional, tidak terlalu besar */
+        }
+    }
+
+    /* ================== 9. WHY ======================= */
+    /* Container */
+    .whyapu-accordion-wrap {
+        max-width: var(--whyapu-maxwidth);
+        margin: 28px auto;
+        display: grid;
+        gap: 24px;
+    }
+
+    .whyapu-heading {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+    }
+
+    .whyapu-badge {
+        background: linear-gradient(135deg, var(--whyapu-accent1), var(--whyapu-accent2));
+        color: white;
+        font-weight: 700;
+        padding: 8px 12px;
+        border-radius: 999px;
+        box-shadow: 0 6px 24px rgba(99, 102, 241, 0.12);
+        font-size: 14px;
+    }
+
+    .whyapu-title {
+        font-size: 24px;
+        line-height: 1.05;
+        font-weight: 700;
+    }
+
+    .whyapu-sub {
+        color: var(--whyapu-muted);
+        font-size: 14px;
+        margin-top: 6px;
+    }
+
+    /* Accordion card */
+    .whyapu-accordion {
+        display: flex;
+        flex-direction: column;
+        gap: var(--whyapu-gap);
+    }
+
+    .whyapu-item {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(250, 252, 255, 0.8));
+        border-radius: var(--whyapu-radius);
+        padding: 10px;
+        box-shadow: var(--whyapu-glow);
+        border: 1px solid rgba(99, 102, 241, 0.06);
+        overflow: hidden;
+        transition: transform var(--whyapu-transition), box-shadow var(--whyapu-transition);
+        position: relative;
+    }
+
+    .whyapu-item:focus-within {
+        transform: translateY(-6px);
+        box-shadow: 0 18px 50px rgba(99, 102, 241, 0.12);
+    }
+
+    /* Toggle button */
+    .whyapu-btn {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        background: transparent;
+        border: 0;
+        padding: 14px;
+        cursor: pointer;
+        text-align: left;
+        border-radius: 12px;
+        outline: none;
+    }
+
+    .whyapu-btn:hover {
+        background: rgba(6, 182, 212, 0.04);
+    }
+
+    .whyapu-btn:active {
+        transform: translateY(1px);
+    }
+
+    .whyapu-left {
+        flex: 1;
+    }
+
+    .whyapu-ttl {
+        display: flex;
+        gap: 8px;
+        align-items: baseline;
+    }
+
+    .whyapu-ttl h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    .whyapu-ttl .whyapu-idx {
+        display: inline-block;
+        font-size: 18px;
+        color: var(--whyapu-muted);
+        background: rgba(139, 92, 246, 0.08);
+        padding: 4px 8px;
+        border-radius: 999px;
+        font-weight: 600;
+    }
+
+    .whyapu-meta {
+        font-size: 15px;
+        color: var(--whyapu-muted);
+        margin-top: 6px;
+    }
+
+    /* icon */
+    .whyapu-icon {
+        width: 44px;
+        height: 44px;
+        display: inline-grid;
+        place-items: center;
+        border-radius: 10px;
+        background: linear-gradient(180deg, rgba(139, 92, 246, 0.12), rgba(6, 182, 212, 0.06));
+        box-shadow: inset 0 -6px 18px rgba(6, 182, 212, 0.03);
+        transition: transform var(--whyapu-transition);
+    }
+
+    .whyapu-chevron {
+        width: 18px;
+        height: 18px;
+        transition: transform var(--whyapu-transition);
+    }
+
+    /* Panel */
+    .whyapu-panel {
+        max-height: 0;
+        overflow: hidden;
+        padding: 0 14px;
+        transition: max-height var(--whyapu-transition), padding var(--whyapu-transition);
+        font-size: 14px;
+        color: var(--whyapu-text);
+    }
+
+    .whyapu-panel.open {
+        padding: 12px 14px 18px 14px;
+    }
+
+    /* content styles */
+    .whyapu-panel p {
+        margin: 0 0 10px 0;
+        color: var(--whyapu-muted);
+        line-height: 1.45;
+    }
+
+    .whyapu-panel ul {
+        margin: 6px 0 12px 18px;
+        color: var(--whyapu-muted);
+    }
+
+    .whyapu-panel li {
+        margin: 6px 0;
+    }
+
+    /* transform icon when open */
+    .whyapu-item[aria-expanded="true"] .whyapu-chevron {
+        transform: rotate(180deg);
+    }
+
+    .whyapu-item[aria-expanded="true"] .whyapu-icon {
+        transform: translateY(-4px) scale(1.03);
+        box-shadow: 0 8px 30px rgba(139, 92, 246, 0.08);
+    }
+
+    /* responsive */
+    @media (max-width:640px) {
+        .whyapu-btn {
+            padding: 12px;
+            gap: 12px;
+        }
+
+        .whyapu-icon {
+            width: 40px;
+            height: 40px;
+        }
+
+        .whyapu-ttl h3 {
+            font-size: 15px;
+        }
+
+        :root {
+            --whyapu-maxwidth: 100%;
+        }
+    }
+
+    /* If JS disabled, show panels */
+    .whyapu-nojs .whyapu-panel {
+        max-height: none;
+        padding: 12px 14px 18px 14px;
+    }
+
+    .whyapu-nojs .whyapu-item {
+        transform: none;
+    }
+
+    /* panels */
+    .whyapu-panel {
+        max-height: 0;
+        /* closed state */
+        overflow: hidden;
+        /* hide content when closed */
+        transition: max-height 320ms ease, padding 220ms ease;
+        padding: 0 14px;
+        /* closed: no vertical padding to avoid jump */
+    }
+
+    /* opened panel */
+    .whyapu-panel.open {
+        padding: 12px 14px 18px 14px;
+        /* restore padding when open */
+    }
+
+    /* buttons */
+    .whyapu-btn {
+        width: 100%;
+        border: 0;
+        background: transparent;
+        text-align: left;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 14px;
+    }
+
+    /* make sure SVG / children don't block pointer events */
+    .whyapu-btn,
+    .whyapu-btn * {
+        pointer-events: auto;
+    }
+
+    /* safety: prevent accidental overlay intercept (temporary for debugging) */
+    .whyapu-debug-overlay-check * {
+        outline: none;
+    }
+
+    /* keep this off in prod */
+
+    /* ================= . SWIPER ============================ */
+    .swiper {
+        width: 100%;
+        padding: 20px 0;
+    }
+
+    .sliderx-container {
+        max-width: 1140px;
+        margin: 0 auto;
+        padding: 0 15px;
+    }
+
+    .sliderx-container h2 {
+        font-size: 26px;
+        text-align: center;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+    }
+
+    .myLogoSlider .swiper-slide {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .logo-box {
+        width: 140px;
+        height: 140px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+
+    .logo-box img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        display: block;
+    }
+
+    /* panah kecil abu-abu */
+    .swiper-button-next,
+    .swiper-button-prev {
+        width: 26px;
+        height: 26px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #888 !important;
+    }
+
+    .swiper-button-next:after,
+    .swiper-button-prev:after {
+        font-size: 18px !important;
+        color: #888 !important;
+    }
+
+    .swiper-button-next:hover:after,
+    .swiper-button-prev:hover:after {
+        color: #555 !important;
+    }
+
+    /* pagination sedikit naik */
+    .swiper-pagination {
+        bottom: -12px !important;
+    }
+
+    /* Pastikan container tidak memotong pagination */
+    .sliderx-container {
+        overflow: visible;
+    }
+
+    /* Paksa pagination muncul dan mudah dilihat */
+    .myLogoSlider .swiper-pagination {
+        position: relative !important;
+        bottom: 0 !important;
+        /* jangan negatif jika memotong */
+        margin-top: 12px;
+        z-index: 50;
+        display: block !important;
+        text-align: center;
+        pointer-events: auto;
+    }
+
+    /* Gaya bulletedot */
+    .myLogoSlider .swiper-pagination-bullet {
+        width: 8px;
+        height: 8px;
+        margin: 0 6px;
+        background: #cfcfcf;
+        opacity: 1;
+        transition: transform .18s;
+    }
+
+    .myLogoSlider .swiper-pagination-bullet-active {
+        background: #0b79d0;
+        transform: scale(1.15);
+    }
+
+    /* ============= MODAL ============== */
+    /* ===== Image Modal ===== */
+    .image-modal {
+        position: fixed;
+        inset: 0;
+        display: none;
+        z-index: 2000;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .image-modal[aria-hidden="false"] {
+        display: flex;
+    }
+
+    .image-modal__overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.65);
+        backdrop-filter: blur(4px);
+    }
+
+    .image-modal__panel {
+        position: relative;
+        max-width: min(92vw, 1100px);
+        width: 92vw;
+        max-height: 92vh;
+        margin: 0 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+    }
+
+    .image-modal__figure {
+        pointer-events: auto;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .image-modal__img {
+        max-width: 100%;
+        max-height: calc(92vh - 120px);
+        object-fit: contain;
+        border-radius: 12px;
+        box-shadow: 0 18px 60px rgba(0, 0, 0, 0.6);
+        background: #111;
+    }
+
+    .image-modal__caption {
+        color: #e6eefc;
+        font-size: 14px;
+        text-align: center;
+        max-width: 90%;
+    }
+
+    .image-modal__close {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        z-index: 10;
+        pointer-events: auto;
+        background: rgba(0, 0, 0, 0.45);
+        border: none;
+        color: #fff;
+        font-size: 28px;
+        line-height: 1;
+        width: 44px;
+        height: 44px;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+    .image-modal__nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: auto;
+        width: 56px;
+        height: 56px;
+        border-radius: 12px;
+        border: none;
+        background: rgba(0, 0, 0, 0.35);
+        color: #fff;
+        font-size: 30px;
+        cursor: pointer;
+        display: none;
+    }
+
+    .image-modal__nav--prev {
+        left: -10px;
+    }
+
+    .image-modal__nav--next {
+        right: -10px;
+    }
+
+    .image-modal__download {
+        position: absolute;
+        bottom: 12px;
+        right: 16px;
+        z-index: 11;
+        pointer-events: auto;
+        background: rgba(255, 255, 255, 0.06);
+        color: #fff;
+        padding: 8px 10px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 14px;
+    }
+
+    @media (max-width:640px) {
+        .image-modal__nav {
+            width: 44px;
+            height: 44px;
+            font-size: 24px;
+        }
+
+        .image-modal__close {
+            width: 40px;
+            height: 40px;
+            font-size: 22px;
+        }
+
+        .image-modal__download {
+            font-size: 13px;
+            bottom: 10px;
+            right: 10px;
+        }
+    }
+
+    /*=========== PATCH ==============*/
+    /* ⛔ Desktop Default (Your Existing) */
+    .grid-one-row {
+        display: grid;
+        grid-template-columns: repeat(10, 1fr);
+        gap: 10px;
+        padding: 0 20px;
+        height: 100%;
+        align-items: start;
+    }
+
+    /* 📱 Mobile — reduce to 3 columns */
+    @media (max-width:576px) {
+        .frame {
+            height: 380px;
+        }
+
+        /* sesuaikan tinggi agar tidak terlalu panjang */
+        .grid-one-row {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+        }
+
+        .grid-one-row img {
+            height: 110%;
+        }
+
+        /* Sesuaikan lengkungan (lebih ringan) */
+        .grid-one-row img:nth-child(1),
+        .grid-one-row img:nth-child(3) {
+            transform: translateY(5px);
+        }
+
+        .grid-one-row img:nth-child(2) {
+            transform: translateY(20px);
+        }
+
+        /* Sisa gambar supaya tetap turun bertahap (opsional) */
+    }
+
+    /* 📟 Tablet — tampilkan 5 kolom */
+    @media (min-width:577px) and (max-width:900px) {
+        .frame {
+            height: 450px;
+        }
+
+        .grid-one-row {
+            grid-template-columns: repeat(5, 1fr);
+        }
+
+        .grid-one-row img:nth-child(1),
+        .grid-one-row img:nth-child(5) {
+            transform: translateY(10px);
+        }
+
+        .grid-one-row img:nth-child(2),
+        .grid-one-row img:nth-child(4) {
+            transform: translateY(30px);
+        }
+
+        .grid-one-row img:nth-child(3) {
+            transform: translateY(50px);
+        }
+
+        /* area terdalam */
+    }
+
+    .img3d.hovered {
+        transform: rotateY(var(--rotation)) translateZ(calc(var(--radius) + 90px)) rotateY(180deg) scale(1.08);
+    }
+
+    /* ================= VIDEO SECTION ================= */
+    .secvid-wrapper {
+        position: relative;
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto;
+        padding-bottom: 56.25%;
+        /* 16:9 aspect ratio */
+        height: 0;
+        overflow: hidden;
+        border-radius: 8px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    }
+
+    .secvid-wrapper iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+    }
+
+    /* Optional: tweak for mobile */
+    @media (max-width: 768px) {
+        .secvid-wrapper {
+            border-radius: 0;
+            box-shadow: none;
+        }
+    }
+
+    /* GALERRY PATCH */
+    /* ================= PATCH ================== */
+
+    /* ===== touch / scroll behavior fix ===== */
+    .gallery-wrapper {
+        /* izinkan vertical page scroll, tapi biarkan elemen menangani horizontal drag */
+        touch-action: pan-y;
+        /* hentikan overscroll chaining ke parent (hindari lompat halaman) */
+        overscroll-behavior: contain;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        /* hapus highlight di android/ios */
+        -webkit-user-select: none;
+        user-select: none;
+    }
+
+    /* gambar: jangan boleh di-drag / dipilih, dan biarkan wrapper menangani gesture horizontal */
+    .img3d {
+        touch-action: none;
+        /* elemen gambar menerima pointer secara eksplisit untuk drag horizontal */
+        -webkit-user-drag: none;
+        user-select: none;
+        -webkit-touch-callout: none;
+    }
+
+    /* mencegah efek highlight / select di seluruh wrapper saat user drag */
+    .gallery-wrapper,
+    .gallery-wrapper * {
+        -webkit-user-select: none;
+        user-select: none;
+    }
+
+    /* optional: kalau ingin mencegah overscroll "bounce" internasional di mobile juga:
+   gunakan overscroll-behavior pada container utama jika diperlukan */
+    .prof {
+        overscroll-behavior: contain;
+    }
+
+    /* Tooltip / aria tweaks (tidak wajib) */
+    .gallery-tooltip {
+        pointer-events: none;
+        touch-action: none;
+    }
+</style>
+<!--------- 1. INPO ------------>
+<section class="inpo">
+    <div class="eyebrow">Shaping Your Future Before University Begins</div>
+    <h1 class="judul">PRE – UNIVERSITY APU</h1>
+    <p class="sub">Learn directly from distinguished professors and global diaspora experts in our Pre-University
+        Program</p>
+</section>
+<!--------- 2. POTO ------------>
+<section class="prof">
+    <div class="gallery-area"> <!-- new wrapper -->
+        <div class="mask-left"></div>
+        <div class="mask-right"></div>
+        <section class="bungkus3d">
+            <div class="gallery-wrapper" id="galleryWrapper">
+                <div class="gallery-cylinder" id="galleryCylinder"></div>
+            </div>
+        </section>
+        <div class="controls">...</div>
+    </div>
+</section>
+
+
+<!--------- 3. COL ------------>
+<p class="subd">
+    The Pre-University Excellence Track (Pre-U ET) is a recognition pathway for PreUniv-APU students who show
+    outstanding academic performance during the program.
+    Students in the Pre-U ET can:
+</p>
+
+<!-- FEATURES -->
+<section class="features" aria-label="features">
+    <div class="feature">
+        <h4>Early Credit Conversion for Top Students</h4>
+        <p>Receive credit conversion toward their bachelor’s degree.</p>
+    </div>
+    <div class="feature">
+        <h4>Scholarship Opportunities for High Achievers</h4>
+        <p>Earn scholarships for top-ranking students.</p>
+    </div>
+    <div class="feature">
+        <h4>A Culture of Healthy Competition & Collaboration</h4>
+        <p>Grow in a culture of healthy competition, collaboration, and innovation.</p>
+    </div>
+</section>
+
+
+<!---------- 4. APPLYX ------------------>
+<div class="applyx-wrap">
+    <section class="applyx-banner">
+        <div class="applyx-container">
+            <div class="applyx-left">
+                <h2 class="applyx-title">Pre-Univ Batch 1<br>
+                    2 Januari - 14 Februari 2025.</h2>
+            </div>
+            <div class="applyx-right">
+                <span class="applyx-free">FREE</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tombol sebagai sibling agar tidak ter-clip oleh banner -->
+    <button class="applyx-button-bleed"><a href="https://forms.gle/RsbcTHiJTF1z2n3r8"
+            style="text-decoration: none;">Apply Now! →</a></button>
+</div>
+
+<!------------ 5. VIDEO ------------>
+<section class="lppmkmb-video-wrapper">
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/eDHYFu8Cmhw?&autoplay=1"
+        title="YouTube video player" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</section>
+
+<!-- ================= 6. PROGRAMS (7) — BIG HERO GRID ================= -->
+<div class="bungkus-prodi">
+    <!-- DESKTOP -->
+    <section class="desktop-only dsk-progdi-section" aria-label="Daftar Program Studi (Desktop)">
+        <div class="dsk-progdi-grid" role="list">
+            <a id="dsk-progdi-biotechnology" class="dsk-progdi-slide" href="/biotechnology/" aria-label="Biotechnology"
+                style="background-image:url('/static/img/prodi/biotech.jpg')">
+                <div class="dsk-progdi-card">Biotechnology</div>
+                <div class="dsk-progdi-footer">FUTURISTIC GREEN CAMPUS</div>
+            </a>
+            <a id="dsk-progdi-biomedical" class="dsk-progdi-slide" href="/biomedical-science/" aria-label="Biomedical"
+                style="background-image:url('/static/img/prodi/biomed.jpg')">
+                <div class="dsk-progdi-card">Biomedical</div>
+                <div class="dsk-progdi-footer">FUTURISTIC GREEN CAMPUS</div>
+            </a>
+            <a id="dsk-progdi-management" class="dsk-progdi-slide" href="/management/" aria-label="Management"
+                style="background-image:url('/static/img/prodi/management.jpg')">
+                <div class="dsk-progdi-card">Management</div>
+                <div class="dsk-progdi-footer">FUTURISTIC GREEN CAMPUS</div>
+            </a>
+            <a id="dsk-progdi-communication" class="dsk-progdi-slide" href="/communication-science/"
+                aria-label="Communication Science" style="background-image:url('/static/img/prodi/communication.jpg')">
+                <div class="dsk-progdi-card">Communication Science</div>
+                <div class="dsk-progdi-footer">FUTURISTIC GREEN CAMPUS</div>
+            </a>
+            <a id="dsk-progdi-law" class="dsk-progdi-slide" href="/law/" aria-label="Law"
+                style="background-image:url('/static/img/prodi/law.jpg')">
+                <div class="dsk-progdi-card">Law</div>
+                <div class="dsk-progdi-footer">FUTURISTIC GREEN CAMPUS</div>
+            </a>
+            <a id="dsk-progdi-midwifery-prof" class="dsk-progdi-slide" href="/midwifery/"
+                aria-label="Midwifery Professional" style="background-image:url('/static/img/prodi/midwiferys1.jpg')">
+                <div class="dsk-progdi-card">Midwifery</div>
+                <div class="dsk-progdi-footer">FUTURISTIC GREEN CAMPUS</div>
+            </a>
+        </div>
+    </section>
+
+    <!-- MOBILE (Swiper) -->
+    <section id="progdi-programs" class="mobile-only progdi-section" aria-label="Program Studi Unggulan (Mobile)">
+        <div class="progdi-swiper swiper" aria-roledescription="carousel" role="region">
+            <div class="swiper-wrapper">
+                <!-- slides (gunakan path gambar nyata) -->
+                <a id="progdi-biotechnology" class="progdi-slide swiper-slide" href="/biotechnology/"
+                    style="background-image:url('/static/img/prodi/biotech.jpg');">
+                    <div class="progdi-card">
+                        <div class="progdi-label">Undergraduate</div>
+                        <h3 class="progdi-title">Biotechnology</h3>
+                    </div>
+                </a>
+                <a id="progdi-biomedical" class="progdi-slide swiper-slide" href="/biomedical-science/"
+                    style="background-image:url('/static/img/prodi/biomed.jpg');">
+                    <div class="progdi-card">
+                        <div class="progdi-label">Undergraduate</div>
+                        <h3 class="progdi-title">Biomedical</h3>
+                    </div>
+                </a>
+                <a id="progdi-management" class="progdi-slide swiper-slide" href="/management/"
+                    style="background-image:url('/static/img/prodi/management.jpg');">
+                    <div class="progdi-card">
+                        <div class="progdi-label">Undergraduate</div>
+                        <h3 class="progdi-title">Management</h3>
+                    </div>
+                </a>
+                <a id="progdi-communication" class="progdi-slide swiper-slide" href="/communication-science/"
+                    style="background-image:url('/static/img/prodi/communication.jpg');">
+                    <div class="progdi-card">
+                        <div class="progdi-label">Undergraduate</div>
+                        <h3 class="progdi-title">Communication</h3>
+                    </div>
+                </a>
+                <a id="progdi-law" class="progdi-slide swiper-slide" href="/law/"
+                    style="background-image:url('/static/img/prodi/law.jpg');">
+                    <div class="progdi-card">
+                        <div class="progdi-label">Undergraduate</div>
+                        <h3 class="progdi-title">Law</h3>
+                    </div>
+                </a>
+                <a id="progdi-midwifery-prof" class="progdi-slide swiper-slide" href="/midwifery/"
+                    style="background-image:url('/static/img/prodi/midwiferys1.jpg');">
+                    <div class="progdi-card">
+                        <div class="progdi-label">Undergraduate</div>
+                        <h3 class="progdi-title">Midwifery</h3>
+                    </div>
+                </a>
+            </div>
+
+            <!-- nav -->
+            <button class="progdi-swiper-button progdi-swiper-button-prev" aria-label="Previous">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                    <path d="M15 18L9 12L15 6" stroke="#0a58ca" stroke-width="2.2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+            </button>
+            <button class="progdi-swiper-button progdi-swiper-button-next" aria-label="Next">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                    <path d="M9 6L15 12L9 18" stroke="#0a58ca" stroke-width="2.2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+            </button>
+        </div>
+    </section>
+
+</div>
+<script>
+    /* ================= DESKTOP fallback: set CSS vars on pointer enter/leave ================= */
+    (function () {
+        const GRID_MIN_DESKTOP = 900;
+        const grid = document.querySelector('.desktop-only .dsk-progdi-grid');
+        if (!grid) return;
+        const slides = Array.from(grid.children);
+
+        function setVarsFor(index) {
+            for (let i = 0; i < 6; i++) {
+                grid.style.setProperty(`--g${i}`, i === index ? '2.5fr' : '1fr');
+            }
+        }
+        function resetVars() {
+            for (let i = 0; i < 6; i++) grid.style.setProperty(`--g${i}`, '1fr');
+        }
+
+        slides.forEach((s, i) => {
+            s.addEventListener('pointerenter', () => { if (window.innerWidth >= GRID_MIN_DESKTOP) setVarsFor(i); });
+            s.addEventListener('focus', () => { if (window.innerWidth >= GRID_MIN_DESKTOP) setVarsFor(i); }, true);
+        });
+        grid.addEventListener('pointerleave', () => { if (window.innerWidth >= GRID_MIN_DESKTOP) resetVars(); });
+        grid.addEventListener('blur', () => { if (window.innerWidth >= GRID_MIN_DESKTOP) resetVars(); }, true);
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth < GRID_MIN_DESKTOP) resetVars();
+        });
+    })();
+
+    /* ================= MOBILE: Swiper init (ensure breakpoint-driven slidesPerView) ================= */
+    (function () {
+        const container = document.querySelector('.mobile-only .progdi-swiper');
+        if (!container) return;
+        const wrapper = container.querySelector('.swiper-wrapper');
+        if (!wrapper) return;
+
+        const prevEl = container.querySelector('.progdi-swiper-button-prev');
+        const nextEl = container.querySelector('.progdi-swiper-button-next');
+
+        const originalSlides = Array.from(wrapper.querySelectorAll('.swiper-slide'));
+        const originalCount = originalSlides.length || 1;
+
+        let swiper = null;
+
+        function initSwiper() {
+            if (swiper) return; // already init
+            // enable loop only if more than 1 slide
+            const enableLoop = originalCount > 1;
+
+            swiper = new Swiper(container, {
+                loop: enableLoop,
+                slidesPerView: 1, // base; breakpoints override
+                spaceBetween: 12,
+                breakpoints: {
+                    0: { slidesPerView: Math.min(1, originalCount), spaceBetween: 12 },
+                    480: { slidesPerView: Math.min(2, originalCount), spaceBetween: 14 },
+                    820: { slidesPerView: Math.min(3, originalCount), spaceBetween: 16 }
+                },
+                navigation: { prevEl, nextEl },
+                autoplay: { delay: 3000, disableOnInteraction: false, pauseOnMouseEnter: false },
+                keyboard: { enabled: true, onlyInViewport: true },
+                a11y: { enabled: true },
+                grabCursor: true,
+                speed: 600,
+                observer: true,
+                observeParents: true,
+                observeSlideChildren: true,
+                on: {
+                    init() { this.update(); },
+                    breakpoints() { this.update(); },
+                    resize() { this.update(); }
+                }
+            });
+        }
+
+        if (document.readyState === 'loading') {
+            window.addEventListener('DOMContentLoaded', initSwiper);
+        } else {
+            initSwiper();
+        }
+
+        // Keep Swiper updated on orientation/resize
+        window.addEventListener('orientationchange', () => { setTimeout(() => { swiper?.update?.(); }, 250); });
+        window.addEventListener('resize', () => { setTimeout(() => { swiper?.update?.(); }, 200); });
+
+    })();
+</script>
+<!------------- 8. LOGO UNI ----------------->
+
+<div class="lgapx-title-wrap">
+    <h2 class="lgapx-title">
+        60% of the Curriculum from Top 10 Universities QS WUR by Subject 2025
+    </h2>
+</div>
+
+
+<section class="lgapx-section">
+    <div class="lgapx-row lgapx-r1">
+        <img src="/static/img/etc/ext/3.png" alt="">
+        <img src="/static/img/etc/ext/4.png" alt="">
+        <img src="/static/img/etc/ext/5.png" alt="">
+        <img src="/static/img/etc/ext/6.png" alt="">
+    </div>
+
+    <div class="lgapx-row lgapx-r2">
+        <img src="/static/img/etc/ext/7.png" alt="">
+        <img src="/static/img/etc/ext/8.png" alt="">
+        <img src="/static/img/etc/ext/9.png" alt="">
+        <img src="/static/img/etc/ext/10.png" alt="">
+        <img src="/static/img/etc/ext/11.png" alt="">
+    </div>
+
+    <div class="lgapx-row lgapx-r3">
+        <img src="/static/img/etc/ext/12.png" alt="">
+        <img src="/static/img/etc/ext/13.png" alt="">
+        <img src="/static/img/etc/ext/14.png" alt="">
+        <img src="/static/img/etc/ext/15.png" alt="">
+        <img src="/static/img/etc/ext/16.png" alt="">
+    </div>
+
+    <div class="lgapx-row lgapx-r4">
+        <img src="/static/img/etc/ext/17.png" alt="">
+        <img src="/static/img/etc/ext/18.png" alt="">
+        <img src="/static/img/etc/ext/19.png" alt="">
+        <img src="/static/img/etc/ext/20.png" alt="">
+    </div>
+</section>
+
+<!------------ VIDEO 2 ------------>
+<section class="secvid-wrapper">
+    <iframe src="https://www.youtube.com/embed/bATm6gaEr98?controls=0" title="YouTube video player"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</section>
+
+<!-- TITLE SECTION 2 -->
+<div class="lgapx-title-wrap">
+    <h2 class="lgapx-title">
+        40% of the Curriculum from Top 8 Universities QS WUR 2026 in Indonesia
+    </h2>
+</div>
+
+<!-- LOGO SECTION 2 -->
+<section class="lgapx-int-section">
+
+    <div class="lgapx-int-row">
+        <img src="/static/img/etc/int/1.png" alt="">
+        <img src="/static/img/etc/int/2.png" alt="">
+        <img src="/static/img/etc/int/3.png" alt="">
+        <img src="/static/img/etc/int/4.png" alt="">
+    </div>
+
+    <div class="lgapx-int-row">
+        <img src="/static/img/etc/int/5.png" alt="">
+        <img src="/static/img/etc/int/6.png" alt="">
+        <img src="/static/img/etc/int/7.png" alt="">
+        <img src="/static/img/etc/int/8.png" alt="">
+    </div>
+
+</section>
+
+<!------------ VIDEO 3 ------------>
+<section class="secvid-wrapper">
+    <iframe src="https://www.youtube.com/embed/QxZTDrsSCu0?controls=0" title="YouTube video player"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</section>
+
+<!-------------- 9. WHY -------------------->
+<div class="whyapu-accordion-wrap" id="whyapu-root">
+    <div class="whyapu-heading" aria-hidden="false">
+        <div class="whyapu-badge">PreUniv-APU</div>
+        <div>
+            <div class="whyapu-title">Why Join the Pre-University Program at APU?</div>
+            <div class="whyapu-sub">A structured pathway to Agung Putra University. Combining an international
+                curriculum with project-based learning.</div>
+        </div>
+    </div>
+
+    <section class="whyapu-accordion" id="whyapu-accordion" role="tablist" aria-multiselectable="false">
+        <!-- Item 1 -->
+        <article class="whyapu-item" id="whyapu-item-1" role="tabpanel" aria-expanded="false">
+            <button type="button" class="whyapu-btn" id="whyapu-btn-1" aria-controls="whyapu-panel-1"
+                aria-expanded="false" role="tab">
+                <div class="whyapu-left">
+                    <div class="whyapu-ttl">
+                        <span class="whyapu-idx">1</span>
+                        <h3>Preparing for University Life and a Global Career</h3>
+                    </div>
+                    <div class="whyapu-meta">Build intellectual, emotional, and mental readiness.</div>
+                </div>
+                <div class="whyapu-icon" aria-hidden="true">
+                    <!-- chevron svg -->
+                    <svg class="whyapu-chevron" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true">
+                        <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round"></path>
+                    </svg>
+                </div>
+            </button>
+
+            <div class="whyapu-panel" id="whyapu-panel-1" role="region" aria-labelledby="whyapu-btn-1">
+                <ul>
+                    <li>
+                        The Pre-University Program at APU bridges the transition from high school to university life.
+                    </li>
+                    <li>Students develop intellectual, emotional, and mental readiness to adapt to a global-standard
+                        academic environment.</li>
+                </ul>
+            </div>
+        </article>
+
+        <!-- Item 2 -->
+        <article class="whyapu-item" id="whyapu-item-2" role="tabpanel" aria-expanded="false">
+            <button type="button" class="whyapu-btn" id="whyapu-btn-2" aria-controls="whyapu-panel-2"
+                aria-expanded="false" role="tab">
+                <div class="whyapu-left">
+                    <div class="whyapu-ttl">
+                        <span class="whyapu-idx">2</span>
+                        <h3>Access to 12 International & AI-Embedded Pre-University Courses</h3>
+                    </div>
+                    <div class="whyapu-meta">Choose your pathway: Science, Health, or Social & Humanities.</div>
+                </div>
+                <div class="whyapu-icon" aria-hidden="true">
+                    <svg class="whyapu-chevron" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true">
+                        <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round"></path>
+                    </svg>
+                </div>
+            </button>
+
+            <div class="whyapu-panel" id="whyapu-panel-2" role="region" aria-labelledby="whyapu-btn-2">
+                <ul>
+                    <li>Students can select courses based on their interests in Science, Health, or Social & Humanities.
+                    </li>
+                    <li>Participants receive official certificates that may be recognized as academic credits (SKS) upon
+                        admission to Agung Putra University.</li>
+                    <li>The curriculum follows 60% international standards and integrates Artificial Intelligence (AI)
+                        to support modern learning.</li>
+                </ul>
+            </div>
+        </article>
+
+        <!-- Item 3 -->
+        <article class="whyapu-item" id="whyapu-item-3" role="tabpanel" aria-expanded="false">
+            <button type="button" class="whyapu-btn" id="whyapu-btn-3" aria-controls="whyapu-panel-3"
+                aria-expanded="false" role="tab">
+                <div class="whyapu-left">
+                    <div class="whyapu-ttl">
+                        <span class="whyapu-idx">3</span>
+                        <h3>Direct Pathway to Undergraduate Programs and Scholarships</h3>
+                    </div>
+                    <div class="whyapu-meta">A smoother route to your future degree.</div>
+                </div>
+                <div class="whyapu-icon" aria-hidden="true">
+                    <svg class="whyapu-chevron" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true">
+                        <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round"></path>
+                    </svg>
+                </div>
+            </button>
+
+            <div class="whyapu-panel" id="whyapu-panel-3" role="region" aria-labelledby="whyapu-btn-3">
+                <ul>
+                    <li>Pre-University students gain access to a dedicated admission pathway to APU’s undergraduate
+                        programs, without going through highly competitive general entrance exams.</li>
+                    <li>Students have the opportunity to apply for the APU Scholarship Program.</li>
+                </ul>
+            </div>
+        </article>
+
+        <!-- Item 4 -->
+        <article class="whyapu-item" id="whyapu-item-4" role="tabpanel" aria-expanded="false">
+            <button type="button" class="whyapu-btn" id="whyapu-btn-4" aria-controls="whyapu-panel-4"
+                aria-expanded="false" role="tab">
+                <div class="whyapu-left">
+                    <div class="whyapu-ttl">
+                        <span class="whyapu-idx">4</span>
+                        <h3>Portfolio Development through Project-Based Learning</h3>
+                    </div>
+                    <div class="whyapu-meta">Real academic experience for university and career applications.</div>
+                </div>
+                <div class="whyapu-icon" aria-hidden="true">
+                    <svg class="whyapu-chevron" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true">
+                        <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round"></path>
+                    </svg>
+                </div>
+            </button>
+
+            <div class="whyapu-panel" id="whyapu-panel-4" role="region" aria-labelledby="whyapu-btn-4">
+                <p>Project-based learning outcomes can be used as academic portfolios for university applications, both
+                    locally and internationally.</p>
+            </div>
+        </article>
+
+        <!-- Item 5 -->
+        <article class="whyapu-item" id="whyapu-item-5" role="tabpanel" aria-expanded="false">
+            <button type="button" class="whyapu-btn" id="whyapu-btn-5" aria-controls="whyapu-panel-5"
+                aria-expanded="false" role="tab">
+                <div class="whyapu-left">
+                    <div class="whyapu-ttl">
+                        <span class="whyapu-idx">5</span>
+                        <h3>Interactive Online and Offline Learning Experience</h3>
+                    </div>
+                    <div class="whyapu-meta">Flexible learning supported by Agung Putra University lecturers.</div>
+                </div>
+                <div class="whyapu-icon" aria-hidden="true">
+                    <svg class="whyapu-chevron" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true">
+                        <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round"></path>
+                    </svg>
+                </div>
+            </button>
+
+            <div class="whyapu-panel" id="whyapu-panel-5" role="region" aria-labelledby="whyapu-btn-5">
+                <ul>
+                    <li>Learning is delivered through a combination of online and offline classes, allowing students to
+                        study flexibly from anywhere.</li>
+                    <li>Students are guided by experienced Agung Putra University lecturers and supported by
+                        high-quality digital learning materials.</li>
+                </ul>
+            </div>
+        </article>
+
+    </section>
+</div>
+
+<!--------------------- . SWIPER ---------------------->
+<section class="sliderx-container">
+    <h2>SCCR Indonesia Strategic Partners :</h2>
+    <div class="swiper myLogoSlider">
+        <div class="swiper-wrapper">
+
+            <div class="swiper-slide">
+                <div class="logo-box">
+                    <img src="https://sccr.id/wp-content/uploads/2025/11/universitas-sumatera-utara.webp"
+                        alt="Universitas Sumatera Utara" title="Universitas Sumatera Utara" width="300" height="300">
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <div class="logo-box">
+                    <img src="https://sccr.id/wp-content/themes/hello-elementor/img/biofarma.jpg" alt="Biofarma"
+                        title="Biofarma" width="300" height="300">
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <div class="logo-box">
+                    <img src="https://sccr.id/wp-content/uploads/2025/11/unissula.webp"
+                        alt="Unissula - Universitas Islam Sultan Agung"
+                        title="Unissula - Universitas Islam Sultan Agung" width="300" height="300">
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <div class="logo-box">
+                    <img src="https://sccr.id/wp-content/themes/hello-elementor/img/universitas diponegoro.webp"
+                        alt="Universitas Diponegoro (UNDIP) Semarang" title="Universitas Diponegoro (UNDIP) Semarang"
+                        width="300" height="300">
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <div class="logo-box">
+                    <img src="https://sccr.id/wp-content/themes/hello-elementor/img/UGM.webp"
+                        alt="Universitas Gadjah Mada" title="Universitas Gadjah Mada" width="300" height="300">
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <div class="logo-box">
+                    <img src="https://sccr.id/wp-content/themes/hello-elementor/img/binus.jpg"
+                        alt="Binus University (Universitas Bina Nusantara)"
+                        title="Binus University (Universitas Bina Nusantara)" width="300" height="300">
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <div class="logo-box">
+                    <img src="https://sccr.id/wp-content/themes/hello-elementor/img/umy.webp" alt="UMY" title="UMY"
+                        width="300" height="300">
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <div class="logo-box">
+                    <img src="https://sccr.id/wp-content/themes/hello-elementor/img/unud.webp" alt="Udayana University"
+                        title="Udayana University" width="300" height="300">
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <div class="logo-box">
+                    <img src="https://sccr.id/wp-content/themes/hello-elementor/img/UIN Walisongo.webp"
+                        alt="UIN Walisongo" title="UIN Walisongo" width="300" height="300">
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <div class="logo-box">
+                    <img src="https://sccr.id/wp-content/themes/hello-elementor/img/Unhan.webp"
+                        alt="Universitas Pertahanan Indonesia" title="Universitas Pertahanan Indonesia" width="300"
+                        height="300">
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <div class="logo-box">
+                    <img src="https://sccr.id/wp-content/themes/hello-elementor/img/rsu banyumanik 2.webp"
+                        alt="RS Banyumanik Semarang" title="RS Banyumanik Semarang" width="300" height="300">
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <div class="logo-box">
+                    <img src="https://sccr.id/wp-content/themes/hello-elementor/img/rs amc.jpg" alt="RS AMC"
+                        title="RS AMC" width="300" height="300">
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <div class="logo-box">
+                    <img src="https://sccr.id/wp-content/themes/hello-elementor/img/RS Pasar Minggu Cirebon.webp"
+                        alt="RS Pasar Minggu Cirebon" title="RS Pasar Minggu Cirebon" width="300" height="300">
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <div class="logo-box">
+                    <img src="https://sccr.id/wp-content/themes/hello-elementor/img/tni au.webp"
+                        alt="Tentara Nasional Indonesia Angkatan Udara"
+                        title="Tentara Nasional Indonesia Angkatan Udara" width="300" height="300">
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <div class="logo-box">
+                    <img src="https://sccr.id/wp-content/themes/hello-elementor/img/RS Yarsi.jpg"
+                        alt="Rumah sakit YARSI" title="Rumah sakit YARSI" width="300" height="300">
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <div class="logo-box">
+                    <img src="https://sccr.id/wp-content/themes/hello-elementor/img/RS Umum El-Syifa.webp"
+                        alt="RSU El-Syifa" title="RSU El-Syifa" width="300" height="300">
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <div class="logo-box">
+                    <img src="https://sccr.id/wp-content/themes/hello-elementor/img/TelkoMedika.webp" alt="TelkoMedika"
+                        title="TelkoMedika" width="300" height="300">
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <div class="logo-box">
+                    <img src="https://sccr.id/wp-content/themes/hello-elementor/img/Lampung.jpg" alt="Lampung"
+                        title="Lampung" width="300" height="300">
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <div class="logo-box">
+                    <img src="https://sccr.id/wp-content/themes/hello-elementor/img/blora.webp"
+                        alt="Kabupaten Blora, Jawa Tengah, Indonesia" title="Kabupaten Blora" width="300" height="300">
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <div class="logo-box">
+                    <img src="https://sccr.id/wp-content/themes/hello-elementor/img/Primaya Hospital.jpg"
+                        alt="Primaya Hospital" title="Primaya Hospital" width="300" height="300">
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <div class="logo-box">
+                    <img src="https://sccr.id/wp-content/themes/hello-elementor/img/cito.jpg"
+                        alt="Laboratorium Klinik CITO" title="Laboratorium Klinik CITO" width="300" height="300">
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <div class="logo-box">
+                    <img src="https://sccr.id/wp-content/themes/hello-elementor/img/rsi sultan agung.webp"
+                        alt="RSI Sultan Agung" title="RSI Sultan Agung" width="300" height="300">
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <div class="logo-box">
+                    <img src="https://sccr.id/wp-content/themes/hello-elementor/img/Rumah_Sakit_Jih.webp"
+                        alt="Rumah Sakit JIH" title="Rumah Sakit JIH" width="300" height="300">
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <div class="logo-box">
+                    <img src="https://sccr.id/wp-content/themes/hello-elementor/img/esensia.webp"
+                        alt="Klinik Esensia Semarang" title="Klinik Esensia Semarang" width="300" height="300">
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <div class="logo-box">
+                    <img src="https://sccr.id/wp-content/themes/hello-elementor/img/rs anugerah semarang.webp"
+                        alt="RSIA Anugerah Semarang" title="RSIA Anugerah Semarang" width="300" height="300">
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <div class="logo-box">
+                    <img src="https://sccr.id/wp-content/themes/hello-elementor/img/Rumah_Sakit_PKU_Muhammadiyah_Yogyakarta.webp"
+                        alt="Rumah Sakit PKU Muhammadiyah Yogyakarta" title="Rumah Sakit PKU Muhammadiyah Yogyakarta"
+                        width="300" height="300">
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <div class="logo-box">
+                    <img src="https://sccr.id/wp-content/themes/hello-elementor/img/Rumah_Sakit_PKU_Muhammadiyah_Gamping.webp"
+                        alt="RS PKU Muhammadiyah Gamping" title="RS PKU Muhammadiyah Gamping" width="300" height="300">
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <div class="logo-box">
+                    <img src="https://sccr.id/wp-content/themes/hello-elementor/img/rs kia sadewa.webp"
+                        alt="RSKIA Sadewa" title="RSKIA Sadewa" width="300" height="300">
+                </div>
+            </div>
+
+        </div>
+
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-pagination"></div>
+    </div>
+    <hr style="border: 0.8px solid #005a87;">
+</section>
+
+<!-- MODAL -->
+<!-- ================= IMAGE MODAL HTML & CSS ================= -->
+<div id="imageModal" class="image-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Image viewer"
+    style="display:none;">
+    <div class="image-modal__overlay" data-action="close"></div>
+    <div class="image-modal__panel" role="document">
+        <button class="image-modal__close" aria-label="Close (Esc)" data-action="close">&times;</button>
+
+        <!-- Previous on the LEFT (‹) -->
+        <button class="image-modal__nav image-modal__nav--next" aria-label="Next image" data-action="next">‹</button>
+
+        <figure class="image-modal__figure">
+            <img src="" alt="" class="image-modal__img" />
+            <figcaption class="image-modal__caption" style="display: none;"></figcaption>
+        </figure>
+
+        <!-- Next on the RIGHT (›) -->
+        <button class="image-modal__nav image-modal__nav--prev" aria-label="Previous image"
+            data-action="prev">›</button>
+
+        <a class="image-modal__download" target="_blank" rel="noopener" download aria-label="Download image"
+            style="display: none;">⬇</a>
+    </div>
+</div>
+
+<style>
+    /* === PACTH === */
+    .gallery-area {
+        position: relative;
+        width: 100%;
+    }
+
+    /* trik: kasih “painted pixel” super tipis supaya hit-test makin konsisten */
+    .gallery-wrapper {
+        background: rgba(0, 0, 0, 0.001);
+    }
+</style>
+
+<!-- =================== MAIN SCRIPT (POTO) =================== -->
+<script>
+    (function () {
+        "use strict";
+
+        // ====== CONFIG ======
+        const PHOTO_DATA = [
+            { url: "static/img/team/Prof. Dr. dr. Agung Putra. M.Si., Med.jpg", alt: "Foto 1", title: "Prof. Dr. dr. Agung Putra, M.Si., Med" },
+            { url: "static/img/team/Prof. Dr. Denny Nugroho Sugianto, S.T., M.Si.jpg", alt: "Foto 2", title: "Prof Denny" },
+            { url: "static/img/team/Faheem Ahmed Khan, BSc, MS, PhD.jpg", alt: "Foto 3", title: "Dr Faheem" },
+            { url: "static/img/team/Dendi Krisna Nugraha, Ph.D.jpg", alt: "Foto 4", title: "Dr Dendi" },
+            { url: "static/img/team/Prof. Dr. Lita Tyesta ALW, S.H., M.Hum..JPG", alt: "Foto 5", title: "Prof Lita" },
+            { url: "static/img/team/Prof. Bulan Prabawani, S.Sos., M.M., Ph.D..webp", alt: "Foto 6", title: "Prof Bulan" },
+            { url: "static/img/team/dr diana.webp", alt: "Foto 7", title: "Dr. Diana" },
+            { url: "static/img/team/prof widodo.webp", alt: "Foto 8", title: "Prof Widodo" },
+            { url: "static/img/team/Dr. Ir. Agus F. Abdillah, MBA.png", alt: "Foto 9", title: "Dr Agus F Abdillah" },
+            { url: "static/img/Prof. Yayuk Astuti, S.Si, Ph.D preuniv.jpg", alt: "Foto 10", title: "Prof. Yayuk" },
+            { url: "static/img/team/Prof. Dr. dr. Agung Putra. M.Si., Med.jpg", alt: "Foto 11", title: "Prof Agung Putra" },
+            { url: "static/img/team/Prof. Dr. Denny Nugroho Sugianto, S.T., M.Si.jpg", alt: "Foto 12", title: "Prof Denny" },
+            { url: "static/img/team/Faheem Ahmed Khan, BSc, MS, PhD.jpg", alt: "Foto 13", title: "Dr Faheem" },
+            { url: "static/img/team/Dendi Krisna Nugraha, Ph.D.jpg", alt: "Foto 14", title: "Dr Dendi" },
+            { url: "static/img/team/Prof. Dr. Lita Tyesta ALW, S.H., M.Hum..JPG", alt: "Foto 15", title: "Prof Lita" },
+            { url: "static/img/team/Prof. Bulan Prabawani, S.Sos., M.M., Ph.D..webp", alt: "Foto 16", title: "Prof Bulan" },
+            { url: "static/img/team/dr diana.webp", alt: "Foto 17", title: "Dr. Diana" },
+            { url: "static/img/team/prof widodo.webp", alt: "Foto 18", title: "Prof Widodo" },
+            { url: "static/img/team/Dr. Ir. Agus F. Abdillah, MBA.png", alt: "Foto 19", title: "Dr Agus F Abdillah" },
+            { url: "static/img/Prof. Yayuk Astuti, S.Si, Ph.D preuniv.jpg", alt: "Foto 20", title: "Prof. Yayuk" }
+        ];
+
+        const TOTAL_PHOTOS = PHOTO_DATA.length;
+        const CARD_ANGLE = 360 / TOTAL_PHOTOS;
+
+        // ====== DOM ======
+        const galleryWrapper = document.getElementById("galleryWrapper");
+        const cylinder = document.getElementById("galleryCylinder");
+        const galleryArea = document.querySelector(".gallery-area") || galleryWrapper;
+
+        if (!galleryWrapper || !cylinder) return;
+
+        // optional buttons (kalau kamu punya)
+        const btnLeft = document.getElementById("btnLeft");
+        const btnRight = document.getElementById("btnRight");
+
+        // ====== STATE ======
+        let currentRotation = 0;
+        let lastFrameTime = null;
+
+        let isPointerDown = false;
+        let isUserInteracting = false;
+        let pointerLastX = 0;
+        let pointerVelocity = 0;
+        let dragDistance = 0;
+
+        // supaya click setelah drag tidak buka modal
+        let suppressNextClick = false;
+
+        // auto rotate
+        const AUTO_ROTATE_SPEED_DEG_PER_SEC = 4;
+        const AUTO_ROTATE_PAUSE_AFTER_INTERACTION = 1500;
+        let autoRotatePausedUntil = 0;
+
+        // tween
+        let snapTween = null;
+
+        // hover/tooltip
+        let hoveredCard = null;
+
+        // ====== HELPERS ======
+        function normalizeRotation() {
+            if (currentRotation > 360 || currentRotation < -360) currentRotation = currentRotation % 360;
+        }
+        function updateCylinderTransform() {
+            cylinder.style.transform = `rotateY(${currentRotation}deg)`;
+        }
+        function pauseAutoRotate() {
+            autoRotatePausedUntil = performance.now() + 9999999;
+        }
+        function resumeAutoRotateSoon() {
+            autoRotatePausedUntil = performance.now() + AUTO_ROTATE_PAUSE_AFTER_INTERACTION;
+        }
+
+        function createTween(from, to, durationSec) {
+            let t = 0;
+            return {
+                value: from,
+                step(dt) {
+                    t += dt;
+                    const p = Math.min(1, t / durationSec);
+                    const ease = 1 - Math.pow(1 - p, 3);
+                    this.value = from + (to - from) * ease;
+                    return p >= 1;
+                }
+            };
+        }
+
+        function animateToRotation(targetDeg, durationMs = 600) {
+            snapTween = null;
+            const start = currentRotation;
+            let diff = targetDeg - start;
+            diff = ((diff + 180) % 360) - 180;
+            const final = start + diff;
+
+            snapTween = createTween(start, final, durationMs / 1000);
+            isUserInteracting = true;
+            autoRotatePausedUntil = performance.now() + durationMs + 120;
+        }
+
+        function getCardAtPoint(x, y) {
+            const hit = document.elementFromPoint(x, y);
+            return hit && hit.closest ? hit.closest(".img3d") : null;
+        }
+
+        function setHovered(card) {
+            if (card === hoveredCard) return;
+            if (hoveredCard) hoveredCard.classList.remove("hovered");
+            hoveredCard = card;
+            if (hoveredCard) hoveredCard.classList.add("hovered");
+            updateCardVisuals();
+
+            if (hoveredCard) pauseAutoRotate();
+            else resumeAutoRotateSoon();
+        }
+
+        // ====== MODAL (same behavior, but solid) ======
+        const ImageModal = (function () {
+            const modalEl = document.getElementById("imageModal");
+            const fallback = { open() { }, close() { }, next() { }, prev() { } };
+            if (!modalEl) return fallback;
+
+            const modalImg = modalEl.querySelector(".image-modal__img");
+            const modalCaption = modalEl.querySelector(".image-modal__caption");
+            const btnPrev = modalEl.querySelector('[data-action="prev"]');
+            const btnNext = modalEl.querySelector('[data-action="next"]');
+            const btnCloseBtns = Array.from(modalEl.querySelectorAll('[data-action="close"]'));
+            const overlay = modalEl.querySelector(".image-modal__overlay");
+            const downloadLink = modalEl.querySelector(".image-modal__download");
+
+            let currentModalIndex = 0;
+            let lastFocusedElement = null;
+
+            function showModalImage(index) {
+                const data = PHOTO_DATA[index];
+                if (!data) return;
+                const fullUrl = data.full || data.url;
+                modalImg.src = fullUrl;
+                modalImg.alt = data.title || data.alt || "";
+                if (modalCaption) modalCaption.textContent = data.title || data.alt || "";
+                if (downloadLink) {
+                    downloadLink.href = fullUrl;
+                    downloadLink.setAttribute("download", fullUrl.split("/").pop());
+                }
+                if (btnPrev) btnPrev.disabled = (PHOTO_DATA.length <= 1);
+                if (btnNext) btnNext.disabled = (PHOTO_DATA.length <= 1);
+            }
+
+            function open(index) {
+                index = Number(index);
+                if (!Number.isFinite(index)) index = 0;
+                if (index < 0) index = 0;
+                if (index >= PHOTO_DATA.length) index = PHOTO_DATA.length - 1;
+
+                currentModalIndex = index;
+                lastFocusedElement = document.activeElement;
+
+                showModalImage(currentModalIndex);
+                modalEl.setAttribute("aria-hidden", "false");
+                modalEl.style.display = "";
+                document.body.style.overflow = "hidden";
+
+                pauseAutoRotate();
+
+                const closeBtn = modalEl.querySelector(".image-modal__close");
+                if (closeBtn) closeBtn.focus();
+            }
+
+            function close() {
+                modalEl.setAttribute("aria-hidden", "true");
+                modalEl.style.display = "none";
+                document.body.style.overflow = "";
+                if (lastFocusedElement && typeof lastFocusedElement.focus === "function") lastFocusedElement.focus();
+                resumeAutoRotateSoon();
+            }
+
+            function openIndex(i) {
+                if (i < 0) i = PHOTO_DATA.length - 1;
+                if (i >= PHOTO_DATA.length) i = 0;
+                currentModalIndex = i;
+                showModalImage(currentModalIndex);
+            }
+
+            if (btnPrev) btnPrev.addEventListener("click", (e) => { e.stopPropagation(); openIndex(currentModalIndex - 1); });
+            if (btnNext) btnNext.addEventListener("click", (e) => { e.stopPropagation(); openIndex(currentModalIndex + 1); });
+            if (overlay) overlay.addEventListener("click", close);
+            btnCloseBtns.forEach((b) => b.addEventListener("click", close));
+
+            window.addEventListener("keydown", (e) => {
+                if (modalEl.getAttribute("aria-hidden") !== "false") return;
+                if (e.key === "Escape") close();
+                else if (e.key === "ArrowLeft") openIndex(currentModalIndex + 1);  // sesuai mapping kamu
+                else if (e.key === "ArrowRight") openIndex(currentModalIndex - 1);
+            });
+
+            // swipe modal
+            let touchStartX = 0;
+            modalEl.addEventListener("touchstart", (e) => {
+                if (e.touches && e.touches[0]) touchStartX = e.touches[0].clientX;
+            }, { passive: true });
+            modalEl.addEventListener("touchend", (e) => {
+                if (!e.changedTouches || !e.changedTouches[0]) return;
+                const dx = e.changedTouches[0].clientX - touchStartX;
+                if (Math.abs(dx) > 40) {
+                    if (dx > 0) openIndex(currentModalIndex - 1);
+                    else openIndex(currentModalIndex + 1);
+                }
+            }, { passive: true });
+
+            const api = { open, close, next() { openIndex(currentModalIndex + 1); }, prev() { openIndex(currentModalIndex - 1); } };
+            window.imageModal = api;
+            return api;
+        })();
+
+        function openModalByCard(card) {
+            const idx = parseInt(card?.dataset?.index || "", 10);
+            if (!Number.isFinite(idx)) return;
+            if (window.imageModal && typeof window.imageModal.open === "function") window.imageModal.open(idx);
+        }
+
+        // ====== BUILD DOM ======
+        function setupGalleryDOM() {
+            cylinder.innerHTML = "";
+            PHOTO_DATA.forEach((p, i) => {
+                const img = document.createElement("img");
+                img.src = p.url;
+                img.alt = p.alt || "";
+                img.className = "img3d";
+                img.dataset.index = String(i);
+                img.dataset.title = p.title || p.alt || "";
+                img.title = img.dataset.title; // fallback native tooltip
+                img.style.setProperty("--rotation", `${i * CARD_ANGLE}deg`);
+                cylinder.appendChild(img);
+            });
+        }
+
+        function updateCardVisuals() {
+            const allCards = Array.from(cylinder.querySelectorAll(".img3d"));
+            let bestCos = -Infinity;
+            let frontCard = null;
+
+            allCards.forEach((card) => {
+                const idx = parseInt(card.dataset.index, 10);
+                if (!Number.isFinite(idx)) return;
+
+                const cardBaseDeg = idx * CARD_ANGLE;
+                let angleDeg = cardBaseDeg + currentRotation;
+                angleDeg = ((angleDeg + 180) % 360) - 180;
+                const cosVal = Math.cos(angleDeg * Math.PI / 180);
+
+                let z = Math.round(cosVal * 1000) + 1000;
+
+                // hovered card always on top
+                if (hoveredCard === card) z = 99999;
+
+                card.style.zIndex = String(z);
+                card.style.pointerEvents = "auto";
+
+                if (cosVal > bestCos) {
+                    bestCos = cosVal;
+                    frontCard = card;
+                }
+            });
+
+            // OPTIONAL: jangan paksa frontCard jadi 99999 (bisa nutup kartu lain)
+            // if (frontCard && frontCard !== hoveredCard) frontCard.style.zIndex = "3000";
+        }
+
+        // ====== TOOLTIP (custom) ======
+        const tooltipEl = document.createElement("div");
+        tooltipEl.className = "gallery-tooltip";
+        galleryWrapper.appendChild(tooltipEl);
+
+        function showTooltip(text) {
+            tooltipEl.textContent = text || "";
+            tooltipEl.classList.add("visible");
+        }
+        function hideTooltip() {
+            tooltipEl.classList.remove("visible");
+        }
+        function positionTooltip(clientX, clientY) {
+            const rect = galleryWrapper.getBoundingClientRect();
+            tooltipEl.style.left = `${clientX - rect.left}px`;
+            tooltipEl.style.top = `${clientY - rect.top}px`;
+        }
+
+        // hover tracking via elementFromPoint (works on gap + painted pixel)
+        galleryWrapper.addEventListener("pointermove", (ev) => {
+            if (isPointerDown) return; // jangan ganggu saat drag
+            const card = getCardAtPoint(ev.clientX, ev.clientY);
+            if (!card) {
+                setHovered(null);
+                hideTooltip();
+                return;
+            }
+            setHovered(card);
+            const text = card.dataset.title || card.title || card.alt || "";
+            if (text) showTooltip(text);
+            positionTooltip(ev.clientX, ev.clientY);
+        }, { passive: true });
+
+        galleryWrapper.addEventListener("pointerleave", () => {
+            if (isPointerDown) return;
+            setHovered(null);
+            hideTooltip();
+        }, { passive: true });
+
+        // ====== DRAG ROTATE ======
+        galleryWrapper.setAttribute("tabindex", "-1"); // avoid focus scrollIntoView
+        galleryWrapper.addEventListener("focus", () => galleryWrapper.blur(), true);
+
+        function onPointerDown(e) {
+            // left click only (mouse)
+            if (typeof e.button === "number" && e.button !== 0) return;
+
+            isPointerDown = true;
+            isUserInteracting = true;
+            pointerLastX = e.clientX;
+            pointerVelocity = 0;
+            dragDistance = 0;
+            snapTween = null;
+
+            suppressNextClick = false;
+
+            hideTooltip();
+            setHovered(null);
+
+            pauseAutoRotate();
+            try { galleryWrapper.setPointerCapture(e.pointerId); } catch { }
+        }
+
+        function onPointerMove(e) {
+            if (!isPointerDown) return;
+            const dx = e.clientX - pointerLastX;
+            dragDistance += Math.abs(dx);
+            pointerLastX = e.clientX;
+
+            const sensitivity = 0.25;
+            currentRotation += dx * sensitivity;
+            pointerVelocity = dx / (1 / 60);
+
+            normalizeRotation();
+            updateCylinderTransform();
+            updateCardVisuals();
+        }
+
+        function onPointerUp(e) {
+            if (!isPointerDown) return;
+            isPointerDown = false;
+            try { galleryWrapper.releasePointerCapture(e.pointerId); } catch { }
+
+            const CLICK_THRESHOLD = 6;
+
+            // click (no drag) -> open modal
+            if (dragDistance < CLICK_THRESHOLD) {
+                const card = getCardAtPoint(e.clientX, e.clientY);
+                if (card) openModalByCard(card);
+                suppressNextClick = true;     // cegah click event browser setelah pointerup
+                resumeAutoRotateSoon();
+                isUserInteracting = false;
+                return;
+            }
+
+            // drag end -> snap
+            const flickThreshold = 30;
+            let inertia = 0;
+            if (Math.abs(pointerVelocity) > flickThreshold) inertia = pointerVelocity * 0.06;
+
+            const nearestIndex = Math.round(-(currentRotation + inertia) / CARD_ANGLE);
+            const target = -nearestIndex * CARD_ANGLE;
+
+            suppressNextClick = true;       // click setelah drag jangan buka modal
+            animateToRotation(target, 600);
+
+            resumeAutoRotateSoon();
+            isUserInteracting = false;
+        }
+
+        galleryWrapper.addEventListener("pointerdown", onPointerDown, { passive: false });
+        window.addEventListener("pointermove", onPointerMove, { passive: false });
+        window.addEventListener("pointerup", onPointerUp, { passive: false });
+        window.addEventListener("pointercancel", onPointerUp, { passive: false });
+
+        // robust click fallback (kalau device tidak memicu pointerup path tertentu)
+        galleryWrapper.addEventListener("click", (ev) => {
+            if (suppressNextClick) { suppressNextClick = false; return; }
+            const card = getCardAtPoint(ev.clientX, ev.clientY);
+            if (!card) return;
+            ev.preventDefault();
+            ev.stopPropagation();
+            openModalByCard(card);
+        }, true);
+
+        // ====== WHEEL ROTATE (fix gap scroll bug) ======
+        window.addEventListener("wheel", (e) => {
+            if (e.ctrlKey || e.metaKey) return;
+
+            // some browsers might not provide clientX/clientY consistently
+            const x = (typeof e.clientX === "number") ? e.clientX : 0;
+            const y = (typeof e.clientY === "number") ? e.clientY : 0;
+
+            const rect = galleryArea.getBoundingClientRect();
+            const inside = (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom);
+            if (!inside) return;
+
+            // prefer vertical wheel for rotate; allow horizontal trackpad to pass if you want
+            if (Math.abs(e.deltaY) < Math.abs(e.deltaX)) return;
+
+            e.preventDefault();
+            e.stopPropagation();
+
+            const sensitivity = 0.28;
+            currentRotation += e.deltaY * sensitivity;
+
+            normalizeRotation();
+            updateCylinderTransform();
+            updateCardVisuals();
+
+            pauseAutoRotate();
+            resumeAutoRotateSoon();
+        }, { passive: false, capture: true });
+
+        // ====== TOUCH SWIPE (optional, safe) ======
+        let tActive = false, tLocked = false, tStartX = 0, tStartY = 0;
+        const HORIZ_THRESHOLD = 10;
+
+        galleryWrapper.addEventListener("touchstart", (ev) => {
+            if (!ev.touches || !ev.touches[0]) return;
+            tActive = true;
+            tLocked = false;
+            tStartX = ev.touches[0].clientX;
+            tStartY = ev.touches[0].clientY;
+        }, { passive: true });
+
+        galleryWrapper.addEventListener("touchmove", (ev) => {
+            if (!tActive || !ev.touches || !ev.touches[0]) return;
+            const cx = ev.touches[0].clientX;
+            const cy = ev.touches[0].clientY;
+            const dx = cx - tStartX;
+            const dy = cy - tStartY;
+
+            if (tLocked || (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > HORIZ_THRESHOLD)) {
+                tLocked = true;
+                ev.preventDefault();
+                const sensitivity = 0.35;
+                currentRotation += dx * sensitivity;
+                tStartX = cx;
+
+                normalizeRotation();
+                updateCylinderTransform();
+                updateCardVisuals();
+                pauseAutoRotate();
+            }
+        }, { passive: false });
+
+        galleryWrapper.addEventListener("touchend", () => {
+            if (!tActive) return;
+            tActive = false;
+            tLocked = false;
+
+            const nearestIndex = Math.round(-currentRotation / CARD_ANGLE);
+            const target = -nearestIndex * CARD_ANGLE;
+            animateToRotation(target, 450);
+            resumeAutoRotateSoon();
+            isUserInteracting = false;
+        }, { passive: true });
+
+        // ====== BUTTONS (optional) ======
+        function slideGallery(direction) {
+            const currentIndex = Math.round(-currentRotation / CARD_ANGLE);
+            const targetIndex = currentIndex + direction;
+            animateToRotation(-targetIndex * CARD_ANGLE, 500);
+        }
+        if (btnLeft) btnLeft.addEventListener("click", () => { pauseAutoRotate(); slideGallery(-1); });
+        if (btnRight) btnRight.addEventListener("click", () => { pauseAutoRotate(); slideGallery(1); });
+
+        // ====== RAF LOOP ======
+        function rafLoop(ts) {
+            if (!lastFrameTime) lastFrameTime = ts;
+            const dt = (ts - lastFrameTime) / 1000;
+            lastFrameTime = ts;
+
+            if (snapTween) {
+                const done = snapTween.step(dt);
+                currentRotation = snapTween.value;
+                updateCylinderTransform();
+                updateCardVisuals();
+                if (done) snapTween = null;
+            } else {
+                const now = performance.now();
+                if (!isUserInteracting && now > autoRotatePausedUntil) {
+                    currentRotation += AUTO_ROTATE_SPEED_DEG_PER_SEC * dt * -1;
+                    normalizeRotation();
+                    updateCylinderTransform();
+                    updateCardVisuals();
+                }
+            }
+
+            requestAnimationFrame(rafLoop);
+        }
+
+        // ====== INIT ======
+        setupGalleryDOM();
+        updateCylinderTransform();
+        updateCardVisuals();
+        galleryWrapper.classList.add("loaded");
+        requestAnimationFrame(rafLoop);
+
+    })();
+</script>
+<!-- =================== END POTO SCRIPT =================== -->
+<script>
+    (function () {
+        const root = document.getElementById('whyapu-root');
+        if (!root) return;
+        document.body.classList.remove('whyapu-nojs');
+
+        const accordion = document.getElementById('whyapu-accordion');
+        const items = Array.from(accordion.querySelectorAll('.whyapu-item'));
+        const buttons = items.map(it => it.querySelector('.whyapu-btn'));
+        const panels = items.map(it => it.querySelector('.whyapu-panel'));
+        const allowMultiple = false;
+
+        function closeItem(item) {
+            const btn = item.querySelector('.whyapu-btn');
+            const panel = item.querySelector('.whyapu-panel');
+            item.setAttribute('aria-expanded', 'false');
+            btn.setAttribute('aria-expanded', 'false');
+            panel.classList.remove('open');
+            /* set to 0px (explicit) — more consistent across browsers */
+            panel.style.maxHeight = '0px';
+        }
+
+        function openItem(item) {
+            const btn = item.querySelector('.whyapu-btn');
+            const panel = item.querySelector('.whyapu-panel');
+
+            if (!allowMultiple) {
+                items.forEach(it => { if (it !== item) closeItem(it); });
+            }
+
+            item.setAttribute('aria-expanded', 'true');
+            btn.setAttribute('aria-expanded', 'true');
+            panel.classList.add('open');
+
+            /* Force a reflow reading scrollHeight then set maxHeight: reliable for animations */
+            const full = panel.scrollHeight;
+            panel.style.maxHeight = full + 'px';
+        }
+
+        // initialize closed
+        items.forEach(item => {
+            const panel = item.querySelector('.whyapu-panel');
+            panel.style.maxHeight = '0px';
+            panel.classList.remove('open');
+            item.setAttribute('aria-expanded', 'false');
+            const btn = item.querySelector('.whyapu-btn');
+            btn.setAttribute('aria-expanded', 'false');
+        });
+
+        // choose activation event: prefer PointerEvent on modern browsers
+        const activateEvent = (window.PointerEvent) ? 'pointerdown' : 'click';
+
+        // toggle handler
+        function makeToggle(item) {
+            const btn = item.querySelector('.whyapu-btn');
+            btn.addEventListener(activateEvent, (e) => {
+                // Prevent double-trigger on some old browsers when pointerdown + click happen
+                if (activateEvent === 'pointerdown') {
+                    // prevent default only for pointerdown to avoid dbl-firing; do not prevent scroll
+                    e.preventDefault && e.preventDefault();
+                }
+                const expanded = btn.getAttribute('aria-expanded') === 'true';
+                if (expanded) closeItem(item);
+                else openItem(item);
+            });
+
+            // keyboard accessibility
+            btn.addEventListener('keydown', (e) => {
+                const idx = buttons.indexOf(btn);
+                switch (e.key) {
+                    case 'ArrowDown':
+                        e.preventDefault();
+                        buttons[(idx + 1) % buttons.length].focus();
+                        break;
+                    case 'ArrowUp':
+                        e.preventDefault();
+                        buttons[(idx - 1 + buttons.length) % buttons.length].focus();
+                        break;
+                    case 'Home':
+                        e.preventDefault();
+                        buttons[0].focus();
+                        break;
+                    case 'End':
+                        e.preventDefault();
+                        buttons[buttons.length - 1].focus();
+                        break;
+                    case 'Enter':
+                    case ' ':
+                        e.preventDefault();
+                        // toggle using the same logic as pointer/click
+                        const expanded = btn.getAttribute('aria-expanded') === 'true';
+                        if (expanded) closeItem(item); else openItem(item);
+                        break;
+                    default:
+                        break;
+                }
+            });
+        }
+
+        items.forEach(makeToggle);
+
+        // single resize listener to recalc open panel heights
+        window.addEventListener('resize', () => {
+            panels.forEach(panel => {
+                if (panel.classList.contains('open')) {
+                    panel.style.maxHeight = panel.scrollHeight + 'px';
+                }
+            });
+        });
+
+        // small public API
+        window.whyapuAccordion = {
+            openIndex(i) { if (items[i]) openItem(items[i]); },
+            closeIndex(i) { if (items[i]) closeItem(items[i]); },
+            toggleIndex(i) { if (items[i]) { const btn = items[i].querySelector('.whyapu-btn'); btn.click(); } },
+            openAll() { if (allowMultiple) items.forEach(openItem); },
+            closeAll() { items.forEach(closeItem); }
+        };
+    })();
+</script>
+<noscript>
+    <style>
+        /* If JS disabled, expand all panels for accessibility */
+        body {}
+
+        .whyapu-nojs .whyapu-panel {
+            max-height: none !important;
+            padding: 12px 14px 18px 14px !important;
+        }
+    </style>
+    <script>document.body.classList.add('whyapu-nojs');</script>
+</noscript>
+
+<script>
+    // 8. SLIDER
+    var swiper = new Swiper(".myLogoSlider", {
+        slidesPerView: 4,
+        slidesPerGroup: 4,
+        spaceBetween: 30,
+        loop: true,
+        loopFillGroupWithBlank: true,
+        speed: 600,
+        autoplay: { delay: 2500, disableOnInteraction: false },
+
+        watchOverflow: false,
+
+        pagination: {
+            el: ".myLogoSlider .swiper-pagination",
+            clickable: true,
+            type: 'bullets'
+        },
+
+        navigation: {
+            nextEl: ".myLogoSlider .swiper-button-next",
+            prevEl: ".myLogoSlider .swiper-button-prev"
+        },
+
+        breakpoints: {
+            320: { slidesPerView: 2, slidesPerGroup: 2 },
+            576: { slidesPerView: 3, slidesPerGroup: 3 },
+            768: { slidesPerView: 4, slidesPerGroup: 4 }
+        }
+    });
+</script>

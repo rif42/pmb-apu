@@ -1,6 +1,7 @@
 ---
 import ScrollReveal from '../components/ScrollReveal.astro';
 import { pathways } from '../data/pathways';
+import { scholarships as scholarshipDetails } from '../data/scholarships';
 
 const getBadgeClasses = (type: string) => {
   switch (type) {
@@ -64,12 +65,36 @@ const getBadgeClasses = (type: string) => {
 
             {pathway.scholarships && (
               <div class="space-y-2 mb-6">
-                {pathway.scholarships.map((scholarship) => (
-                  <div class="flex items-center gap-3 p-3 bg-brand-surface-alt/82 rounded-lg border border-brand-border/24">
-                    <div class="w-2 h-2 rounded-full bg-brand-primary-deep flex-shrink-0"></div>
-                    <span class="text-body-s text-brand-text">{scholarship}</span>
-                  </div>
-                ))}
+                {pathway.scholarships.map((scholarship) => {
+                  const detail = scholarshipDetails.find(s => s.name === scholarship);
+                  return (
+                    <div class="group/item relative scholarship-item cursor-pointer">
+                      <div class="flex items-center gap-3 p-3 bg-brand-surface-alt/82 rounded-lg border border-brand-border/24 cursor-default hover:border-brand-accent/30 transition-colors">
+                        <div class="w-2 h-2 rounded-full bg-brand-primary-deep flex-shrink-0"></div>
+                        <span class="text-body-s text-brand-text">{scholarship}</span>
+                      </div>
+                      
+                      {detail && (
+                        <div class={`absolute z-50 w-72 p-5 rounded-xl bg-brand-primary border border-brand-border/30 shadow-2xl opacity-0 invisible group-hover/item:opacity-100 group-hover/item:visible group-[.is-active]/item:opacity-100 group-[.is-active]/item:visible transition-all duration-300 pointer-events-none
+                          bottom-full mb-2 left-1/2 -translate-x-1/2 
+                          md:bottom-auto md:mb-0 md:-translate-x-0 md:left-[calc(100%+1rem)] md:top-1/2 md:-translate-y-1/2
+                        `}>
+                          <h3 class=" font-bold uppercase tracking-wide text-brand-surface mb-2">{detail.name}</h3>
+                          <p class="text-caption text-brand-surface-alt/90 mb-4">{detail.description}</p>
+                          <div class="space-y-1.5 mb-4">
+                            <h4 class="text-brand-surface-alt tracking-widest font-bold">Persyaratan Utama</h4>
+                            <ul class="text-caption text-brand-surface-alt space-y-1.5">
+                              {detail.requirements.map(   req => (
+                                <li class="flex text-caption items-start gap-2"><span class="text-brand-accent mt-0.5">•</span><span class="leading-snug">{req}</span></li>
+                              ))}
+                            </ul>
+                          </div>
+                          <span class="inline-flex px-2 py-1 rounded border border-brand-accent/20 bg-brand-accent/10 text-[10px] font-medium text-brand-accent-soft">{detail.benefit}</span>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             )}
 
@@ -96,3 +121,29 @@ const getBadgeClasses = (type: string) => {
     </ScrollReveal>
   </div>
 </section>
+
+<script>
+  // Handle mobile tap/click on scholarship items
+  const items = document.querySelectorAll('.scholarship-item');
+  
+  items.forEach(item => {
+    item.addEventListener('click', (e) => {
+      e.stopPropagation(); // Prevent document click from immediately closing it
+      
+      const isActive = item.classList.contains('is-active');
+      
+      // Close all others
+      items.forEach(other => other.classList.remove('is-active'));
+      
+      // Toggle current
+      if (!isActive) {
+        item.classList.add('is-active');
+      }
+    });
+  });
+
+  // Close when clicking outside
+  document.addEventListener('click', () => {
+    items.forEach(item => item.classList.remove('is-active'));
+  });
+</script>
