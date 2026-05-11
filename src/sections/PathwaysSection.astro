@@ -15,7 +15,7 @@ const getBadgeClasses = (type: string) => {
 };
 ---
 
-<section id="jalur-masuk" class=" py-24 md:py-32 bg-gradient-to-b from-brand-primary/30 via-white to-brand-accent/30">
+<section id="jalur-masuk" class="motion-aurora-shell motion-aurora-shell--pathways relative isolate overflow-hidden py-24 md:py-32 bg-gradient-to-b from-brand-surface-alt via-brand-aurora/10 to-brand-surface-soft">
   <div class="content-max">
     <!-- Section Header -->
     <ScrollReveal class="text-center mb-16">
@@ -30,7 +30,7 @@ const getBadgeClasses = (type: string) => {
     <div class="grid md:grid-cols-2 gap-8">
       {pathways.map((pathway, index) => (
         <ScrollReveal delay={index * 150}>
-          <div class="bg-brand-surface border border-brand-border/42 rounded-xl p-8 h-full transition-all duration-300 hover:shadow-lg hover:border-brand-accent-soft hover:border-2 hover:border-solid group">
+          <div class="bg-white/75 border border-brand-border/42 rounded-xl p-8 h-full transition-all duration-300 hover:shadow-lg hover:border-brand-accent-soft hover:border-2 hover:border-solid group">
             <!-- Icon -->
             <div class="w-14 h-14 rounded-full bg-brand-surface-alt/75 text-brand-primary-deep flex items-center justify-center mb-6 border border-brand-border/24">
               {pathway.icon === 'graduation-cap' ? (
@@ -75,21 +75,21 @@ const getBadgeClasses = (type: string) => {
                       </div>
                       
                       {detail && (
-                        <div class={`absolute z-50 w-72 p-5 rounded-xl bg-brand-primary border border-brand-border/30 shadow-2xl opacity-0 invisible group-hover/item:opacity-100 group-hover/item:visible group-[.is-active]/item:opacity-100 group-[.is-active]/item:visible transition-all duration-300 pointer-events-none
+                        <div class={`absolute z-50 w-72 p-5 rounded-xl bg-brand-surface border border-brand-border/40 shadow-2xl opacity-0 invisible group-hover/item:opacity-100 group-hover/item:visible group-[.is-active]/item:opacity-100 group-[.is-active]/item:visible transition-all duration-300 pointer-events-none
                           bottom-full mb-2 left-1/2 -translate-x-1/2 
                           md:bottom-auto md:mb-0 md:-translate-x-0 md:left-[calc(100%+1rem)] md:top-1/2 md:-translate-y-1/2
                         `}>
-                          <h3 class=" font-bold uppercase tracking-wide text-brand-surface mb-2">{detail.name}</h3>
-                          <p class="text-caption text-brand-surface-alt/90 mb-4">{detail.description}</p>
+                          <h3 class="font-bold uppercase tracking-wide text-brand-text mb-2">{detail.name}</h3>
+                          <p class="text-caption text-brand-text-muted mb-4">{detail.description}</p>
                           <div class="space-y-1.5 mb-4">
-                            <h4 class="text-brand-surface-alt tracking-widest font-bold">Persyaratan Utama</h4>
-                            <ul class="text-caption text-brand-surface-alt space-y-1.5">
+                            <h4 class="text-brand-text tracking-widest font-bold">Persyaratan Utama</h4>
+                            <ul class="text-caption text-brand-text space-y-1.5">
                               {detail.requirements.map(   req => (
                                 <li class="flex text-caption items-start gap-2"><span class="text-brand-accent mt-0.5">•</span><span class="leading-snug">{req}</span></li>
                               ))}
                             </ul>
                           </div>
-                          <span class="inline-flex px-2 py-1 rounded border border-brand-accent/20 bg-brand-accent/10 text-[10px] font-medium text-brand-accent-soft">{detail.benefit}</span>
+                          <span class="inline-flex px-2 py-1 rounded border border-brand-accent/20 bg-brand-accent/10 text-[10px] font-medium text-brand-primary-deep">{detail.benefit}</span>
                         </div>
                       )}
                     </div>

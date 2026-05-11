@@ -1,0 +1,9 @@
+
+
+
+Plan item 4 manual QA
+- Live page at http://127.0.0.1:4321/ renders #program, #jalur-masuk, #persyaratan, #kontak.
+- ScholarshipSection exists in source but remains commented out in src/pages/index.astro, so no #beasiswa on the live route.
+- Decorative aurora motion is implemented in src/styles/global.css via .motion-aurora-shell pseudo-elements; background-only layering keeps children above motion.
+- Reduced-motion fallback disables aurora/grid animation and flattens opacity/transform.
+- Source check only; browser harness unavailable here, so console/runtime errors could not be directly sampled.

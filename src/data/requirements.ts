@@ -17,17 +17,17 @@ export const requirements: Requirement[] = [
   },
   {
     number: '03',
-    title: 'Fotokopi KTP',
+    title: 'Kartu Tanda Penduduk',
     description: 'Kartu Tanda Penduduk yang masih berlaku',
   },
   {
     number: '04',
-    title: 'Fotokopi KK',
+    title: 'Kartu Keluarga',
     description: 'Kartu Keluarga sebagai bukti domisili',
   },
   {
     number: '05',
-    title: 'Fotokopi Ijazah/SKL',
+    title: 'Ijazah/SKL',
     description: 'Ijazah atau Surat Keterangan Lulus sementara',
   },
 ];

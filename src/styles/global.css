@@ -9,17 +9,33 @@
 @tailwind utilities;
 
 :root {
-  --color-base-surface: 244 247 238;
-  --color-base-surface-alt: 230 240 221;
-  --color-base-surface-soft: 214 231 200;
-  --color-base-primary: 47 107 59;
-  --color-base-primary-deep: 30 77 43;
-  --color-base-primary-deeper: 21 55 32;
-  --color-base-text: 31 49 36;
-  --color-base-text-muted: 86 112 92;
-  --color-base-border: 168 195 157;
-  --color-base-accent: 197 138 46;
-  --color-base-accent-soft: 228 190 115;
+  --color-semantic-surface: 247 250 243;
+  --color-semantic-surface-alt: 236 243 227;
+  --color-semantic-surface-soft: 222 234 210;
+  --color-semantic-primary: 43 122 74;
+  --color-semantic-primary-deep: 28 86 51;
+  --color-semantic-primary-deeper: 17 58 34;
+  --color-semantic-text: 27 41 32;
+  --color-semantic-text-muted: 87 112 94;
+  --color-semantic-border: 176 201 164;
+  --color-semantic-accent: 228 152 78;
+  --color-semantic-accent-soft: 245 208 149;
+  --color-semantic-glow: 113 185 138;
+  --color-semantic-aurora: 239 176 110;
+
+  --color-base-surface: var(--color-semantic-surface);
+  --color-base-surface-alt: var(--color-semantic-surface-alt);
+  --color-base-surface-soft: var(--color-semantic-surface-soft);
+  --color-base-primary: var(--color-semantic-primary);
+  --color-base-primary-deep: var(--color-semantic-primary-deep);
+  --color-base-primary-deeper: var(--color-semantic-primary-deeper);
+  --color-base-text: var(--color-semantic-text);
+  --color-base-text-muted: var(--color-semantic-text-muted);
+  --color-base-border: var(--color-semantic-border);
+  --color-base-accent: var(--color-semantic-accent);
+  --color-base-accent-soft: var(--color-semantic-accent-soft);
+  --color-base-glow: var(--color-semantic-glow);
+  --color-base-aurora: var(--color-semantic-aurora);
   --color-base-white: 255 255 255;
 
   --color-brand-surface: var(--color-base-surface);
@@ -33,34 +49,36 @@
   --color-brand-border: var(--color-base-border);
   --color-brand-accent: var(--color-base-accent);
   --color-brand-accent-soft: var(--color-base-accent-soft);
+  --color-brand-glow: var(--color-base-glow);
+  --color-brand-aurora: var(--color-base-aurora);
 
-  --color-deep-space: var(--color-base-primary-deeper);
-  --color-warm-ivory: var(--color-base-surface);
-  --color-soft-sage: var(--color-base-border);
-  --color-burnt-copper: var(--color-base-accent);
-  --color-deep-sage: var(--color-base-primary);
-  --color-charcoal: var(--color-base-text);
+  --color-deep-space: var(--color-brand-primary-deeper);
+  --color-warm-ivory: var(--color-brand-surface);
+  --color-soft-sage: var(--color-brand-border);
+  --color-burnt-copper: var(--color-brand-accent);
+  --color-deep-sage: var(--color-brand-primary);
+  --color-charcoal: var(--color-brand-text);
 
-  --color-slate-50: var(--color-base-surface);
-  --color-slate-100: var(--color-base-surface-alt);
-  --color-slate-200: var(--color-base-surface-soft);
-  --color-slate-300: var(--color-base-border);
-  --color-slate-400: var(--color-base-text-muted);
-  --color-slate-500: var(--color-base-text-muted);
-  --color-slate-600: var(--color-base-text);
-  --color-slate-700: var(--color-base-primary-deep);
-  --color-slate-800: var(--color-base-primary-deeper);
-  --color-slate-900: var(--color-base-primary-deeper);
+  --color-slate-50: var(--color-brand-surface);
+  --color-slate-100: var(--color-brand-surface-alt);
+  --color-slate-200: var(--color-brand-surface-soft);
+  --color-slate-300: var(--color-brand-border);
+  --color-slate-400: var(--color-brand-text-muted);
+  --color-slate-500: var(--color-brand-text-muted);
+  --color-slate-600: var(--color-brand-text);
+  --color-slate-700: var(--color-brand-primary-deep);
+  --color-slate-800: var(--color-brand-primary-deeper);
+  --color-slate-900: var(--color-brand-primary-deeper);
 
-  --color-gold-300: var(--color-base-surface-soft);
-  --color-gold-400: var(--color-base-accent-soft);
-  --color-gold-500: var(--color-base-accent);
+  --color-gold-300: var(--color-brand-surface-soft);
+  --color-gold-400: var(--color-brand-accent-soft);
+  --color-gold-500: var(--color-brand-accent);
 
-  --color-teal-400: var(--color-base-primary);
-  --color-teal-500: var(--color-base-surface-soft);
+  --color-teal-400: var(--color-brand-primary);
+  --color-teal-500: var(--color-brand-surface-soft);
 
-  --color-navy-800: var(--color-base-primary-deep);
-  --color-navy-900: var(--color-base-primary-deeper);
+  --color-navy-800: var(--color-brand-primary-deep);
+  --color-navy-900: var(--color-brand-primary-deeper);
 }
 
 @layer base {
@@ -166,4 +184,107 @@
     background-size: 200% 100%;
     pointer-events: none;
   }
+
+  .motion-aurora-shell {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  .motion-aurora-shell > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .motion-aurora-shell::before,
+  .motion-aurora-shell::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .motion-aurora-shell::before {
+    background:
+      radial-gradient(circle at 18% 18%, rgb(var(--color-brand-aurora) / 0.28), transparent 38%),
+      radial-gradient(circle at 82% 16%, rgb(var(--color-brand-primary) / 0.2), transparent 34%),
+      radial-gradient(circle at 60% 82%, rgb(var(--color-brand-accent) / 0.16), transparent 40%);
+    filter: blur(34px) saturate(1.08);
+    opacity: var(--motion-aurora-opacity, 1);
+    transform: translate3d(0, 0, 0) scale(1.1);
+    animation: aurora-drift var(--motion-aurora-speed, 26s) ease-in-out infinite alternate;
+  }
+
+  .motion-aurora-shell::after {
+    background-image:
+      linear-gradient(rgb(var(--color-brand-border) / 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(var(--color-brand-border) / 0.06) 1px, transparent 1px),
+      radial-gradient(circle, rgb(var(--color-brand-text) / 0.03) 0 0.7px, transparent 0.9px);
+    background-size: 120px 120px, 120px 120px, 9px 9px;
+    background-position: 0 0, 0 0, 0 0;
+    mix-blend-mode: multiply;
+    opacity: var(--motion-grid-opacity, 0.52);
+    animation: aurora-grid-pan var(--motion-grid-speed, 34s) linear infinite;
+  }
+
+  .motion-aurora-shell--programs {
+    --motion-aurora-opacity: 1.02;
+    --motion-aurora-speed: 24s;
+    --motion-grid-opacity: 0.56;
+    --motion-grid-speed: 34s;
+  }
+
+  .motion-aurora-shell--pathways {
+    --motion-aurora-opacity: 0.96;
+    --motion-aurora-speed: 26s;
+    --motion-grid-opacity: 0.52;
+    --motion-grid-speed: 36s;
+  }
+
+  .motion-aurora-shell--requirements {
+    --motion-aurora-opacity: 0.98;
+    --motion-aurora-speed: 28s;
+    --motion-grid-opacity: 0.54;
+    --motion-grid-speed: 38s;
+  }
+
+  .motion-aurora-shell--scholarship {
+    --motion-aurora-opacity: 0.92;
+    --motion-aurora-speed: 30s;
+    --motion-grid-opacity: 0.5;
+    --motion-grid-speed: 40s;
+  }
+
+  .motion-aurora-shell--contact {
+    --motion-aurora-opacity: 1;
+    --motion-aurora-speed: 27s;
+    --motion-grid-opacity: 0.56;
+    --motion-grid-speed: 37s;
+  }
+
+  @keyframes aurora-drift {
+    0% {
+      transform: translate3d(-2%, -1%, 0) scale(1.08);
+    }
+
+    50% {
+      transform: translate3d(2%, 1.5%, 0) scale(1.14);
+    }
+
+    100% {
+      transform: translate3d(-1.5%, 2%, 0) scale(1.1);
+    }
+  }
+
+  @keyframes aurora-grid-pan {
+    0% {
+      background-position: 0 0, 0 0, 0 0;
+    }
+
+    100% {
+      background-position: 0 160px, 160px 0, 220px 220px;
+    }
+  }
+
 }

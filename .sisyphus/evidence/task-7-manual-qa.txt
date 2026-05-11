@@ -1,0 +1,17 @@
+Task 7 manual QA — Programs section (`#program`)
+
+Desktop viewport:
+- Cards keep distinct tokenized tones; no flattened single-tint appearance.
+- Card label text stays readable over the image overlays.
+- Hover expansion worked; card widths changed across the row.
+
+Mobile viewport:
+- Swiper controls stayed visible; prev/next buttons rendered at 36px and were readable.
+- Program labels remained readable in the active slide.
+
+Issue found:
+- Clicking the visible mobile program card routed to `/management/` and landed on `404: Not Found`.
+
+Notes:
+- No source files modified.
+- Browser QA covered desktop and mobile viewport behavior.

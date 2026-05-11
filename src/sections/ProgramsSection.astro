@@ -2,23 +2,92 @@
 import ScrollReveal from "../components/ScrollReveal.astro";
 import { programs } from "../data/programs";
 
-// Map colors to programs based on reference HTML
-const programColors: Record<string, string> = {
-    "biomedical-science": "#1f3c88",
-    biotechnology: "#2ecc71",
-    law: "#c41515",
-    management: "#f1e300",
-    communication: "#f39c12",
-    "midwifery-s1": "#7a4db3",
-    "midwifery-d3": "#9b59b6",
+type ProgramTone = {
+    hoverBg: string;
+    overlayStart: string;
+    overlayEnd: string;
+    footerBg: string;
+    labelColor: string;
+    arrowStroke: string;
 };
 
-const getColorForProgram = (id: string) => programColors[id] || "#0e1a3a";
+const defaultTone: ProgramTone = {
+    hoverBg: "rgb(var(--color-brand-primary-deeper) / 0.9)",
+    overlayStart: "rgb(var(--color-brand-primary-deep) / 0.78)",
+    overlayEnd: "rgb(var(--color-brand-primary) / 0.9)",
+    footerBg: "rgb(var(--color-brand-primary-deeper))",
+    labelColor: "rgb(var(--color-brand-accent-soft))",
+    arrowStroke: "rgb(var(--color-brand-primary))",
+};
+
+const programTones: Record<string, ProgramTone> = {
+    "biomedical-science": {
+        hoverBg: "rgb(var(--color-brand-primary-deeper) / 0.92)",
+        overlayStart: "rgb(var(--color-brand-primary-deep) / 0.8)",
+        overlayEnd: "rgb(var(--color-brand-primary) / 0.92)",
+        footerBg: "rgb(var(--color-brand-primary-deeper))",
+        labelColor: "rgb(var(--color-brand-surface-soft))",
+        arrowStroke: "rgb(var(--color-brand-primary-deep))",
+    },
+    biotechnology: {
+        hoverBg: "rgb(var(--color-brand-primary) / 0.9)",
+        overlayStart: "rgb(var(--color-brand-primary) / 0.76)",
+        overlayEnd: "rgb(var(--color-brand-accent-soft) / 0.88)",
+        footerBg: "rgb(var(--color-brand-primary-deep))",
+        labelColor: "rgb(var(--color-brand-accent-soft))",
+        arrowStroke: "rgb(var(--color-brand-primary))",
+    },
+    law: {
+        hoverBg: "rgb(var(--color-brand-accent) / 0.84)",
+        overlayStart: "rgb(var(--color-brand-accent) / 0.72)",
+        overlayEnd: "rgb(var(--color-brand-primary-deeper) / 0.86)",
+        footerBg: "rgb(var(--color-brand-accent))",
+        labelColor: "rgb(var(--color-brand-accent-soft))",
+        arrowStroke: "rgb(var(--color-brand-accent))",
+    },
+    management: {
+        hoverBg: "rgb(var(--color-brand-surface-soft) / 0.96)",
+        overlayStart: "rgb(var(--color-brand-surface-soft) / 0.74)",
+        overlayEnd: "rgb(var(--color-brand-primary-deeper) / 0.88)",
+        footerBg: "rgb(var(--color-brand-primary-deep))",
+        labelColor: "rgb(var(--color-brand-primary))",
+        arrowStroke: "rgb(var(--color-brand-primary-deep))",
+    },
+    communication: {
+        hoverBg: "rgb(var(--color-brand-accent-soft) / 0.86)",
+        overlayStart: "rgb(var(--color-brand-accent-soft) / 0.72)",
+        overlayEnd: "rgb(var(--color-brand-primary) / 0.84)",
+        footerBg: "rgb(var(--color-brand-accent-soft))",
+        labelColor: "rgb(var(--color-brand-accent))",
+        arrowStroke: "rgb(var(--color-brand-primary))",
+    },
+    "midwifery-s1": {
+        hoverBg: "rgb(var(--color-brand-primary-deep) / 0.9)",
+        overlayStart: "rgb(var(--color-brand-primary-deep) / 0.74)",
+        overlayEnd: "rgb(var(--color-brand-accent) / 0.82)",
+        footerBg: "rgb(var(--color-brand-primary-deep))",
+        labelColor: "rgb(var(--color-brand-surface-soft))",
+        arrowStroke: "rgb(var(--color-brand-accent))",
+    },
+    "midwifery-d3": {
+        hoverBg: "rgb(var(--color-brand-primary) / 0.88)",
+        overlayStart: "rgb(var(--color-brand-primary) / 0.74)",
+        overlayEnd: "rgb(var(--color-brand-accent-soft) / 0.82)",
+        footerBg: "rgb(var(--color-brand-primary))",
+        labelColor: "rgb(var(--color-brand-surface-soft))",
+        arrowStroke: "rgb(var(--color-brand-primary))",
+    },
+};
+
+const getToneForProgram = (id: string) => programTones[id] || defaultTone;
+
+const toneVars = (tone: ProgramTone) =>
+    `--hover-bg: ${tone.hoverBg}; --overlay-start: ${tone.overlayStart}; --overlay-end: ${tone.overlayEnd}; --program-footer-bg: ${tone.footerBg}; --program-label-color: ${tone.labelColor}; --program-arrow-stroke: ${tone.arrowStroke};`;
 ---
 
 <section
     id="program"
-    class="bungkus-prodi relative overflow-hidden pt-8 pb-20 bg-gradient-to-b from-brand-accent/30 via-white to-brand-primary/30"
+    class="bungkus-prodi motion-aurora-shell motion-aurora-shell--programs relative overflow-hidden bg-gradient-to-b from-brand-surface via-brand-surface-alt to-brand-surface pt-8 pb-20"
 >
     <style>
         .desktop-only {
@@ -83,7 +152,7 @@ const getColorForProgram = (id: string) => programColors[id] || "#0e1a3a";
             content: "";
             position: absolute;
             inset: 0;
-            background: var(--hover-bg, rgba(0, 0, 0, 0.35));
+            background: var(--hover-bg, rgb(var(--color-brand-primary-deeper) / 0.35));
             opacity: 0.88;
             transition:
                 opacity 0.35s ease,
@@ -97,7 +166,7 @@ const getColorForProgram = (id: string) => programColors[id] || "#0e1a3a";
             }
             .desktop-only .dsk-progdi-slide:hover {
                 transform: scale(1.02);
-                box-shadow: 0 18px 44px rgba(0, 0, 0, 0.32);
+                box-shadow: 0 18px 44px rgb(var(--color-brand-primary-deeper) / 0.22);
                 z-index: 4;
             }
             .desktop-only .dsk-progdi-slide:hover .dsk-progdi-card {
@@ -172,11 +241,11 @@ const getColorForProgram = (id: string) => programColors[id] || "#0e1a3a";
             transform: rotate(-90deg) translate(0, 50%);
             font-size: 32px;
             font-weight: 700;
-            color: #fff;
+            color: rgb(var(--color-brand-surface));
             text-align: left;
             letter-spacing: 0.6px;
             z-index: 4;
-            text-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+            text-shadow: 0 10px 28px rgb(var(--color-brand-primary-deeper) / 0.38);
             line-height: 1.1;
             pointer-events: none;
             white-space: nowrap;
@@ -189,14 +258,14 @@ const getColorForProgram = (id: string) => programColors[id] || "#0e1a3a";
             right: 0;
             bottom: 0;
             height: 64px;
-            background: #0e1a3a;
+            background: var(--program-footer-bg, rgb(var(--color-brand-primary-deeper)));
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 12px;
             font-weight: 700;
             letter-spacing: 1px;
-            color: #fff;
+            color: rgb(var(--color-brand-surface));
             z-index: 4;
             padding-left: 10px;
         }
@@ -251,7 +320,7 @@ const getColorForProgram = (id: string) => programColors[id] || "#0e1a3a";
             transition:
                 transform 260ms ease,
                 box-shadow 260ms ease;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 6px 16px rgb(var(--color-brand-primary-deeper) / 0.18);
         }
 
         .mobile-only .swiper-slide {
@@ -276,8 +345,8 @@ const getColorForProgram = (id: string) => programColors[id] || "#0e1a3a";
             inset: 0;
             background: linear-gradient(
                 180deg,
-                rgba(0, 0, 0, 0.2) 8%,
-                rgba(0, 0, 0, 0.3) 75%
+                rgb(var(--color-brand-primary-deeper) / 0.16) 8%,
+                rgb(var(--color-brand-primary-deeper) / 0.34) 75%
             );
             pointer-events: none;
             transition: background 220ms ease;
@@ -306,7 +375,7 @@ const getColorForProgram = (id: string) => programColors[id] || "#0e1a3a";
             left: 22px;
             bottom: 22px;
             z-index: 3;
-            color: #fff;
+            color: rgb(var(--color-brand-surface));
             max-width: 72%;
             text-decoration: none;
         }
@@ -315,7 +384,7 @@ const getColorForProgram = (id: string) => programColors[id] || "#0e1a3a";
             display: inline-block;
             font-size: 12px;
             font-weight: 700;
-            color: #ffd400;
+            color: var(--program-label-color, rgb(var(--color-brand-accent-soft)));
             margin-bottom: 8px;
             letter-spacing: 0.2px;
         }
@@ -325,7 +394,7 @@ const getColorForProgram = (id: string) => programColors[id] || "#0e1a3a";
             line-height: 1.02;
             margin: 0;
             font-weight: 700;
-            text-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+            text-shadow: 0 6px 18px rgb(var(--color-brand-primary-deeper) / 0.38);
             font-family: "Instrument Serif", "Merriweather", Georgia, serif;
         }
 
@@ -336,11 +405,11 @@ const getColorForProgram = (id: string) => programColors[id] || "#0e1a3a";
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: #fff;
+            background: rgb(var(--color-brand-surface));
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.14);
+            box-shadow: 0 8px 22px rgb(var(--color-brand-primary-deeper) / 0.12);
             z-index: 30;
             cursor: pointer;
             border: none;
@@ -376,6 +445,10 @@ const getColorForProgram = (id: string) => programColors[id] || "#0e1a3a";
         .mobile-only .progdi-swiper .swiper-wrapper {
             align-items: stretch;
         }
+
+        .mobile-only .progdi-swiper-button svg path {
+            stroke: var(--program-arrow-stroke, rgb(var(--color-brand-primary)));
+        }
     </style>
 
     <!-- Swiper CSS -->
@@ -399,16 +472,16 @@ const getColorForProgram = (id: string) => programColors[id] || "#0e1a3a";
         <div class="dsk-progdi-grid" role="list">
             {
                 programs.map((program) => (
-                    <a
-                        id={`dsk-progdi-${program.id}`}
-                        class="dsk-progdi-slide"
-                        href={`/${program.id}/`}
-                        aria-label={program.name}
-                        style={`--hover-bg: ${getColorForProgram(program.id)}; background-image:url('${program.image}')`}
-                    >
-                        <div class="dsk-progdi-card">{program.name}</div>
-                    </a>
-                ))
+                <a
+                    id={`dsk-progdi-${program.id}`}
+                    class="dsk-progdi-slide"
+                    href={`/${program.id}/`}
+                    aria-label={program.name}
+                    style={`${toneVars(getToneForProgram(program.id))} background-image:url('${program.image}')`}
+                >
+                    <div class="dsk-progdi-card">{program.name}</div>
+                </a>
+            ))
             }
         </div>
     </section>
@@ -431,7 +504,7 @@ const getColorForProgram = (id: string) => programColors[id] || "#0e1a3a";
                             id={`progdi-${program.id}`}
                             class="progdi-slide swiper-slide"
                             href={`/${program.id}/`}
-                            style={`--overlay-start: ${getColorForProgram(program.id)}52; --overlay-end: ${getColorForProgram(program.id)}5C; background-image:url('${program.image}');`}
+                            style={`${toneVars(getToneForProgram(program.id))} background-image:url('${program.image}');`}
                         >
                             <div class="progdi-card">
                                 <div class="progdi-label">
@@ -452,7 +525,6 @@ const getColorForProgram = (id: string) => programColors[id] || "#0e1a3a";
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                     <path
                         d="M15 18L9 12L15 6"
-                        stroke="#0a58ca"
                         stroke-width="2.2"
                         stroke-linecap="round"
                         stroke-linejoin="round"></path>
@@ -465,7 +537,6 @@ const getColorForProgram = (id: string) => programColors[id] || "#0e1a3a";
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                     <path
                         d="M9 6L15 12L9 18"
-                        stroke="#0a58ca"
                         stroke-width="2.2"
                         stroke-linecap="round"
                         stroke-linejoin="round"></path>

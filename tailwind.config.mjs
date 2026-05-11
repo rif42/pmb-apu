@@ -1,26 +1,49 @@
 /** @type {import('tailwindcss').Config} */
+const semanticColors = {
+  surface: 'rgb(var(--color-semantic-surface) / <alpha-value>)',
+  'surface-alt': 'rgb(var(--color-semantic-surface-alt) / <alpha-value>)',
+  'surface-soft': 'rgb(var(--color-semantic-surface-soft) / <alpha-value>)',
+  primary: 'rgb(var(--color-semantic-primary) / <alpha-value>)',
+  'primary-deep': 'rgb(var(--color-semantic-primary-deep) / <alpha-value>)',
+  'primary-deeper': 'rgb(var(--color-semantic-primary-deeper) / <alpha-value>)',
+  text: 'rgb(var(--color-semantic-text) / <alpha-value>)',
+  'text-muted': 'rgb(var(--color-semantic-text-muted) / <alpha-value>)',
+  border: 'rgb(var(--color-semantic-border) / <alpha-value>)',
+  accent: 'rgb(var(--color-semantic-accent) / <alpha-value>)',
+  'accent-soft': 'rgb(var(--color-semantic-accent-soft) / <alpha-value>)',
+  glow: 'rgb(var(--color-semantic-glow) / <alpha-value>)',
+  aurora: 'rgb(var(--color-semantic-aurora) / <alpha-value>)',
+};
+
+const compatibilityColors = {
+  'brand-surface': 'rgb(var(--color-brand-surface) / <alpha-value>)',
+  'brand-surface-alt': 'rgb(var(--color-brand-surface-alt) / <alpha-value>)',
+  'brand-surface-soft': 'rgb(var(--color-brand-surface-soft) / <alpha-value>)',
+  'brand-primary': 'rgb(var(--color-brand-primary) / <alpha-value>)',
+  'brand-primary-deep': 'rgb(var(--color-brand-primary-deep) / <alpha-value>)',
+  'brand-primary-deeper': 'rgb(var(--color-brand-primary-deeper) / <alpha-value>)',
+  'brand-text': 'rgb(var(--color-brand-text) / <alpha-value>)',
+  'brand-text-muted': 'rgb(var(--color-brand-text-muted) / <alpha-value>)',
+  'brand-border': 'rgb(var(--color-brand-border) / <alpha-value>)',
+  'brand-accent': 'rgb(var(--color-brand-accent) / <alpha-value>)',
+  'brand-accent-soft': 'rgb(var(--color-brand-accent-soft) / <alpha-value>)',
+  'brand-glow': 'rgb(var(--color-brand-glow) / <alpha-value>)',
+  'brand-aurora': 'rgb(var(--color-brand-aurora) / <alpha-value>)',
+  'deep-space': 'rgb(var(--color-deep-space) / <alpha-value>)',
+  'warm-ivory': 'rgb(var(--color-warm-ivory) / <alpha-value>)',
+  'soft-sage': 'rgb(var(--color-soft-sage) / <alpha-value>)',
+  'burnt-copper': 'rgb(var(--color-burnt-copper) / <alpha-value>)',
+  'deep-sage': 'rgb(var(--color-deep-sage) / <alpha-value>)',
+  charcoal: 'rgb(var(--color-charcoal) / <alpha-value>)',
+};
+
 export default {
   content: ['./src/**/*.{astro,html,js,jsx,ts,tsx,vue}'],
   theme: {
     extend: {
       colors: {
-        'brand-surface': 'rgb(var(--color-brand-surface) / <alpha-value>)',
-        'brand-surface-alt': 'rgb(var(--color-brand-surface-alt) / <alpha-value>)',
-        'brand-surface-soft': 'rgb(var(--color-brand-surface-soft) / <alpha-value>)',
-        'brand-primary': 'rgb(var(--color-brand-primary) / <alpha-value>)',
-        'brand-primary-deep': 'rgb(var(--color-brand-primary-deep) / <alpha-value>)',
-        'brand-primary-deeper': 'rgb(var(--color-brand-primary-deeper) / <alpha-value>)',
-        'brand-text': 'rgb(var(--color-brand-text) / <alpha-value>)',
-        'brand-text-muted': 'rgb(var(--color-brand-text-muted) / <alpha-value>)',
-        'brand-border': 'rgb(var(--color-brand-border) / <alpha-value>)',
-        'brand-accent': 'rgb(var(--color-brand-accent) / <alpha-value>)',
-        'brand-accent-soft': 'rgb(var(--color-brand-accent-soft) / <alpha-value>)',
-        'deep-space': 'rgb(var(--color-deep-space) / <alpha-value>)',
-        'warm-ivory': 'rgb(var(--color-warm-ivory) / <alpha-value>)',
-        'soft-sage': 'rgb(var(--color-soft-sage) / <alpha-value>)',
-        'burnt-copper': 'rgb(var(--color-burnt-copper) / <alpha-value>)',
-        'deep-sage': 'rgb(var(--color-deep-sage) / <alpha-value>)',
-        charcoal: 'rgb(var(--color-charcoal) / <alpha-value>)',
+        ...semanticColors,
+        ...compatibilityColors,
         slate: {
           DEFAULT: 'rgb(var(--color-slate-500) / <alpha-value>)',
           50: 'rgb(var(--color-slate-50) / <alpha-value>)',

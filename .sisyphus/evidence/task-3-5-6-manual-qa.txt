@@ -1,0 +1,12 @@
+QA run: local preview `http://127.0.0.1:4321/` in Chromium.
+
+Results:
+- No console/page errors during desktop and mobile checks.
+- Desktop nav starts fixed at top with blur; CTA is visible on desktop and hidden on mobile as expected.
+- Active-link styling changes on scroll: Beranda at top, Program when scrolled to program, Jalur Masuk when scrolled to registration.
+- Mobile menu toggles cleanly: aria-expanded false -> true -> false, with body overflow locked while open.
+- Below-hero rhythm reads light and coherent; program, jalur masuk, persyaratan, kontak, and footer all stay in the pale sage/soft-green range with only restrained orange accent use.
+- Footer visually continues the section sequence and does not break the palette.
+- Scholarship: no dedicated `#beasiswa` section/anchor is rendered on the page; scholarship content appears only within the registration/jalur area.
+
+Verified viewport checks: desktop 1440x1200, mobile 390x900.

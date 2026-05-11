@@ -1,0 +1,33 @@
+﻿rtk : $ astro build
+At line:1 char:1
++ rtk bun run build 2>&1 | Out-File -Encoding utf8 ".sisyphus/evidence/ ...
++ ~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ($ astro build:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+10:00:23 [types] Generated 38ms
+10:00:23 [build] output: "static"
+10:00:23 [build] directory: D:\work\PMB\dist\
+10:00:23 [build] Collecting build info...
+10:00:23 [build] Γ£ô Completed in 71ms.
+10:00:23 [build] Building static entrypoints...
+10:00:23 [vite] [32mΓ£ô built in 835ms[39m
+10:00:23 [build] Γ£ô Completed in 858ms.
+
+ building client (vite) 
+10:00:23 [vite] transforming...
+10:00:23 [vite] [32mΓ£ô[39m 6 modules transformed.
+10:00:23 [vite] rendering chunks...
+10:00:24 [vite] computing gzip size...
+10:00:24 [vite] [2mdist/[22m[36m_astro/hoisted.CFsCMpOg.js  [39m[1m[2m5.41 kB[22m[1m[22m[2m Γöé gzip: 1.80 kB[22m
+10:00:24 [vite] [32mΓ£ô built in 36ms[39m
+
+ generating static routes 
+10:00:24 Γû╢ src/pages/index.astro
+10:00:24   ΓööΓöÇ /index.html (+7ms)
+10:00:24 Γ£ô Completed in 17ms.
+
+10:00:24 [build] 1 page(s) built in 998ms
+10:00:24 [build] Complete!
+
+Reduced-motion browser QA: not executed in this environment; verified only through CSS fallback implementation and build success.

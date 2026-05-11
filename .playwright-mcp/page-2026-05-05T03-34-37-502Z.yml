@@ -1,0 +1,296 @@
+- generic [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]:
+      - link "Agung Putra University" [ref=e4] [cursor=pointer]:
+        - /url: "#beranda"
+        - img "Agung Putra University" [ref=e5]
+      - button "Toggle menu" [expanded] [active] [ref=e6] [cursor=pointer]
+    - generic [ref=e328]:
+      - paragraph [ref=e329]: Menu
+      - generic [ref=e330]:
+        - link "Beranda" [ref=e331] [cursor=pointer]:
+          - /url: "#beranda"
+        - link "Jalur Masuk" [ref=e332] [cursor=pointer]:
+          - /url: "#jalur-masuk"
+        - link "Program" [ref=e333] [cursor=pointer]:
+          - /url: "#program"
+        - link "Beasiswa" [ref=e334] [cursor=pointer]:
+          - /url: "#beasiswa"
+        - link "Kontak" [ref=e335] [cursor=pointer]:
+          - /url: "#kontak"
+      - link "Daftar Sekarang" [ref=e336] [cursor=pointer]:
+        - /url: https://wa.me/628113755552?text=Halo, saya ingin menanyakan informasi pendaftaran mahasiswa baru APU 2026/2027.
+  - main [ref=e9]:
+    - generic [ref=e10]:
+      - img "Kampus Futuristik Agung Putra University" [ref=e12]
+      - generic [ref=e16]:
+        - generic [ref=e17]:
+          - generic [ref=e18]: INSTITUT KARYA MULIA BANGSA
+          - heading "Pendaftaran Mahasiswa Baru 2026/2027" [level=1] [ref=e19]:
+            - generic [ref=e20]: Pendaftaran
+            - generic [ref=e21]: Mahasiswa Baru
+            - generic [ref=e22]: 2026/2027
+          - paragraph [ref=e23]: Futuristic Green Campus — Kampus unggulan di bidang biomedis dan bioteknologi dengan konsep kampus hijau, cerdas, dan berkesinambungan.
+          - generic [ref=e24]:
+            - link "Daftar Sekarang" [ref=e25] [cursor=pointer]:
+              - /url: https://kmb.ac.id/informasi-pendaftaran
+              - generic [ref=e26]: Daftar Sekarang
+              - img [ref=e27]
+            - link "Lihat Jalur Masuk" [ref=e29] [cursor=pointer]:
+              - /url: "#jalur-masuk"
+              - generic [ref=e30]: Lihat Jalur Masuk
+        - generic [ref=e31]:
+          - generic [ref=e32]: Scroll to explore
+          - img [ref=e33]
+    - generic [ref=e35]:
+      - generic [ref=e36]:
+        - generic [ref=e37]: PROGRAM STUDI
+        - heading "Program Unggulan, Masa Depan Cerah" [level=2] [ref=e38]
+      - region "Program Studi Unggulan (Mobile)" [ref=e39]:
+        - region [ref=e40]:
+          - generic [ref=e41]:
+            - group "1 / 6" [ref=e42] [cursor=pointer]:
+              - generic [ref=e43]:
+                - generic [ref=e44]: Program S1
+                - heading "Biomedical Science" [level=3] [ref=e45]
+            - group "2 / 6" [ref=e46] [cursor=pointer]:
+              - generic [ref=e47]:
+                - generic [ref=e48]: Program S1
+                - heading "Biotechnology" [level=3] [ref=e49]
+            - group "3 / 6" [ref=e50] [cursor=pointer]:
+              - generic [ref=e51]:
+                - generic [ref=e52]: Program S1
+                - heading "Hukum" [level=3] [ref=e53]
+            - group "4 / 6" [ref=e54] [cursor=pointer]:
+              - generic [ref=e55]:
+                - generic [ref=e56]: Program S1
+                - heading "Manajemen" [level=3] [ref=e57]
+            - group "5 / 6" [ref=e58] [cursor=pointer]:
+              - generic [ref=e59]:
+                - generic [ref=e60]: Program S1
+                - heading "Ilmu Komunikasi" [level=3] [ref=e61]
+            - group "6 / 6" [ref=e62] [cursor=pointer]:
+              - generic [ref=e63]:
+                - generic [ref=e64]: Program S1
+                - heading "Kebidanan" [level=3] [ref=e65]
+          - button "Previous slide" [ref=e66] [cursor=pointer]:
+            - img [ref=e67]
+          - button "Next slide" [ref=e69] [cursor=pointer]:
+            - img [ref=e70]
+    - generic [ref=e73]:
+      - generic [ref=e74]:
+        - generic [ref=e75]: JALUR PENDAFTARAN
+        - heading "Dua Jalur Menuju Kampus Impian" [level=2] [ref=e76]
+        - paragraph [ref=e77]: Pilih jalur yang sesuai dengan potensi dan persiapanmu. Kami membuka kesempatan seluas-luasnya untuk calon mahasiswa berprestasi.
+      - generic [ref=e78]:
+        - generic [ref=e80]:
+          - img [ref=e82]
+          - heading "Jalur Reguler" [level=3] [ref=e85]
+          - paragraph [ref=e86]: Pendaftaran umum bagi lulusan SMA/SMK/MA dan sederajat. Tersedia 3 gelombang pendaftaran dengan berbagai keuntungan.
+          - generic [ref=e87]:
+            - generic [ref=e88]:
+              - generic [ref=e89]:
+                - paragraph [ref=e90]: Gelombang I
+                - paragraph [ref=e91]: Oktober 2025 – Januari 2026
+              - generic [ref=e92]: Diskon 50%
+            - generic [ref=e93]:
+              - generic [ref=e94]:
+                - paragraph [ref=e95]: Gelombang II
+                - paragraph [ref=e96]: Februari 2026 – Mei 2026
+              - generic [ref=e97]: Diskon 30%
+            - generic [ref=e98]:
+              - generic [ref=e99]:
+                - paragraph [ref=e100]: Gelombang III
+                - paragraph [ref=e101]: Juni 2026 – September 2026
+              - generic [ref=e102]: Harga Normal
+          - link "Daftar Reguler" [ref=e103] [cursor=pointer]:
+            - /url: http://49.50.9.214:8060/index.php/pendaftaran_pmb
+            - generic [ref=e104]: Daftar Reguler
+            - img [ref=e105]
+        - generic [ref=e108]:
+          - img [ref=e110]
+          - heading "Jalur Beasiswa" [level=3] [ref=e113]
+          - paragraph [ref=e114]: Program beasiswa untuk mahasiswa berprestasi akademik, non-akademik, dan content creator. Potongan biaya hingga 100%.
+          - generic [ref=e115]:
+            - generic [ref=e119]: Beasiswa Akademik
+            - generic [ref=e123]: Beasiswa Non-Akademik
+            - generic [ref=e127]: Beasiswa Content Creator
+            - generic [ref=e131]: Beasiswa Pre-University
+          - link "Daftar Beasiswa" [ref=e132] [cursor=pointer]:
+            - /url: https://scholarship.kmb.ac.id
+            - generic [ref=e133]: Daftar Beasiswa
+            - img [ref=e134]
+      - paragraph [ref=e137]: "*Syarat dan ketentuan berlaku untuk setiap jalur pendaftaran"
+    - generic [ref=e139]:
+      - generic [ref=e140]:
+        - generic [ref=e141]: PERSYARATAN
+        - heading "Siapkan Berkasmu, Raih Masa Depanmu" [level=2] [ref=e142]
+        - paragraph [ref=e143]: Pastikan kamu memenuhi persyaratan berikut sebelum melakukan pendaftaran.
+      - generic [ref=e144]:
+        - generic [ref=e146]:
+          - img [ref=e148]
+          - generic [ref=e151]: "01"
+          - heading "Lulusan SMA/SMK/MA" [level=4] [ref=e152]
+          - paragraph [ref=e153]: Lulusan tahun 2026 atau sebelumnya dari jenjang SMA, SMK, atau MA
+        - generic [ref=e155]:
+          - img [ref=e157]
+          - generic [ref=e159]: "02"
+          - heading "Sehat Jasmani & Rohani" [level=4] [ref=e160]
+          - paragraph [ref=e161]: Surat keterangan sehat dari dokter atau puskesmas
+        - generic [ref=e163]:
+          - img [ref=e165]
+          - generic [ref=e167]: "03"
+          - heading "Fotokopi KTP" [level=4] [ref=e168]
+          - paragraph [ref=e169]: Kartu Tanda Penduduk yang masih berlaku
+        - generic [ref=e171]:
+          - img [ref=e173]
+          - generic [ref=e176]: "04"
+          - heading "Fotokopi KK" [level=4] [ref=e177]
+          - paragraph [ref=e178]: Kartu Keluarga sebagai bukti domisili
+        - generic [ref=e180]:
+          - img [ref=e182]
+          - generic [ref=e185]: "05"
+          - heading "Fotokopi Ijazah/SKL" [level=4] [ref=e186]
+          - paragraph [ref=e187]: Ijazah atau Surat Keterangan Lulus sementara
+      - link "Daftar Sekarang" [ref=e189] [cursor=pointer]:
+        - /url: https://kmb.ac.id/informasi-pendaftaran
+        - generic [ref=e190]: Daftar Sekarang
+        - img [ref=e191]
+    - generic [ref=e195]:
+      - generic [ref=e197]:
+        - generic [ref=e198]:
+          - generic [ref=e199]: KONTAK KAMI
+          - heading "Hubungi Tim Admisi Kami" [level=2] [ref=e200]
+          - paragraph [ref=e201]: Ada pertanyaan seputar pendaftaran? Tim admisi kami siap membantu kamu.
+        - generic [ref=e202]:
+          - generic [ref=e203]:
+            - img [ref=e205]
+            - generic [ref=e207]:
+              - generic [ref=e208]: WhatsApp
+              - link "0811 37 5555 2" [ref=e209] [cursor=pointer]:
+                - /url: https://wa.me/628113755552
+          - generic [ref=e210]:
+            - img [ref=e212]
+            - generic [ref=e215]:
+              - generic [ref=e216]: Alamat
+              - paragraph [ref=e217]: Gedung Admisi APU, Jl. Nongkosawit, Gunungpati, Semarang
+          - generic [ref=e218]:
+            - img [ref=e220]
+            - generic [ref=e223]:
+              - generic [ref=e224]: Website
+              - link "kmb.ac.id" [ref=e225] [cursor=pointer]:
+                - /url: https://kmb.ac.id
+          - generic [ref=e226]:
+            - img [ref=e228]
+            - generic [ref=e231]:
+              - generic [ref=e232]: Email
+              - link "info@kmb.ac.id" [ref=e233] [cursor=pointer]:
+                - /url: mailto:info@kmb.ac.id
+        - generic [ref=e234]:
+          - generic [ref=e235]: Follow Kami
+          - generic [ref=e236]:
+            - link "Instagram" [ref=e237] [cursor=pointer]:
+              - /url: https://instagram.com/ikmb.official
+              - img [ref=e238]
+            - link "TikTok" [ref=e241] [cursor=pointer]:
+              - /url: https://tiktok.com/@ikmb.official
+              - img [ref=e242]
+            - link "X" [ref=e244] [cursor=pointer]:
+              - /url: https://twitter.com/ikmb.official
+              - img [ref=e245]
+            - link "YouTube" [ref=e247] [cursor=pointer]:
+              - /url: https://youtube.com/@ikmb_official
+              - img [ref=e248]
+      - generic [ref=e252]:
+        - heading "Kirim Pesan" [level=3] [ref=e253]
+        - generic [ref=e254]:
+          - generic [ref=e255]:
+            - generic [ref=e256]: Nama Lengkap *
+            - textbox "Nama Lengkap *" [ref=e257]:
+              - /placeholder: Masukkan nama lengkap
+          - generic [ref=e258]:
+            - generic [ref=e259]: Email *
+            - textbox "Email *" [ref=e260]:
+              - /placeholder: email@example.com
+          - generic [ref=e261]:
+            - generic [ref=e262]: Nomor WhatsApp
+            - textbox "Nomor WhatsApp" [ref=e263]:
+              - /placeholder: 0812xxxxxxx
+          - generic [ref=e264]:
+            - generic [ref=e265]: Program yang Diminati *
+            - combobox [ref=e266] [cursor=pointer]:
+              - option "Pilih program studi" [disabled] [selected]
+              - option "S1 Biomedical Science"
+              - option "S1 Biotechnology"
+              - option "S1 Hukum"
+              - option "S1 Manajemen"
+              - option "S1 Ilmu Komunikasi"
+              - option "S1 Kebidanan"
+          - generic [ref=e267]:
+            - generic [ref=e268]: Pesan *
+            - textbox "Pesan *" [ref=e269]:
+              - /placeholder: Tulis pertanyaan atau pesanmu...
+          - button "Kirim Pesan" [ref=e270] [cursor=pointer]
+  - contentinfo [ref=e271]:
+    - generic [ref=e272]:
+      - generic [ref=e273]:
+        - generic [ref=e274]:
+          - img "Agung Putra University" [ref=e275]
+          - paragraph [ref=e276]: Institut Karya Mulia Bangsa
+          - paragraph [ref=e277]: Gedung Admisi APU, Jl. Nongkosawit, Gunungpati, Semarang
+        - generic [ref=e278]:
+          - heading "Jalur Masuk" [level=4] [ref=e279]
+          - list [ref=e280]:
+            - listitem [ref=e281]:
+              - link "Jalur Reguler" [ref=e282] [cursor=pointer]:
+                - /url: "#jalur-masuk"
+            - listitem [ref=e283]:
+              - link "Jalur Beasiswa" [ref=e284] [cursor=pointer]:
+                - /url: "#jalur-masuk"
+            - listitem [ref=e285]:
+              - link "Gelombang Pendaftaran" [ref=e286] [cursor=pointer]:
+                - /url: "#jalur-masuk"
+        - generic [ref=e287]:
+          - heading "Program Studi" [level=4] [ref=e288]
+          - list [ref=e289]:
+            - listitem [ref=e290]:
+              - link "S1 Biomedical Science" [ref=e291] [cursor=pointer]:
+                - /url: "#program"
+            - listitem [ref=e292]:
+              - link "S1 Biotechnology" [ref=e293] [cursor=pointer]:
+                - /url: "#program"
+            - listitem [ref=e294]:
+              - link "S1 Hukum" [ref=e295] [cursor=pointer]:
+                - /url: "#program"
+            - listitem [ref=e296]:
+              - link "S1 Manajemen" [ref=e297] [cursor=pointer]:
+                - /url: "#program"
+            - listitem [ref=e298]:
+              - link "S1 Ilmu Komunikasi" [ref=e299] [cursor=pointer]:
+                - /url: "#program"
+        - generic [ref=e300]:
+          - heading "Kontak" [level=4] [ref=e301]
+          - list [ref=e302]:
+            - listitem [ref=e303]:
+              - 'link "WA: 0811 37 5555 2" [ref=e304] [cursor=pointer]':
+                - /url: https://wa.me/628113755552
+            - listitem [ref=e305]:
+              - link "kmb.ac.id" [ref=e306] [cursor=pointer]:
+                - /url: https://kmb.ac.id
+            - listitem [ref=e307]:
+              - link "scholarship.kmb.ac.id" [ref=e308] [cursor=pointer]:
+                - /url: https://scholarship.kmb.ac.id/daftar-beasiswa/
+          - generic [ref=e309]:
+            - link "Instagram" [ref=e310] [cursor=pointer]:
+              - /url: https://instagram.com/ikmb.official
+              - img [ref=e311]
+            - link "TikTok" [ref=e314] [cursor=pointer]:
+              - /url: https://tiktok.com/@ikmb.official
+              - img [ref=e315]
+            - link "X" [ref=e317] [cursor=pointer]:
+              - /url: https://twitter.com/ikmb.official
+              - img [ref=e318]
+            - link "YouTube" [ref=e320] [cursor=pointer]:
+              - /url: https://youtube.com/@ikmb_official
+              - img [ref=e321]
+      - paragraph [ref=e326]: © 2025 Institut Karya Mulia Bangsa. All rights reserved.

@@ -26,19 +26,19 @@ export const pathways: Pathway[] = [
     waves: [
       {
         name: 'Gelombang I',
-        period: 'Oktober 2025 – Januari 2026',
+        period: 'Oktober 2025 – Mei 2026',
         benefit: 'Diskon 50%',
         badgeType: 'active',
       },
       {
         name: 'Gelombang II',
-        period: 'Februari 2026 – Mei 2026',
+        period: 'Juni 2026 – Juli 2026',
         benefit: 'Diskon 30%',
         badgeType: 'upcoming',
       },
       {
         name: 'Gelombang III',
-        period: 'Juni 2026 – September 2026',
+        period: 'September 2026',
         benefit: 'Harga Normal',
         badgeType: 'normal',
       },
@@ -56,7 +56,6 @@ export const pathways: Pathway[] = [
       'Beasiswa Akademik',
       'Beasiswa Non-Akademik',
       'Beasiswa Content Creator',
-      'Beasiswa Pre-University',
     ],
     ctaText: 'Daftar Beasiswa',
     ctaLink: 'https://scholarship.kmb.ac.id',

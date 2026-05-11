@@ -1,0 +1,6 @@
+Task 5 evidence
+
+- Command: `rtk bun run build`
+- Result: PASS
+- Output: Astro static build completed successfully (`dist/` generated, 1 page built)
+- Hygiene scan: `Navigation.astro` had no `TODO|FIXME|HACK|xxx|console.log|@ts-ignore|as any` matches

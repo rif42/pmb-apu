@@ -1,0 +1,4 @@
+PASS: `rtk bun run build`
+
+Result: Astro static build completed successfully.
+Output: 1 page built, no build errors.
