@@ -5,13 +5,18 @@ export interface Wave {
   badgeType: 'active' | 'upcoming' | 'normal';
 }
 
+export interface Scholarship {
+  name: string;
+  link: string;
+}
+
 export interface Pathway {
   id: string;
   name: string;
   description: string;
   icon: string;
   waves?: Wave[];
-  scholarships?: string[];
+  scholarships?: Scholarship[];
   ctaText: string;
   ctaLink: string;
 }
@@ -53,9 +58,9 @@ export const pathways: Pathway[] = [
       'Program beasiswa untuk mahasiswa berprestasi akademik, non-akademik, dan content creator. Potongan biaya hingga 100%.',
     icon: 'award',
     scholarships: [
-      'Beasiswa Akademik',
-      'Beasiswa Non-Akademik',
-      'Beasiswa Content Creator',
+      { name: 'Beasiswa Akademik', link: 'https://scholarship.kmb.ac.id/academic-scholarship/' },
+      { name: 'Beasiswa Non-Akademik', link: 'https://scholarship.kmb.ac.id/non-academic-achievement-scholarship/' },
+      { name: 'Beasiswa Konten Kreator', link: 'https://scholarship.kmb.ac.id/content-creator-scholarship/' }
     ],
     ctaText: 'Daftar Beasiswa',
     ctaLink: 'https://scholarship.kmb.ac.id',

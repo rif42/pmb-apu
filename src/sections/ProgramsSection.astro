@@ -152,7 +152,10 @@ const toneVars = (tone: ProgramTone) =>
             content: "";
             position: absolute;
             inset: 0;
-            background: var(--hover-bg, rgb(var(--color-brand-primary-deeper) / 0.35));
+            background: var(
+                --hover-bg,
+                rgb(var(--color-brand-primary-deeper) / 0.35)
+            );
             opacity: 0.88;
             transition:
                 opacity 0.35s ease,
@@ -166,7 +169,8 @@ const toneVars = (tone: ProgramTone) =>
             }
             .desktop-only .dsk-progdi-slide:hover {
                 transform: scale(1.02);
-                box-shadow: 0 18px 44px rgb(var(--color-brand-primary-deeper) / 0.22);
+                box-shadow: 0 18px 44px
+                    rgb(var(--color-brand-primary-deeper) / 0.22);
                 z-index: 4;
             }
             .desktop-only .dsk-progdi-slide:hover .dsk-progdi-card {
@@ -245,7 +249,8 @@ const toneVars = (tone: ProgramTone) =>
             text-align: left;
             letter-spacing: 0.6px;
             z-index: 4;
-            text-shadow: 0 10px 28px rgb(var(--color-brand-primary-deeper) / 0.38);
+            text-shadow: 0 10px 28px
+                rgb(var(--color-brand-primary-deeper) / 0.38);
             line-height: 1.1;
             pointer-events: none;
             white-space: nowrap;
@@ -258,7 +263,10 @@ const toneVars = (tone: ProgramTone) =>
             right: 0;
             bottom: 0;
             height: 64px;
-            background: var(--program-footer-bg, rgb(var(--color-brand-primary-deeper)));
+            background: var(
+                --program-footer-bg,
+                rgb(var(--color-brand-primary-deeper))
+            );
             display: flex;
             align-items: center;
             justify-content: center;
@@ -384,7 +392,10 @@ const toneVars = (tone: ProgramTone) =>
             display: inline-block;
             font-size: 12px;
             font-weight: 700;
-            color: var(--program-label-color, rgb(var(--color-brand-accent-soft)));
+            color: var(
+                --program-label-color,
+                rgb(var(--color-brand-accent-soft))
+            );
             margin-bottom: 8px;
             letter-spacing: 0.2px;
         }
@@ -394,7 +405,8 @@ const toneVars = (tone: ProgramTone) =>
             line-height: 1.02;
             margin: 0;
             font-weight: 700;
-            text-shadow: 0 6px 18px rgb(var(--color-brand-primary-deeper) / 0.38);
+            text-shadow: 0 6px 18px
+                rgb(var(--color-brand-primary-deeper) / 0.38);
             font-family: "Instrument Serif", "Merriweather", Georgia, serif;
         }
 
@@ -447,7 +459,10 @@ const toneVars = (tone: ProgramTone) =>
         }
 
         .mobile-only .progdi-swiper-button svg path {
-            stroke: var(--program-arrow-stroke, rgb(var(--color-brand-primary)));
+            stroke: var(
+                --program-arrow-stroke,
+                rgb(var(--color-brand-primary))
+            );
         }
     </style>
 
@@ -472,16 +487,16 @@ const toneVars = (tone: ProgramTone) =>
         <div class="dsk-progdi-grid" role="list">
             {
                 programs.map((program) => (
-                <a
-                    id={`dsk-progdi-${program.id}`}
-                    class="dsk-progdi-slide"
-                    href={`/${program.id}/`}
-                    aria-label={program.name}
-                    style={`${toneVars(getToneForProgram(program.id))} background-image:url('${program.image}')`}
-                >
-                    <div class="dsk-progdi-card">{program.name}</div>
-                </a>
-            ))
+                    <a
+                        id={`dsk-progdi-${program.id}`}
+                        class="dsk-progdi-slide"
+                        href={`${program.link}`}
+                        aria-label={program.name}
+                        style={`${toneVars(getToneForProgram(program.id))} background-image:url('${program.image}')`}
+                    >
+                        <div class="dsk-progdi-card">{program.name}</div>
+                    </a>
+                ))
             }
         </div>
     </section>
@@ -503,7 +518,7 @@ const toneVars = (tone: ProgramTone) =>
                         <a
                             id={`progdi-${program.id}`}
                             class="progdi-slide swiper-slide"
-                            href={`/${program.id}/`}
+                            href={`${program.link}`}
                             style={`${toneVars(getToneForProgram(program.id))} background-image:url('${program.image}');`}
                         >
                             <div class="progdi-card">

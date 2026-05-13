@@ -4,6 +4,7 @@ export interface Program {
   degree: string;
   subPrograms: string[];
   image: string;
+  link: string;
 }
 
 export const programs: Program[] = [
@@ -17,6 +18,7 @@ export const programs: Program[] = [
       'Biomedical AI',
     ],
     image: '/images/programs/biomedical.jpg',
+    link: 'https://biomedical.kmb.ac.id/'
   },
   {
     id: 'biotechnology',
@@ -28,6 +30,7 @@ export const programs: Program[] = [
       'Biotechnology Industry',
     ],
     image: '/images/programs/biotech.jpg',
+    link: 'https://biotechnology.kmb.ac.id/'
   },
   {
     id: 'law',
@@ -35,6 +38,7 @@ export const programs: Program[] = [
     degree: 'S1',
     subPrograms: ['Law & Litigation', 'Medical Law'],
     image: '/images/programs/law.jpg',
+    link: 'https://law.kmb.ac.id/'
   },
   {
     id: 'management',
@@ -46,6 +50,7 @@ export const programs: Program[] = [
       'Entrepreneur Business Management',
     ],
     image: '/images/programs/management.jpg',
+    link: 'https://management.kmb.ac.id/'
   },
   {
     id: 'communication',
@@ -56,6 +61,7 @@ export const programs: Program[] = [
       'Strategic Business Communication Science',
     ],
     image: '/images/programs/communication.jpg',
+    link: 'https://communication.kmb.ac.id/'
   },
   {
     id: 'midwifery-s1',
@@ -66,6 +72,7 @@ export const programs: Program[] = [
       'Entrepreneur in Midwifery Business',
     ],
     image: '/images/programs/midwiferys1.jpg',
+    link: 'https://bachelor-midwifery.kmb.ac.id/'
   },
 
 ];
