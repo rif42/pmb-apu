@@ -35,6 +35,8 @@ const compatibilityColors = {
   'burnt-copper': 'rgb(var(--color-burnt-copper) / <alpha-value>)',
   'deep-sage': 'rgb(var(--color-deep-sage) / <alpha-value>)',
   charcoal: 'rgb(var(--color-charcoal) / <alpha-value>)',
+  'apu-navy': 'rgb(var(--color-apu-navy) / <alpha-value>)',
+  'apu-accent': 'rgb(var(--color-apu-accent) / <alpha-value>)',
 };
 
 export default {

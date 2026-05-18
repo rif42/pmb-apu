@@ -59,6 +59,10 @@
   --color-deep-sage: var(--color-brand-primary);
   --color-charcoal: var(--color-brand-text);
 
+  /* APU palette */
+  --color-apu-navy: 19 40 66;
+  --color-apu-accent: 252 188 85;
+
   --color-slate-50: var(--color-brand-surface);
   --color-slate-100: var(--color-brand-surface-alt);
   --color-slate-200: var(--color-brand-surface-soft);
