@@ -1,0 +1,55 @@
+---
+import ProgramsSection from "./ProgramsSection.astro";
+---
+
+<div class="apu-programs-theme">
+    <ProgramsSection />
+</div>
+
+<style>
+    .apu-programs-theme {
+        /* remap section token space to APU navy/accent palette */
+        --color-brand-primary: var(--color-apu-navy);
+        --color-brand-primary-deep: var(--color-apu-navy);
+        --color-brand-primary-deeper: var(--color-apu-navy);
+        --color-brand-accent: var(--color-apu-accent);
+        --color-brand-accent-soft: var(--color-apu-accent);
+
+        /* light neutral surface set (keep light theme) */
+        --color-brand-surface: 248 246 240;
+        --color-brand-surface-alt: 242 238 229;
+        --color-brand-surface-soft: 235 231 221;
+        --color-brand-border: 206 197 179;
+        --color-brand-text: var(--color-apu-navy);
+        --color-brand-text-muted: 73 88 112;
+        --color-brand-aurora: 252 188 85;
+        --color-brand-glow: 252 188 85;
+
+        --color-warm-ivory: 248 246 240;
+        --color-soft-sage: 206 197 179;
+        --color-burnt-copper: var(--color-apu-accent);
+        --color-deep-sage: var(--color-apu-navy);
+        --color-charcoal: var(--color-apu-navy);
+    }
+
+    /* stagger palette so side-by-side cards alternate */
+    .apu-programs-theme :global(.dsk-progdi-grid > a:nth-child(odd)),
+    .apu-programs-theme :global(.progdi-swiper .swiper-slide:nth-child(odd)) {
+        --hover-bg: rgb(var(--color-apu-navy) / 0.9) !important;
+        --overlay-start: rgb(var(--color-apu-navy) / 0.76) !important;
+        --overlay-end: rgb(var(--color-apu-accent) / 0.84) !important;
+        --program-footer-bg: rgb(var(--color-apu-navy)) !important;
+        --program-label-color: rgb(var(--color-apu-accent)) !important;
+        --program-arrow-stroke: rgb(var(--color-apu-navy)) !important;
+    }
+
+    .apu-programs-theme :global(.dsk-progdi-grid > a:nth-child(even)),
+    .apu-programs-theme :global(.progdi-swiper .swiper-slide:nth-child(even)) {
+        --hover-bg: rgb(var(--color-apu-accent) / 0.86) !important;
+        --overlay-start: rgb(var(--color-apu-accent) / 0.74) !important;
+        --overlay-end: rgb(var(--color-apu-navy) / 0.88) !important;
+        --program-footer-bg: rgb(var(--color-apu-navy)) !important;
+        --program-label-color: rgb(var(--color-apu-accent)) !important;
+        --program-arrow-stroke: rgb(var(--color-apu-accent)) !important;
+    }
+</style>
