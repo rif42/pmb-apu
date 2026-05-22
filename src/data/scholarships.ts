@@ -37,17 +37,17 @@ export const scholarships: Scholarship[] = [
   },
   {
     id: 'content-creator',
-    name: 'Beasiswa Content Creator',
+    name: 'Beasiswa Konten Kreator',
     description:
-      'Untuk kreator digital dengan followers ≥5,000',
+      'Untuk calon mahasiswa yang aktif membangun platform digital dengan engagement audiens yang signifikan',
     benefit: 'Potongan SPI & UKT',
     requirements: [
       'Lulus dari SMA/SMK/Sederajat atau sedang duduk di kelas 12.',
       'Memiliki akun aktif dengan engagement autentik',
-      'Minimum 10,000 followers (Instagram/TikTok/YouTube)',
-      'Mengumpulkan data analisa sosial media jika diminta',
-      'Fotokopi rapor X–XII yang dilegalisir',
+      'Memenuhi ketentuan minimum followers sesuai platform',
+      'Mengumpulkan data analisa media sosial jika diminta',
       'Mengumpulkan form pendaftaran online',
+      'Mengisi dan mengunggah formulir assessment resmi',
     ],
   },
   {
@@ -60,6 +60,21 @@ export const scholarships: Scholarship[] = [
       'Mengikuti minimal 4 sesi kuliah Pre-University',
       'Partisipasi aktif dan disiplin waktu dalam program Pre-University',
       'Mengumpulkan form pendaftaran online',
+    ],
+  },
+  {
+    id: 'partnership',
+    name: 'Beasiswa Partnership',
+    description:
+      'Program kolaboratif bersama institusi mitra untuk memperluas akses pendidikan dan pengembangan SDM berkualitas',
+    benefit: 'Full UKT & SPI (100%) hingga 4 tahun',
+    requirements: [
+      'Lulus dari SMA/SMK/Sederajat atau sedang duduk di kelas 12.',
+      'Nilai rata-rata mapel terkait pilihan prodi minimum 85',
+      'Nilai rata-rata rapor keseluruhan minimum 80',
+      'Mengumpulkan transkrip akademik atau rapor',
+      'Mengumpulkan form pendaftaran online',
+      'Mengisi dan mengunggah formulir assessment resmi',
     ],
   },
 ];
