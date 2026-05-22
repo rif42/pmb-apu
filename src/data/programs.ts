@@ -11,26 +11,26 @@ export interface Program {
 export const programs: Program[] = [
   {
     id: 'biomedical-science',
-    name: 'Biomedical Science',
+    name: 'Ilmu Biomedis',
     degree: 'S1',
     shortDescription: 'Mempelajari ilmu biomedis modern untuk riset kesehatan, terapi sel, dan inovasi medis berbasis teknologi.',
     subPrograms: [
-      'Biomedical Cell Therapy',
-      'Biomedical Industry',
-      'Biomedical AI',
+      'Terapi Sel Biomedis',
+      'Industri Biomedis',
+      'Kecerdasan Buatan Biomedis',
     ],
     image: '/images/programs/biomedical.jpg',
     link: 'https://biomedical.kmb.ac.id/'
   },
   {
     id: 'biotechnology',
-    name: 'Biotechnology',
+    name: 'Bioteknologi',
     degree: 'S1',
     shortDescription: 'Menggabungkan biologi dan teknologi untuk menghasilkan solusi pangan, kesehatan, dan industri berkelanjutan.',
     subPrograms: [
-      'Medical Biotechnology',
-      'Biotechnology Informatics',
-      'Biotechnology Industry',
+      'Bioteknologi Medis',
+      'Informatika Bioteknologi',
+      'Industri Bioteknologi',
     ],
     image: '/images/programs/biotech.jpg',
     link: 'https://biotechnology.kmb.ac.id/'
@@ -40,7 +40,7 @@ export const programs: Program[] = [
     name: 'Hukum',
     degree: 'S1',
     shortDescription: 'Membentuk calon profesional hukum yang kuat di litigasi, etika, dan regulasi pada sektor strategis.',
-    subPrograms: ['Law & Litigation', 'Medical Law'],
+    subPrograms: ['Hukum & Litigasi', 'Hukum Medis'],
     image: '/images/programs/law.jpg',
     link: 'https://law.kmb.ac.id/'
   },
@@ -50,9 +50,9 @@ export const programs: Program[] = [
     degree: 'S1',
     shortDescription: 'Fokus pada bisnis digital, kewirausahaan, dan kepemimpinan untuk membangun organisasi yang adaptif.',
     subPrograms: [
-      'International Business Management',
-      'Digital Business Management',
-      'Entrepreneur Business Management',
+      'Manajemen Bisnis Internasional',
+      'Manajemen Bisnis Digital',
+      'Manajemen Bisnis Kewirausahaan',
     ],
     image: '/images/programs/management.jpg',
     link: 'https://management.kmb.ac.id/'
@@ -63,8 +63,8 @@ export const programs: Program[] = [
     degree: 'S1',
     shortDescription: 'Mengasah strategi komunikasi kreatif untuk media digital, brand, dan relasi publik di era baru.',
     subPrograms: [
-      'Digital and New Media Communication Science',
-      'Strategic Business Communication Science',
+      'Ilmu Komunikasi Digital dan Media Baru',
+      'Ilmu Komunikasi Bisnis Strategis',
     ],
     image: '/images/programs/communication.jpg',
     link: 'https://communication.kmb.ac.id/'
@@ -75,8 +75,8 @@ export const programs: Program[] = [
     degree: 'S1',
     shortDescription: 'Menyiapkan bidan profesional dengan pendekatan kesehatan perempuan, layanan holistik, dan jiwa wirausaha.',
     subPrograms: [
-      'Innovative Women Health & Beauty Care in Midwifery',
-      'Entrepreneur in Midwifery Business',
+      'Layanan Kesehatan & Kecantikan Perempuan Inovatif dalam Kebidanan',
+      'Kewirausahaan dalam Bisnis Kebidanan',
     ],
     image: '/images/programs/midwiferys1.jpg',
     link: 'https://bachelor-midwifery.kmb.ac.id/'

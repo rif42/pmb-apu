@@ -55,7 +55,7 @@ export const pathways: Pathway[] = [
     id: "jalur-beasiswa",
     name: "Jalur Beasiswa",
     description:
-      "Program beasiswa untuk mahasiswa berprestasi akademik, non-akademik, dan content creator. Potongan biaya hingga 100%.",
+      "Program beasiswa untuk mahasiswa berprestasi akademik, non-akademik, dan konten kreator. Potongan biaya hingga 100%.",
     icon: "award",
     scholarships: [
       {
@@ -71,7 +71,7 @@ export const pathways: Pathway[] = [
         link: "https://scholarship.kmb.ac.id/content-creator-scholarship/",
       },
       {
-        name: "Beasiswa Partnership",
+        name: "Beasiswa Kemitraan",
         link: "https://scholarship.kmb.ac.id/partnership-scholarship/",
       },
     ],
