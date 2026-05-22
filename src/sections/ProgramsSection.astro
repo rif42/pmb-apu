@@ -46,7 +46,7 @@ const programTones: Record<string, ProgramTone> = {
         arrowStroke: "rgb(var(--color-brand-accent))",
     },
     management: {
-        hoverBg: "rgb(var(--color-brand-surface-soft) / 0.96)",
+        hoverBg: "rgb(var(--color-brand-surface-soft) / 0.7)",
         overlayStart: "rgb(var(--color-brand-surface-soft) / 0.74)",
         overlayEnd: "rgb(var(--color-brand-primary-deeper) / 0.88)",
         footerBg: "rgb(var(--color-brand-primary-deep))",
@@ -181,6 +181,13 @@ const toneVars = (tone: ProgramTone) =>
                 width: calc(100% - 48px);
             }
 
+            .desktop-only .dsk-progdi-slide:hover .dsk-progdi-desc {
+                max-height: 120px;
+                opacity: 1;
+                transform: translateY(0);
+                margin-top: 14px;
+            }
+
             .desktop-only
                 .dsk-progdi-grid:has(.dsk-progdi-slide:nth-child(1):hover) {
                 --g0: 2.5fr;
@@ -255,6 +262,31 @@ const toneVars = (tone: ProgramTone) =>
             pointer-events: none;
             white-space: nowrap;
             transition: all 0.5s cubic-bezier(0.2, 0.9, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            max-width: min(520px, 92%);
+        }
+
+        .desktop-only .dsk-progdi-desc {
+            margin: 0;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transform: translateY(14px);
+            transition:
+                max-height 0.36s ease,
+                opacity 0.3s ease,
+                transform 0.36s ease,
+                margin-top 0.36s ease;
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 1.5;
+            letter-spacing: 0.1px;
+            color: rgb(var(--color-brand-surface) / 0.94);
+            text-shadow: 0 6px 16px
+                rgb(var(--color-brand-primary-deeper) / 0.45);
+            white-space: normal;
         }
 
         .desktop-only .dsk-progdi-footer {
@@ -300,6 +332,14 @@ const toneVars = (tone: ProgramTone) =>
                 bottom: 96px;
                 font-size: 24px;
                 text-align: left;
+            }
+
+            .desktop-only .dsk-progdi-desc {
+                max-height: none;
+                opacity: 1;
+                transform: none;
+                margin-top: 10px;
+                font-size: 15px;
             }
         }
 
@@ -494,7 +534,12 @@ const toneVars = (tone: ProgramTone) =>
                         aria-label={program.name}
                         style={`${toneVars(getToneForProgram(program.id))} background-image:url('${program.image}')`}
                     >
-                        <div class="dsk-progdi-card">{program.name}</div>
+                        <div class="dsk-progdi-card">
+                            <span>{program.name}</span>
+                            <p class="dsk-progdi-desc">
+                                {program.shortDescription}
+                            </p>
+                        </div>
                     </a>
                 ))
             }
